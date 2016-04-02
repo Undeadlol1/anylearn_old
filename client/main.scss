@@ -1,0 +1,167 @@
+/*****************************************************************************/
+
+
+/* main: Style */
+
+
+/*****************************************************************************/
+
+// If you want to override materialize sass variables you can uncomment the following:
+//@import "{undeadlol1:materialize-scss-no-js}/bower_components/materialize/sass/components/_color.scss";
+@import "{poetic:materialize-scss}/sass/components/_color.scss";
+$primary-color: color("indigo", "darken-2");
+$secondary-color: color("light-blue", "base");
+// import main scss file
+//@import "{undeadlol1:materialize-scss-no-js}/bower_components/materialize/sass/materialize.scss";
+@import "{poetic:materialize-scss}/sass/materialize.scss";
+//.main
+body {
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+}
+
+.clear-fix {
+    clear: both
+}
+
+
+/* animations */
+
+.goal.ng-enter {
+    animation: fadeDown 2s;
+}
+
+.goal.ng-leave {
+    animation: fadeOutRight 1s;
+}
+
+
+/*
+.collection-item, .collapsible-header  {
+  overflow: auto;
+  height: auto;
+}
+.collection-item{
+  position: relative;
+  span {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+}
+
+*/
+
+@media #{$large-and-up} {
+    // styles for large screens and up
+    nav {
+        padding: 0 0.6rem
+    }
+}
+
+
+/*for login buttons of accounts-ui-styled package
+
+#login-dropdown-list {
+    top: 20px;
+    left: -200px;
+}
+
+*/
+
+
+/* fix for md-color-picker plugin unnecessary left padding */
+
+.color-picker-wrapper .input-group .color-picker-input-swatch {
+    padding-left: 0;
+}
+
+.label .label-name {
+    margin-top: 10px;
+    // add padding to label name in settings.html
+    padding-left: 10px;
+    //padding adds overflow. To get rid of it add negative margin
+    margin-left: -10px;
+}
+
+.side-nav a {
+    text-align: center;
+}
+
+.side-nav li:last-child:hover {
+    background-color: transparent;
+}
+
+.desire {
+    float: left;
+    padding: 20px 20px;
+}
+
+// SPINKIT SHIT
+.spinner {
+    margin: 100px auto;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    // my styles
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+}
+
+.cube1,
+.cube2 {
+    background-color: #333;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-animation: sk-cubemove 1.8s infinite ease-in-out;
+    animation: sk-cubemove 1.8s infinite ease-in-out;
+}
+
+.cube2 {
+    -webkit-animation-delay: -0.9s;
+    animation-delay: -0.9s;
+}
+
+@-webkit-keyframes sk-cubemove {
+    25% {
+        -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5)
+    }
+    50% {
+        -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg)
+    }
+    75% {
+        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5)
+    }
+    100% {
+        -webkit-transform: rotate(-360deg)
+    }
+}
+
+@keyframes sk-cubemove {
+    25% {
+        transform: translateX(42px) rotate(-90deg) scale(0.5);
+        -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+    }
+    50% {
+        transform: translateX(42px) translateY(42px) rotate(-179deg);
+        -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+    }
+    50.1% {
+        transform: translateX(42px) translateY(42px) rotate(-180deg);
+        -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+    }
+    75% {
+        transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    }
+    100% {
+        transform: rotate(-360deg);
+        -webkit-transform: rotate(-360deg);
+    }
+}
