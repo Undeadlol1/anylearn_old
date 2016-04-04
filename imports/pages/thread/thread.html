@@ -1,0 +1,28 @@
+<!-- loading="{{$ctrl.loading}}" -->
+<div class="row">
+    <div class="col s12">
+        <form ng-submit="$ctrl.commentsInsert(); $ctrl.text= '';">
+            <div class="input-field">
+                <textarea id="comment" ng-model="$ctrl.text" class="materialize-textarea" required></textarea>
+                <label for="comment">Описание</label>
+            </div>
+            <div class="input-field">
+                <button class="btn waves-effect waves-light" type="submit">Сохранить
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+        <ul class="collection with-header">
+            <li class="collection-item">
+                <h4 class="center-align">Комментарии</h4>
+            </li>
+            <li ng-repeat="comment in $ctrl.comments" class="collection-item">
+                {{comment.text}}
+            </li>
+        </ul>
+    </div>
+</div>

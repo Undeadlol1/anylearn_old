@@ -23,61 +23,16 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    const generatedId = new Mongo.ObjectID()._str;
-    Meteor.call('comments.insert', {
-      text: data.text,
-      parent: generatedId
-    })
-    Threads.insert({
-      id: generatedId,
+    const threadId = Threads.insert({
       name: data.name,
       parent: data.parent,
       author: Meteor.userId(),
       createdAt: new Date()
     });
-  }/*,
-  'threads.remove' (taskId) {
-    check(taskId, String);
-
-    const task = Threads.findOne(taskId);
-    if (task.private && task.owner !== Meteor.userId()) {
-      // If the task is private, make sure only the owner can delete it
-      throw new Meteor.Error('not-authorized');
-    }
-
-    Threads.remove(taskId);
-  },
-  'threads.setChecked' (taskId, setChecked) {
-    check(taskId, String);
-    check(setChecked, Boolean);
-
-    const task = Threads.findOne(taskId);
-    if (task.private && task.owner !== Meteor.userId()) {
-      // If the task is private, make sure only the owner can check it off
-      throw new Meteor.Error('not-authorized');
-    }
-
-    Threads.update(taskId, {
-      $set: {
-        checked: setChecked
-      }
-    });
-  },
-  'threads.setPrivate' (taskId, setToPrivate) {
-    check(taskId, String);
-    check(setToPrivate, Boolean);
-
-    const task = Threads.findOne(taskId);
-
-    // Make sure only the task owner can make a task private
-    if (task.owner !== Meteor.userId()) {
-      throw new Meteor.Error('not-authorized');
-    }
-
-    Threads.update(taskId, {
-      $set: {
-        private: setToPrivate
-      }
-    });
-  }*/
+    Meteor.call('comments.insert', {
+      text: data.text,
+      parent: threadId
+    })
+    return threadId
+  }
 });

@@ -1,0 +1,44 @@
+<div class="container"> <!-- loading="{{$ctrl.loading}}" -->
+  <div class="row">
+    <div class="col s12">
+      <form ng-submit="$ctrl.threadsInsert(); $ctrl.name = ''; $ctrl.text= '';">
+        <div class="input-field">
+          <input id="thread-name" type="text" ng-model="$ctrl.name" required>
+          <label for="thread-name">Название</label>
+        </div>
+          <div class="input-field">
+            <textarea ng-model="$ctrl.text" class="materialize-textarea" required></textarea>
+            <label>Описание</label>
+          </div>
+          <div class="input-field">
+            <button class="btn waves-effect waves-light" type="submit">Сохранить
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m6 l5 offset-l1">
+      <b ng-hide="$ctrl.threads">Пока обсуждений не было...</b>
+      <ul ng-show="$ctrl.threads" class="collection with-header">
+        <li class="collection-item">
+          <h4 class="center-align">Обсуждения</h4>
+        </li>
+        <li ng-repeat="thread in $ctrl.threads" class="collection-item">
+          <a href="thread/{{thread._id}}">{{thread.name}}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col s12 m6 l5">
+      <ul class="collection with-header">
+        <li class="collection-item">
+          <h4 class="center-align">История</h4>
+        </li>
+        <li ng-repeat="revision in $ctrl.revisions" class="collection-item">
+          <a href="revision/{{revision._id}}">{{revision.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

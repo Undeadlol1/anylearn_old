@@ -22,34 +22,22 @@ export default angular.module('routes', [
         }).state('add-skill', {
             url: '/add-skill',
             template: '<add-skill></add-skill>'
-        })/*.state('edit-skill', {
+        }).state('skill-edit', {
             url: '/skill/:skillId/edit',
-            templateUrl: 'client/edit-skill/edit-skill.html',
-            controller: 'EditSkillCtrl as vm'
+            template: '<skill-edit></skill-edit>'
         }).state('skill', {
-            url: '/skill/:skillId',
-            templateUrl: 'client/skill/skill.html',
-            controller: 'SkillCtrl as vm'
+            url:'/skill/:skillId',
+            template: '<skill></skill>'
         }).state('revision', {
             url: '/revision/:revisionId',
-            templateUrl: 'client/revision/revision.html',
-            controller: 'RevisionCtrl as vm'
+            template: '<revision></revision>'
         }).state('forum', {
             url: '/skill/:skillId/forum/:forumId',
-            templateUrl: 'client/forum/forum.html',
-            controller: 'ForumCtrl as vm'
+            template: '<forum></forum>'
         }).state('thread', {
             url: '/thread/:threadId',
-            templateUrl: 'client/thread/thread.html',
-            controller: 'ThreadCtrl as vm'
-        }).state('history', {
-            url: '/history',
-            templateUrl: 'client/history/history.html',
-            controller: 'HistoryCtrl as history'
-        }).state('signIn', {
-            url: '/sign-in',
-            template: '<sign-in></sign-in>'
-        });*/
+            template: '<thread></thread>'
+        });
 
     $urlRouterProvider.otherwise("/");
 }).run(function($rootScope, $state) {

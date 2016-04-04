@@ -14,8 +14,8 @@ if (Meteor.isServer) {
 
 Meteor.methods({
   'forums.insert' (data) {
+    console.log(data);
     check(data.parent, String);
-    check(data.type, String)
 
     // Make sure the user is logged in before inserting a task
     if (!Meteor.userId()) {
@@ -24,7 +24,6 @@ Meteor.methods({
 
     Forums.insert({
       parent: data.parent,
-      type: data.type,
       createdAt: new Date()
     });
   }/*,

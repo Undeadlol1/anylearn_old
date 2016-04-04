@@ -1,0 +1,37 @@
+<!-- loading="{{$ctrl.loading}}" -->
+<div class="row">
+    <div class="col s12">
+        <div>
+            <a href="skill/{{$ctrl.skill._id}}/edit" style="float:left" class="btn waves-effect waves-light">Редактировать
+                <i class="material-icons right">mode_edit</i>
+            </a>
+            <a href="skill/{{$ctrl.skill._id}}/forum/{{$ctrl.forum._id}}" style="float:right" class="btn waves-effect waves-light">Обсуждение
+                <i class="material-icons right">list</i>
+            </a>
+        </div>
+        <h1 class="center-align">{{$ctrl.skill.name}}</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12">
+        <ul class="tabs" tabs>
+            <li class="tab col s3">
+                <a class="active" href="#stage1">Новичок</a>
+            </li>
+            <li class="tab col s3">
+                <a href="#stage2">Ученик</a>
+            </li>
+            <li class="tab col s3">
+                <a href="#stage3">Практикант</a>
+            </li>
+            <li class="tab col s3">
+                <a href="#stage4">Мастер</a>
+            </li>
+        </ul>
+    </div>
+    <div ng-bind-html="$ctrl.text[0]" id="stage1" class="stage col s12">32123</div>
+    <div ng-bind-html="$ctrl.text[1]" id="stage2" class="stage col s12">131</div>
+    <div ng-bind-html="$ctrl.text[2]" id="stage3" class="stage col s12">22</div>
+    <div ng-bind-html="$ctrl.text[3]" id="stage4" class="stage col s12">33</div>
+</div>
