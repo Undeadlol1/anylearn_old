@@ -4,6 +4,8 @@ import angularSanitize from 'angular-sanitize'
 
 import skillsList from '../imports/components/skillsList/skillsList';
 import wysiwyg from '../imports/components/wysiwyg/wysiwyg';
+import navBar from '../imports/components/navBar/navBar';
+import skillStages from '../imports/components/skillStages/skillStages';
 
 //import wysiwygDirective from '../imports/directives/wysiwygDirective/wysiwygDirective';
 
@@ -16,13 +18,13 @@ import thread from '../imports/pages/thread/thread';
 import revision from '../imports/pages/revision/revision';
 import signIn from '../imports/pages/signIn/signIn';
 import layout from '../imports/pages/layout/layout';
+import docs from '../imports/pages/docs/docs';
 
 import routes from '../imports/startup/routes';
 import '../imports/startup/accounts-config.js';
 
 // tinymce ui relies on tinymce cdn, which is linked in main.html
 import '../node_modules/angular-ui-tinymce/src/tinymce.js'
-import angularMaterialize from 'angular-materialize';
 
 angular.module('teachme', [
   angularMeteor,
@@ -31,6 +33,8 @@ angular.module('teachme', [
   addSkill.name,
   skillEdit.name,
   wysiwyg.name,
+  navBar.name,
+  skillStages.name,
 //  wysiwygDirective.name,
   index.name,
   skill.name,
@@ -39,10 +43,10 @@ angular.module('teachme', [
   revision.name,
   signIn.name,
   layout.name,
+  docs.name,
   'ui.tinymce',
   'accounts.ui',
-  angularSanitize,
-  angularMaterialize
+  angularSanitize
 ]);
 
 function onReady() {

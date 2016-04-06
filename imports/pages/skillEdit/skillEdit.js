@@ -57,10 +57,6 @@ class skillEditCtrl {
       }
     })
     this.skillEdit = () => {
-      console.log(this.first)
-      console.log(this.second);
-      console.log(this.third);
-      console.log(this.fourth);
         const post = {
             name: this.name,
             description: this.description,

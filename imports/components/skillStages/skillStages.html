@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col s12">
+        <ul class="tabs">
+            <li class="tab col s3">
+                <a class="active" href="#stage1">Новичок</a>
+            </li>
+            <li class="tab col s3">
+                <a href="#stage2">Ученик</a>
+            </li>
+            <li class="tab col s3">
+                <a href="#stage3">Практикант</a>
+            </li>
+            <li class="tab col s3">
+                <a href="#stage4">Мастер</a>
+            </li>
+        </ul>
+    </div>
+    <div ng-bind-html="$ctrl.text[0]" id="stage1" class="col s12"></div>
+    <div ng-bind-html="$ctrl.text[1]" id="stage2" class="col s12"></div>
+    <div ng-bind-html="$ctrl.text[2]" id="stage3" class="col s12"></div>
+    <div ng-bind-html="$ctrl.text[3]" id="stage4" class="col s12"></div>
+</div>

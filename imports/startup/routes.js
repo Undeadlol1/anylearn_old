@@ -8,8 +8,10 @@ export default angular.module('routes', [
     $stateProvider
         .state('index', {
             url: '/',
-            template: '<index></index>'/*,
-            controller: 'IndexCtrl as vm',
+            template: '<index></index>'
+        }).state('add-skill', {
+            url: '/add-skill',
+            template: '<add-skill></add-skill>'/*,
             resolve: {
                 currentUser: ($q) => {
                     if (Meteor.userId() === null) {
@@ -19,9 +21,6 @@ export default angular.module('routes', [
                     }
                 }
             }*/
-        }).state('add-skill', {
-            url: '/add-skill',
-            template: '<add-skill></add-skill>'
         }).state('skill-edit', {
             url: '/skill/:skillId/edit',
             template: '<skill-edit></skill-edit>'
@@ -37,6 +36,9 @@ export default angular.module('routes', [
         }).state('thread', {
             url: '/thread/:threadId',
             template: '<thread></thread>'
+        }).state('docs', {
+            url: '/docs',
+            template: '<docs></docs>'
         });
 
     $urlRouterProvider.otherwise("/");

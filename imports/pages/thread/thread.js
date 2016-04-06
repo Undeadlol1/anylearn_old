@@ -31,7 +31,7 @@ class threadCtrl {
                 if (err) {
                     console.log(err);
                 } else {
-                    this.text = ' ';
+                    this.text = '';
                 }
             })
         }

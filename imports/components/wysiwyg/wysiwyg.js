@@ -1,24 +1,17 @@
 import angular from 'angular';
-//import angularMeteor from 'angular-meteor';
-//import { Skills } from '../../api/skills.js';
-
-//import template from './wysiwyg.html';
 
 class wysiwygCtrl {
     constructor($scope) {
-        /*$scope.viewModel(this);
-
-        this.subscribe('skills');
-
-        this.helpers({
-            skills() {
-                return Skills.find({}, {
-                    sort: {
-                        createdAt: -1
-                    }
-                });
-            }
-        })*/
+      $scope.options = {
+          //selector:'textarea', //???????
+          menubar: false,
+          language_url : '/tinymce.languages/ru.js',
+          skin_url: '/tinymce.skins/light',
+          plugins: 'autoresize',
+          autoresize_bottom_margin: 10,
+          elementpath: false,
+          resize: false
+      }
     }
 }
 
@@ -26,8 +19,7 @@ export default angular.module('wysiwyg', [
 
 ])//angularMeteor
   .component('wysiwyg', {
-    template: `<b>{{$ctrl.label}}</b><textarea ui-tinymce ng-model="$ctrl.text"></textarea>`,
-  //  templateUrl: 'imports/components/wysiwyg/wysiwyg.html',
+    template: `<b>{{$ctrl.label}}</b><textarea ui-tinymce="options" ng-model="$ctrl.text"></textarea>`,
     bindings: {
       label: '@',
       text: '='

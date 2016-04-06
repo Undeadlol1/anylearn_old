@@ -5,14 +5,10 @@
             <input ng-model="$ctrl.name" type="text" id="skill-name" required>
             <label for="skill-name">Название навыка</label>
           </div>
-          <b>Новичок</b>
-          <textarea ui-tinymce ng-model="$ctrl.text[0]"></textarea>
-          <b>Ученик</b>
-          <textarea ui-tinymce ng-model="$ctrl.text[1]"></textarea>
-          <b>Практикант</b>
-          <textarea ui-tinymce ng-model="$ctrl.text[2]"></textarea>
-          <b>Мастер</b>
-          <textarea ui-tinymce ng-model="$ctrl.text[3]"></textarea>
+          <wysiwyg label="Новичок" text="$ctrl.text[0]"></wysiwyg>
+          <wysiwyg label="Ученик" text="$ctrl.text[1]"></wysiwyg>
+          <wysiwyg label="Практикант" text="$ctrl.text[2]"></wysiwyg>
+          <wysiwyg label="Мастер" text="$ctrl.text[3]"></wysiwyg>
           <button class="btn waves-effect waves-light" type="submit" name="action">Сохранить
             <i class="material-icons right">send</i>
           </button>

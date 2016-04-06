@@ -16,6 +16,11 @@ class skillCtrl {
           skill() {
               return Skills.findOne($stateParams.skillId);
           },
+          isSubscribed(){
+            if (Meteor.user() && Meteor.user.skills()) return Meteor.user.groups.indexOf($stateParams.skillId)
+            return false
+          }
+          ,
           text(){
             const revision = Revisions.findOne({
               parent: $stateParams.skillId,
@@ -30,6 +35,9 @@ class skillCtrl {
             return revision
           }
       })
+      this.subscribe = ()=>{
+        console.log('Subscribing is happanening!');
+      }
   }
 }
 

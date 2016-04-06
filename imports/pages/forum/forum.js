@@ -48,8 +48,8 @@ class forumCtrl {
                 if (err) {
                     console.log(err);
                 } else {
-                    this.name = ' ';
-                    this.text = ' ';
+                    this.name = '';
+                    this.text = '';
                 }
             })
         }
