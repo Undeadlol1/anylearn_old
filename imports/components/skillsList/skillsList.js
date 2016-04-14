@@ -12,11 +12,7 @@ class skillsListCtrl {
 
         this.helpers({
             skills() {
-                return Skills.find({}, {
-                    sort: {
-                        createdAt: -1
-                    }
-                });
+                return Skills.find();
             }
         })
     }

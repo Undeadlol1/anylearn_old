@@ -8,12 +8,14 @@
           <a href="skill/{{$ctrl.skill._id}}/forum/{{$ctrl.forum._id}}" class="btn waves-effect waves-light right">Обсуждение
               <i class="material-icons right">list</i>
           </a>
-          <a class="waves-effect waves-blue btn-flat right" ng-click="$ctrl.subscribe()">
-            <i ng-if="$ctrl.isSubbed" class="material-icons center-align">turned_in_not</i>
-            <i ng-if="!$ctrl.isSubbed" class="material-icons center-align">turned_in</i>
+          <a class="waves-effect waves-blue btn-flat right" title="подписаться" ng-click="$ctrl.subscribe()">
+            <i ng-if="$ctrl.isSubscribed" class="material-icons center-align">turned_in</i>
+            <i ng-if="!$ctrl.isSubscribed" class="material-icons center-align">turned_in_not</i>
           </a>
         </div>
         <h1 class="center-align">{{$ctrl.skill.name}}</h1>
     </div>
 </div>
 <skill-stages text="$ctrl.text"></skill-stages>
+<threads-insert parent="$ctrl.skill._id"></threads-insert>
+<threads-list parent="$ctrl.skill._id"></threads-list>

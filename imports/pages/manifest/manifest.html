@@ -1,0 +1,21 @@
+<!-- loading="{{$ctrl.loading}}" -->
+<div class="row">
+    <div class="col s12"> <!-- ; $ctrl.name = ''; $ctrl.text= ''; -->
+      <form name="form" ng-submit="$ctrl.suggestionsInsert($ctrl.name, $ctrl.text)">
+                 <div class="input-field">
+                  <input type="text" ng-model="$ctrl.name" required>
+                  <label>Название</label>
+                </div>
+                  <div class="input-field">
+                    <textarea ng-model="$ctrl.text" class="materialize-textarea"></textarea>
+                    <label>Описание</label>
+                  </div>
+                  <div class="input-field">
+                    <button class="btn waves-effect waves-light" type="submit">Сохранить
+                      <i class="material-icons right">send</i>
+                    </button>
+                  </div>
+      </form>
+    </div>
+</div>
+<suggestions name="Основные положения" parent="$ctrl.manifestId"></suggestions>

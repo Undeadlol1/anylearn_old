@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+        <ul class="collection with-header">
+            <li class="collection-item">
+                <h4 class="center-align">{{$ctrl.name}}</h4>
+            </li>
+            <li ng-repeat="suggestion in $ctrl.suggestions" class="collection-item">
+                <a href="thread/{{suggestion._id}}">{{suggestion.name}}</a>
+                <vote parent="suggestion._id"></vote>
+            </li>
+        </ul>
+    </div>
+</div>

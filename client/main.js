@@ -1,30 +1,36 @@
-import angular from 'angular';
-import angularMeteor from 'angular-meteor';
+import angular from 'angular'
+import { Meteor } from 'meteor/meteor'
+import angularMeteor from 'angular-meteor'
 import angularSanitize from 'angular-sanitize'
 
-import skillsList from '../imports/components/skillsList/skillsList';
-import wysiwyg from '../imports/components/wysiwyg/wysiwyg';
-import navBar from '../imports/components/navBar/navBar';
-import skillStages from '../imports/components/skillStages/skillStages';
+import navBar from '../imports/components/navBar/navBar'
+import skillsList from '../imports/components/skillsList/skillsList'
+import skillStages from '../imports/components/skillStages/skillStages'
+import threadsInsert from '../imports/components/threadsInsert/threadsInsert'
+import threadsList from '../imports/components/threadsList/threadsList'
+import wysiwyg from '../imports/components/wysiwyg/wysiwyg'
 
-//import wysiwygDirective from '../imports/directives/wysiwygDirective/wysiwygDirective';
+import collapsible from '../imports/directives/collapsible/collapsible'
 
-import index from '../imports/pages/index/index';
-import skill from '../imports/pages/skill/skill';
-import addSkill from '../imports/pages/addSkill/addSkill';
-import skillEdit from '../imports/pages/skillEdit/skillEdit';
-import forum from '../imports/pages/forum/forum';
-import thread from '../imports/pages/thread/thread';
-import revision from '../imports/pages/revision/revision';
-import signIn from '../imports/pages/signIn/signIn';
-import layout from '../imports/pages/layout/layout';
-import docs from '../imports/pages/docs/docs';
+import index from '../imports/pages/index/index'
+import skill from '../imports/pages/skill/skill'
+import addSkill from '../imports/pages/addSkill/addSkill'
+import skillEdit from '../imports/pages/skillEdit/skillEdit'
+import forum from '../imports/pages/forum/forum'
+import manifest from '../imports/pages/manifest/manifest'
+import siteForums from '../imports/pages/siteForums/siteForums'
+import siteThreads from '../imports/pages/siteThreads/siteThreads'
+import thread from '../imports/pages/thread/thread'
+import revision from '../imports/pages/revision/revision'
+import signIn from '../imports/pages/signIn/signIn'
+import docs from '../imports/pages/docs/docs'
 
-import routes from '../imports/startup/routes';
-import '../imports/startup/accounts-config.js';
+import routes from '../imports/startup/routes'
+import '../imports/startup/accounts-config.js'
 
 // tinymce ui relies on tinymce cdn, which is linked in main.html
 import '../node_modules/angular-ui-tinymce/src/tinymce.js'
+
 
 angular.module('teachme', [
   angularMeteor,
@@ -35,26 +41,30 @@ angular.module('teachme', [
   wysiwyg.name,
   navBar.name,
   skillStages.name,
-//  wysiwygDirective.name,
   index.name,
   skill.name,
   forum.name,
+  manifest.name,
+  collapsible.name,
+  siteForums.name,
+  siteThreads.name,
+  threadsList.name,
+  threadsInsert.name,
   thread.name,
   revision.name,
   signIn.name,
-  layout.name,
   docs.name,
   'ui.tinymce',
   'accounts.ui',
   angularSanitize
-]);
+])
 
 function onReady() {
-  angular.bootstrap(document, ['teachme']);
+  angular.bootstrap(document, ['teachme'])
 }
 
 if (Meteor.isCordova) {
-  angular.element(document).on('deviceready', onReady);
+  angular.element(document).on('deviceready', onReady)
 } else {
-  angular.element(document).ready(onReady);
+  angular.element(document).ready(onReady)
 }

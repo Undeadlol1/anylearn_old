@@ -24,11 +24,12 @@ class revisionCtrl {
             }
         },
         html(){
-          // I ENABLED NG-SANIGITZE. SHOULD I REMOVE IT?
           const first = this.getReactively('previous')
           const second = this.getReactively('revision')
           if (angular.isDefined(first) && angular.isDefined(second)) {
-            return html = $sce.trustAsHtml(htmldiff(first.text.join(`\n`), second.text.join(`\n`)))
+            return html = $sce.trustAsHtml(
+              htmldiff(first.text.join(`\n`), second.text.join(`\n`))
+            )
           }
         }
     })

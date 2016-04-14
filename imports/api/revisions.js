@@ -5,8 +5,6 @@ import { check, Match } from 'meteor/check';
 export const Revisions = new Mongo.Collection('revisions');
 
 if (Meteor.isServer) {
-  // This code only runs on the server
-  // Only publish tasks that are public or belong to the current user
   Meteor.publish('revisions', function revisionsPublication() {
     return Revisions.find();
   });
@@ -19,12 +17,12 @@ Meteor.methods({
     check(data.parent, String);
     check(data.description, Match.Maybe(String));
 
-    // Make sure the user is logged in before inserting a task
+    // Make sure the user is logged in before inserting
     if (!Meteor.userId()) {
       throw new Meteor.Error('not-authorized');
     }
 
-    Revisions.insert({
+    return Revisions.insert({
       name: data.name,
       text: data.text,
       description: data.description,
@@ -45,12 +43,14 @@ Meteor.methods({
     if (!Meteor.userId()) {
       throw new Meteor.Error('not-authorized');
     }
+    // deactivate current revision
     Revisions.update(data.previous, {
       $set: {
         active: false
       }
     })
-    return Revisions.insert({
+    // insert new active revision
+    const newRevisionId = Revisions.insert({
       name: data.name,
       text: data.text,
       description: data.description,
@@ -59,6 +59,15 @@ Meteor.methods({
       active: true,
       author: Meteor.userId(),
       createdAt: new Date()
-    });
+    })
+    // create notification
+    Meteor.call('notifications.insert', {
+      name: data.name,
+      targetId: newRevisionId,
+      parent: data.parent,
+      type: 'revision',
+      author: Meteor.userId()
+    })
+    return newRevisionId
   }
 });

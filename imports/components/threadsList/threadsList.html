@@ -1,0 +1,12 @@
+<div ng-class="{'row': !$ctrl.classes}">
+  <div class="col {{$ctrl.classes || 's12 m12 l6 offset-l3'}}">
+    <b ng-hide="$ctrl.threads.length" class="center-align"><i>Пока обсуждений не было...</i></b>
+    <ul ng-show="$ctrl.threads.length" class="collection with-header">
+        <li class="collection-item">
+            <h4 class="center-align">Обсуждения</h4></li>
+        <li ng-repeat="thread in $ctrl.threads" class="collection-item">
+            <a href="thread/{{thread._id}}">{{thread.name}}</a>
+        </li>
+    </ul>
+  </div>
+</div>

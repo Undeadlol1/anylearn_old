@@ -1,9 +1,8 @@
-import { Meteor } from 'meteor/meteor';
-import { Mongo } from 'meteor/mongo';
-import { Skills } from './skills';
+import { Meteor } from 'meteor/meteor'
 
 export default ()=>{
-  if (Meteor.isServer) {
+  //if (Meteor.isServer) {
+  /*  Meteor.startup(function () {
   // This code only runs on the server
   // Only publish tasks that are public or belong to the current user
   /*  if(Skills.find({userId: 1}).count() >= 0){
@@ -13,7 +12,8 @@ export default ()=>{
           name: element,
           userId: 1
         })
-      });
+      })
     }*/
-  }
+  //})
+//}
 }

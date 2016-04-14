@@ -1,0 +1,43 @@
+<div class="container"> <!-- loading="{{$ctrl.loading}}" -->
+<!--   <div class="row">
+    <div class="col s12">
+      <form ng-submit="$ctrl.forumsInsert(); $ctrl.name = ''; $ctrl.text= '';">
+        <div class="input-field">
+          <input id="forum-name" type="text" ng-model="$ctrl.name" required>
+          <label for="forum-name">Название</label>
+        </div>
+          <div class="input-field">
+            <textarea ng-model="$ctrl.text" class="materialize-textarea" required></textarea>
+            <label>Описание</label>
+          </div>
+          <div class="input-field">
+            <button class="btn waves-effect waves-light" type="submit">Сохранить
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+      </form>
+    </div>
+  </div> -->
+<!--   <div class="row">
+    <div class="col s12 m12 l6 offset-l3">
+      <ul class="collection with-header">
+        <li class="collection-item">
+          <h4 class="center-align">Форумы</h4>
+        </li>
+        <li ng-repeat="forum in $ctrl.forums" class="collection-item">
+          <a href="forum/{{forum._id}}">{{forum.name}}</a>
+        </li>
+      </ul>
+    </div>
+  </div> -->
+  <div class="row" ng-repeat="forum in $ctrl.forums">
+     <a href="forums/{{forum._id}}" class="col m12 l8 offset-l2">
+       <div class="card light-blue base">
+         <div class="card-content white-text">
+           <span class="card-title">{{forum.name}}</span>
+           <p>{{forum.description}}</p>
+         </div>
+       </div>
+     </a>
+   </div>
+</div>

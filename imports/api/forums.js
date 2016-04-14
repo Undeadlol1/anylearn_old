@@ -1,74 +1,82 @@
-import { Meteor } from 'meteor/meteor';
-import { Mongo } from 'meteor/mongo';
-import { check } from 'meteor/check';
+import { Meteor } from 'meteor/meteor'
+import { Mongo } from 'meteor/mongo'
+import { check, Match } from 'meteor/check'
 
-export const Forums = new Mongo.Collection('forums');
+export const Forums = new Mongo.Collection('forums')
 
 if (Meteor.isServer) {
   // This code only runs on the server
   // Only publish forums that are public or belong to the current user
   Meteor.publish('forums', function forumsPublication() {
-    return Forums.find();
-  });
+    return Forums.find()
+  })
 }
 
 Meteor.methods({
-  'forums.insert' (data) {
-    console.log(data);
-    check(data.parent, String);
-
-    // Make sure the user is logged in before inserting a task
+  'forums.insert' (skillId, name) {
+    check(skillId, String)
+    check(name, Match.Maybe(String))
     if (!Meteor.userId()) {
-      throw new Meteor.Error('not-authorized');
+      throw new Meteor.Error('not-authorized')
+    }
+    if (name){
+      return Forums.insert({
+        name,
+        parent: skillId,
+        createdAt: new Date()
+      })
+    }
+    else {
+      return Forums.insert({
+        parent: skillId,
+        createdAt: new Date()
+      })
     }
 
-    Forums.insert({
-      parent: data.parent,
-      createdAt: new Date()
-    });
+
   }/*,
   'forums.remove' (taskId) {
-    check(taskId, String);
+    check(taskId, String)
 
-    const task = Forums.findOne(taskId);
+    const task = Forums.findOne(taskId)
     if (task.private && task.owner !== Meteor.userId()) {
       // If the task is private, make sure only the owner can delete it
-      throw new Meteor.Error('not-authorized');
+      throw new Meteor.Error('not-authorized')
     }
 
-    Forums.remove(taskId);
+    Forums.remove(taskId)
   },
   'forums.setChecked' (taskId, setChecked) {
-    check(taskId, String);
-    check(setChecked, Boolean);
+    check(taskId, String)
+    check(setChecked, Boolean)
 
-    const task = Forums.findOne(taskId);
+    const task = Forums.findOne(taskId)
     if (task.private && task.owner !== Meteor.userId()) {
       // If the task is private, make sure only the owner can check it off
-      throw new Meteor.Error('not-authorized');
+      throw new Meteor.Error('not-authorized')
     }
 
     Forums.update(taskId, {
       $set: {
         checked: setChecked
       }
-    });
+    })
   },
   'forums.setPrivate' (taskId, setToPrivate) {
-    check(taskId, String);
-    check(setToPrivate, Boolean);
+    check(taskId, String)
+    check(setToPrivate, Boolean)
 
-    const task = Forums.findOne(taskId);
+    const task = Forums.findOne(taskId)
 
     // Make sure only the task owner can make a task private
     if (task.owner !== Meteor.userId()) {
-      throw new Meteor.Error('not-authorized');
+      throw new Meteor.Error('not-authorized')
     }
 
     Forums.update(taskId, {
       $set: {
         private: setToPrivate
       }
-    });
+    })
   }*/
-});
+})

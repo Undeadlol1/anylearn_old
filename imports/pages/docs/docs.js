@@ -1,20 +1,17 @@
 import angular from 'angular';
-import angularMeteor from 'angular-meteor';
+import templates from '../../services/templates'
 import template from './docs.html';
 
 class docsCtrl {
-  constructor($scope, $stateParams, $sce) {
+  constructor($scope, templates, $sce) {
     $scope.viewModel(this);
-
-    this.subscribe('docs');
-
-    this.helpers({
-    })
+    this.text = templates.skill
+    this.introduction = $sce.trustAsHtml(templates.introduction)
   }
 }
 
-export default angular.module('docs', [])
+export default angular.module('docs', [templates.name])
   .component('docs', {
     templateUrl: 'imports/pages/docs/docs.html',
-    controller: ['$scope', docsCtrl]
+    controller: ['$scope', 'templates', '$sce', docsCtrl]
   });

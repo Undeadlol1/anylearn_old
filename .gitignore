@@ -1,1 +1,3 @@
 node_modules/
+.npm/
+server/PROTECTED_VARIABLES.js
