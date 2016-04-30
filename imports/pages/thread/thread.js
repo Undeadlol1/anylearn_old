@@ -8,31 +8,39 @@ import template from './thread.html';
 class threadCtrl {
     constructor($scope, $stateParams) {
         $scope.viewModel(this);
-        const threadId = $stateParams.threadId
+        const parent = $stateParams.threadId
         this.subscribe('threads');
-        this.subscribe('comments');
+        this.subscribe('comments', ()=>{
+          return [parent]
+        });
 
         this.helpers({
             thread(){
-              return Threads.findOne(threadId, {fields:{
+              return Threads.findOne(parent, {fields:{
                 name: 1
               }})
             },
             comments() {
-                return Comments.find({
-                    parent: $stateParams.threadId
-                }, {
-                    sort: {
-                        createdAt: 1
-                    }
-                });
+            return Comments.find({ //const comments =
+                  parent
+              }, {
+                  sort: {
+                      createdAt: 1
+                  }
+              }).map(function(doc) {
+                const user = Meteor.users.findOne(doc.author)
+                doc.username = user.username || user.email
+                return doc
+              })
+              //if (comments) return comments
+              //return ''
             }
         })
 
         this.commentsInsert = () => {
             const data = {
-                text: this.text,
-                parent: $stateParams.threadId
+                parent,
+                text: this.text
             }
             Meteor.call('comments.insert', data, (err, result) => {
                 if (err) {

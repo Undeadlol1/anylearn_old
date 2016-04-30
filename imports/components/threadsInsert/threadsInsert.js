@@ -6,9 +6,8 @@ import template from './threadsInsert.html'
 class threadsInsertCtrl {
     constructor($scope) {
         $scope.viewModel(this)
-      //  const parent = this.parent
         this.threadsInsert = (name, text) => {
-            const data = { name, text, parent: this.parent }
+            const data = { name, text, type: this.type, parent: this.parent}
             Meteor.call('threads.insert', data, (err, result) => {
                 if (err) console.log(err)
                 else {
@@ -28,7 +27,8 @@ export default angular.module('threadsInsert', [
   .component('threadsInsert', {
     templateUrl: 'imports/components/threadsInsert/threadsInsert.html',
     bindings: {
-      parent: '<'
+      parent: '<',
+      type: '@'
     },
     controller: ['$scope', threadsInsertCtrl]
   })

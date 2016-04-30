@@ -2,10 +2,10 @@
     <div class="col s12">
         <h1 class="center-align">{{$ctrl.skill.name}}</h1>
         <form ng-submit="$ctrl.skillEdit()">
-            <wysiwyg label="Новичок" text="$ctrl.first"></wysiwyg>
-            <wysiwyg label="Ученик" text="$ctrl.second"></wysiwyg>
-            <wysiwyg label="Практикант" text="$ctrl.third"></wysiwyg>
-            <wysiwyg label="Мастер" text="$ctrl.fourth"></wysiwyg>
+            <wysiwyg label="Новичок" text="$ctrl.revision.text[0]"></wysiwyg>
+            <wysiwyg label="Ученик" text="$ctrl.revision.text[1]"></wysiwyg>
+            <wysiwyg label="Практикант" text="$ctrl.revision.text[2]"></wysiwyg>
+            <wysiwyg label="Мастер" text="$ctrl.revision.text[3]"></wysiwyg>
             <div class="input-field">
                 <input type="text" ng-model="$ctrl.name" required>
                 <label>Название изменения</label>

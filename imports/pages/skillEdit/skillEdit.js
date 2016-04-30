@@ -8,72 +8,43 @@ import template from './skillEdit.html';
 class skillEditCtrl {
     constructor($scope, $state, $stateParams) {
       $scope.viewModel(this);
+      const parent = $stateParams.skillId
+      const active = true
 
-      this.subscribe('skills');
-      this.subscribe('revisions');
+      this.subscribe('skills', () => {
+        return [parent]
+      });
+      this.subscribe('revisions', ()=>{
+        return [{ parent, active  }]
+      });
 
       this.helpers({
           skill() {
-              return Skills.findOne($stateParams.skillId);
+              return Skills.findOne()
           },
-          revision(){
-            const revision = Revisions.findOne({
-              parent: $stateParams.skillId,
-              active: true
-            })
-            return revision
-      },
-      first(){
-        var revision = Revisions.findOne({
-          parent: $stateParams.skillId,
-          active: true
-        })
-        if(revision) return revision.text[0]
-        return ' '
-      },
-      second(){
-        var revision = Revisions.findOne({
-          parent: $stateParams.skillId,
-          active: true
-        })
-        if(revision) return revision.text[1]
-        return ' '
-      },
-      third(){
-        var revision = Revisions.findOne({
-          parent: $stateParams.skillId,
-          active: true
-        })
-        if(revision) return revision.text[2]
-        return ' '
-      },
-      fourth(){
-        var revision = Revisions.findOne({
-          parent: $stateParams.skillId,
-          active: true
-        })
-        if(revision) return revision.text[3]
-        return ' '
+          revision() {
+              const revision = Revisions.findOne()
+              return revision
+          }
+      })
+      this.skillEdit = () => {
+          const post = {
+              name: this.name,
+              description: this.description,
+              text: this.revision.text,
+              previous: this.revision._id,
+              parent
+          }
+          Meteor.call('revisions.update', post, (err, result) => {
+              if (err) {
+                  console.log(err);
+              } else {
+                  $state.go('skill', {
+                      skillId: parent
+                  })
+              }
+          })
       }
-    })
-    this.skillEdit = () => {
-        const post = {
-            name: this.name,
-            description: this.description,
-            text: [this.first, this.second, this.third, this.fourth],
-            previous: this.revision._id,
-            parent: $stateParams.skillId
-        }
-        Meteor.call('revisions.update', post, function(err, result) {
-            if (err) {
-                console.log(err);
-            } else {
-                $state.go('skill', {
-                    skillId: $stateParams.skillId
-                })
-            }
-        })
-    }
   }
 }
 

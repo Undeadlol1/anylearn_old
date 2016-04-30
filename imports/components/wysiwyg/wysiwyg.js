@@ -4,12 +4,13 @@ class wysiwygCtrl {
     constructor($scope) {
       $scope.options = {
           //selector:'textarea', //???????
-          menubar: false,
+        //  menubar: false,
           language_url : '/tinymce.languages/ru.js',
           skin_url: '/tinymce.skins/light',
-          plugins: 'autoresize',
+          plugins: 'autoresize code image autolink advlist autosave codesample link preview print contextmenu paste',
           autoresize_bottom_margin: 10,
-          elementpath: false,
+          paste_as_text: true,
+        //  elementpath: false,
           resize: false
       }
     }
@@ -17,7 +18,7 @@ class wysiwygCtrl {
 
 export default angular.module('wysiwyg', [
 
-])//angularMeteor
+])
   .component('wysiwyg', {
     template: `<b>{{$ctrl.label}}</b><textarea ui-tinymce="options" ng-model="$ctrl.text"></textarea>`,
     bindings: {

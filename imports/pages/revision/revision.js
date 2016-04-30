@@ -1,4 +1,5 @@
 import angular from 'angular';
+import { Meteor } from 'meteor/meteor'
 import angularMeteor from 'angular-meteor';
 import { Revisions } from '../../api/revisions.js';
 import template from './revision.html';
@@ -6,30 +7,25 @@ import template from './revision.html';
 class revisionCtrl {
   constructor($scope, $stateParams, $sce) {
     $scope.viewModel(this);
-
-    this.subscribe('revisions');
+    const current = $stateParams.revisionId
+    this.subscribe('revisions', ()=>{
+     return [{}]
+    })
 
     this.helpers({
         revision() {
-            const data = Revisions.findOne($stateParams.revisionId);
-            if(data) this.first = data.text.join('\n')
-            return data
+            return Revisions.findOne(current)
         },
         previous() {
             const revision = this.getReactively('revision')
-            if (revision) {
-              const data = Revisions.findOne({_id: revision.previous});
-              if(data) this.second = data.text.join('\n')
-              return data
-            }
+            if (revision) return Revisions.findOne(revision.previous)
         },
         html(){
           const first = this.getReactively('previous')
           const second = this.getReactively('revision')
-          if (angular.isDefined(first) && angular.isDefined(second)) {
-            return html = $sce.trustAsHtml(
-              htmldiff(first.text.join(`\n`), second.text.join(`\n`))
-            )
+          if (first && second) {
+            const difference = htmldiff(first.text.join(`\n`), second.text.join(`\n`))
+            return $sce.trustAsHtml(difference)
           }
         }
     })

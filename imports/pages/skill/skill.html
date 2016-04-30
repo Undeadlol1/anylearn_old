@@ -1,5 +1,5 @@
 <!-- loading="{{$ctrl.loading}}" -->
-<div class="row">
+<div class="row section">
     <div class="col s12">
         <div style="overflow: auto; padding-top: 20px;">
           <a href="skill/{{$ctrl.skill._id}}/edit" class="btn waves-effect waves-light left">Улучшить
@@ -16,6 +16,7 @@
         <h1 class="center-align">{{$ctrl.skill.name}}</h1>
     </div>
 </div>
-<skill-stages text="$ctrl.text"></skill-stages>
-<threads-insert parent="$ctrl.skill._id"></threads-insert>
-<threads-list parent="$ctrl.skill._id"></threads-list>
+<skill-stages text="$ctrl.revision.text"></skill-stages>
+<div class="divider"></div>
+<threads-insert parent="$ctrl.skill._id" type="skill"></threads-insert>
+<threads-list parent="$ctrl.skill._id" type="skill"></threads-list>

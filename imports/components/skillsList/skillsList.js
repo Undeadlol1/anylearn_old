@@ -8,7 +8,13 @@ class skillsListCtrl {
     constructor($scope) {
         $scope.viewModel(this);
 
-        this.subscribe('skills');
+        this.subscribe('skills', () => {
+            return [{}, {
+                sort: {
+                    createdAt: -1
+                }
+            }]
+        });
 
         this.helpers({
             skills() {

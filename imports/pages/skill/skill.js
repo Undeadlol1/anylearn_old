@@ -9,37 +9,29 @@ class skillCtrl {
   constructor($scope, $stateParams) {
       $scope.viewModel(this)
       const skillId = $stateParams.skillId
-      this.subscribe('skills')
-      this.subscribe('revisions')
+      this.subscribe('skills',()=>{
+        return [skillId]
+      })
+      this.subscribe('revisions',()=>{
+        return [{
+          parent: skillId,
+          active: true
+        }]
+      })
       this.helpers({
-          skill() {
-              return Skills.findOne(skillId)
-          },
-          text(){
-            const revision = Revisions.findOne({
-              parent: skillId,
-              active: true
-            })
-            if(angular.isDefined(revision) && angular.isDefined(revision.text)){
-              return revision.text
-            }
-            return revision
-          },
-          user(){
-            if(!Meteor.user()) return undefined
-            return Meteor.user()
-          },
-          isSubscribed (){
-            // get user reactively incase login/logout happanes
-            const user = this.getReactively('user')
-            if (angular.isDefined(user) && angular.isDefined(user.profile) &&
-             angular.isDefined(user.profile.skills)) {
-              // check if user has item in inside profile.skills array
-              const indexOf = user.profile.skills.indexOf(skillId)
-              if(indexOf === -1) { return false} else { return true}
-            }
-            return false
+        skill() {
+            return Skills.findOne()
+        },
+        revision(){
+          return Revisions.findOne()
+        },
+        isSubscribed (){
+          // get user reactively incase login/logout happens
+          const user = Meteor.user()
+          if (user && user.profile.skills) {
+            if(user.profile.skills.indexOf(skillId) != -1) {return true}
           }
+        }
       })
       this.subscribe = () => {
         Meteor.call('users.subscribe', skillId)

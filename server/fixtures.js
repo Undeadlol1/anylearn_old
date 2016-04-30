@@ -19,9 +19,7 @@ Meteor.startup(function () {
         if(err) console.log(err)
       })
     }
-    insert('Общий', 'Это какая-то информация. Ибо бла-бла-бла. Вот. выаыаыаыа и еще')
-    insert('Второй', 'Это фвфвф-то информация. Ибо бла-бла-бла. Вот.фвфвфвфв выаыаыаыа и еще')
-    insert('Третий', 'AdadadaAD adadAdad adadadasdad asdadadada adaddad dadasdada adadadad')
+    insert('О сайте', 'Предложения, баг-репорты и прочее')
   }
 const findAdmin = new Promise(function(resolve, reject) {
   //const query = Meteor.users.findOne({emails: {$elemMatch: {adress: 'undeadlol1@mail.ru'}}})

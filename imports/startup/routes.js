@@ -1,9 +1,10 @@
 import angular from 'angular'
-import 'angular-ui-router'
+import router from 'angular-ui-router'
 
 export default angular.module('routes', [
-  'ui.router'
-]).config(function($urlRouterProvider, $stateProvider, $locationProvider) {
+  router
+]).config(['$urlRouterProvider', '$stateProvider', '$locationProvider', function($urlRouterProvider, $stateProvider, $locationProvider) {
+    'ngInject';
     $locationProvider.html5Mode(true)
     $stateProvider
         .state('index', {
@@ -11,7 +12,7 @@ export default angular.module('routes', [
             template: '<index></index>'
         }).state('add-skill', {
             url: '/add-skill',
-            template: '<add-skill></add-skill>'/*,
+            template: '<skill-insert></skill-insert>'/*,
             resolve: {
                 currentUser: ($q) => {
                     if (Meteor.userId() === null) {
@@ -51,10 +52,11 @@ export default angular.module('routes', [
         })
 
     $urlRouterProvider.otherwise("/")
-}).run(function($rootScope, $state) {
+}]).run(['$rootScope', '$state', function($rootScope, $state) {
+    'ngInject';
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         if (error === 'AUTH_REQUIRED') {
             $state.go('signIn')
         }
     })
-})
+}])

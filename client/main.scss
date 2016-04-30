@@ -22,34 +22,16 @@ body {
 .clear-fix {
     clear: both
 }
-
-
-/* animations */
-
-.goal.ng-enter {
-    animation: fadeDown 2s;
-}
-
-.goal.ng-leave {
-    animation: fadeOutRight 1s;
-}
-
-
-/*
-.collection-item, .collapsible-header  {
-  overflow: auto;
-  height: auto;
-}
-.collection-item{
-  position: relative;
-  span {
-    position: absolute;
-    top: 50%;
-    transform: translate(0, -50%);
+// rich text styles
+[ng-bind-html], wysiwyg {
+  pre, code {
+    display: block;
+    background-color: #ECECA5;
+  }
+  li {
+    list-style: circle;
   }
 }
-
-*/
 
 @media #{$large-and-up} {
     // styles for large screens and up

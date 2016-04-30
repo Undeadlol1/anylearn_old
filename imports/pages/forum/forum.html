@@ -1,35 +1,12 @@
-<div class="container"> <!-- loading="{{$ctrl.loading}}" -->
-  <threads-insert parent="$ctrl.skillId"></threads-insert>
+<div>
+  <threads-insert parent="$ctrl.skillId" type="dev"></threads-insert>
   <div class="row">
     <div class="col m12">
-      <a href="/manifest/{{$ctrl.skill._id}}">Манифест</a>
+      <a href="/manifest/{{$ctrl.skillId}}">Манифест</a>
     </div>
   </div>
-  <div class="row"><!--  l5 offset-l1 -->
-    <threads-list parent="$ctrl.threads" classes="col s12 m6"></threads-list>
-    <div class="col s12 m6">
-      <ul class="collection with-header">
-        <li class="collection-item">
-          <h4 class="center-align">История</h4>
-        </li>
-        <li ng-repeat="revision in $ctrl.revisions" class="collection-item">
-          <a href="revision/{{revision._id}}">{{revision.name}}</a>
-          <vote parent="revision._id"></vote>
-        </li>
-      </ul>
-    </div>
+  <div class="row">
+    <threads-list parent="$ctrl.skillId" type="dev" classes="col s12 m6"></threads-list>
+    <revisions-list parent="$ctrl.skillId" classes="col s12 m6"></revisions-list>
   </div>
 </div>
-<!--
-    <div>
-      <b ng-hide="$ctrl.threads">Пока обсуждений не было...</b>
-      <ul ng-show="$ctrl.threads" class="collection with-header">
-        <li class="collection-item">
-          <h4 class="center-align">Обсуждения</h4>
-        </li>
-        <li ng-repeat="thread in $ctrl.threads" class="collection-item">
-          <a href="thread/{{thread._id}}">{{thread.name}}</a>
-        </li>
-      </ul>
-    </div>
-   -->

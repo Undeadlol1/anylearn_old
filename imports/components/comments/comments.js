@@ -8,7 +8,9 @@ class commentsListCtrl {
     constructor($scope) {
         $scope.viewModel(this);
 
-        this.subscribe('comments');
+        this.subscribe('comments', ()=>{
+          return [this.parent]
+        });
 
         this.helpers({
             comments() {
@@ -23,5 +25,8 @@ export default angular.module('commentsList', [
 ])
   .component('commentsList', {
     templateUrl: 'imports/components/commentsList/commentsList.html',
-    controller: ['$scope', commentsListCtrl]
+    controller: ['$scope', commentsListCtrl],
+    bindings: {
+      parent: '<'
+    }
   });

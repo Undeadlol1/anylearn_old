@@ -1,14 +1,17 @@
-import { Meteor } from 'meteor/meteor';
-import { Mongo } from 'meteor/mongo';
-import { check, Match } from 'meteor/check';
+import { Meteor } from 'meteor/meteor'
+import { Mongo } from 'meteor/mongo'
+import { check, Match } from 'meteor/check'
+import { Counts } from 'meteor/tmeasday:publish-counts'
 
-export const Threads = new Mongo.Collection('threads');
+export const Threads = new Mongo.Collection('threads')
 
-if (Meteor.isServer) { //_id
-  Meteor.publish('threads', function threadsPublication(parent) {
-    return Threads.find({parent})
-  //    return Threads.find()
-  });
+if (Meteor.isServer) {
+    Meteor.publish('threads', function threadsPublication(selector, options) {
+        Counts.publish(this, 'numberOfThreads', Threads.find(selector), {
+            noReady: true
+        })
+        return Threads.find(selector, options)
+    })
 }
 
 Meteor.methods({
@@ -16,12 +19,12 @@ Meteor.methods({
     check(data.name, String)
     check(data.text, String)
     check(data.parent, String)
+    check(data.type, Match.Maybe(String))
     check(data._id, Match.Maybe(String))
-
-    // Make sure the user is logged in before inserting a task
     if (!Meteor.userId()) {
-      throw new Meteor.Error('not-authorized');
+      throw new Meteor.Error('not-authorized')
     }
+
     const thread = {
       name: data.name,
       text: data.text,
@@ -29,6 +32,8 @@ Meteor.methods({
       author: Meteor.userId(),
       createdAt: new Date()
     }
+    // if data specified insert it aswell
+    if(data.type) thread.type = data.type
     if(data._id) thread._id = data._id
     const threadId = Threads.insert(thread)
     Meteor.call('comments.insert', {
@@ -37,4 +42,4 @@ Meteor.methods({
     })
     return threadId
   }
-});
+})

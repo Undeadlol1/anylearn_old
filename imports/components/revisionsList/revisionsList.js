@@ -1,10 +1,10 @@
 import angular from 'angular'
 import angularMeteor from 'angular-meteor'
-import { Threads } from '../../api/threads.js'
+import { Revisions } from '../../api/revisions.js'
 import { Counts } from 'meteor/tmeasday:publish-counts';
-import template from './threadsList.html'
+import template from './revisionsList.html'
 
-class threadsListCtrl {
+class revisionsListCtrl {
     constructor($scope, $attrs) {
         $scope.viewModel(this)
         this.perPage = 10;
@@ -12,38 +12,37 @@ class threadsListCtrl {
         this.sort = {
             createdAt: -1
         };
-        this.subscribe('threads', () => [{
-            parent: this.parent,
-            type: this.type
+        this.subscribe('revisions', () => [{
+            parent: this.parent
         }, {
             limit: parseInt(this.perPage),
             skip: parseInt((this.getReactively('page') - 1) * this.perPage),
             sort: this.getReactively('sort')
         }])
+        this.changePage = index => {
+            this.page = index
+        }
         this.helpers({
-            threads() {
-                return Threads.find({}, {
+            revisions() {
+                return Revisions.find({}, {
                         sort: this.getReactively('sort')
                     }
                 )
             },
-            threadsCount() {
-                return Counts.get('numberOfThreads');
+            revisionsCount() {
+                return Counts.get('numberOfRevisions');
             }
         })
-        this.changePage = index => {
-            this.page = index
-        }
     }
 }
 
-export default angular.module('threadsList', [
+export default angular.module('revisionsList', [
   angularMeteor
 ])
-  .component('threadsList', {
-    templateUrl: 'imports/components/threadsList/threadsList.html',
-    controller: ['$scope', '$attrs', threadsListCtrl],
-    controllerAs: 'TL',
+  .component('revisionsList', {
+    templateUrl: 'imports/components/revisionsList/revisionsList.html',
+    controller: ['$scope', '$attrs', revisionsListCtrl],
+    controllerAs: 'RL',
     bindings: {
       parent: '<',
       classes: '@',

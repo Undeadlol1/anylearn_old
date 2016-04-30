@@ -19,11 +19,11 @@
   <div class="col s12 m12 l6 offset-l3">
   <h4 class="center-align">Комментарии</h4>
     <ul class="collection">
-      <li ng-repeat="comment in $ctrl.comments" class="collection-item avatar">
+      <li ng-repeat="comment in $ctrl.comments track by comment._id" class="collection-item avatar">
         <i class="material-icons circle">folder</i>
-        <span class="title">{{comment.author}}</span>
+        <span class="title">{{comment.username}}</span>
         <p>{{comment.text}}</p>
-        <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+      <!--   <a href="" class="secondary-content black-text"><i class="material-icons">more_vert</i></a> -->
       </li>
     </ul>
   </div>

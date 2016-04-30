@@ -1,13 +1,13 @@
 import angular from 'angular'
-import template from './addSkill.html'
+import template from './skillInsert.html'
 import { Meteor } from 'meteor/meteor'
 import templates from '../../services/templates'
 
-class addSkillCtrl {
+class skillInsertCtrl {
     constructor($scope, $state, templates) {
         $scope.viewModel(this)
         this.text = templates.skill
-        this.addSkill = data => {
+        this.skillsInsert = data => {
             const post = {
                 name: this.name,
                 text: this.text
@@ -25,8 +25,8 @@ class addSkillCtrl {
     }
 }
 
-export default angular.module('addSkill', [templates.name])
-    .component('addSkill', {
-        templateUrl: 'imports/pages/addSkill/addSkill.html',
-        controller: ['$scope', '$state', 'templates', addSkillCtrl]
+export default angular.module('skillInsert', [templates.name])
+    .component('skillInsert', {
+        templateUrl: 'imports/pages/skillInsert/skillInsert.html',
+        controller: ['$scope', '$state', 'templates', skillInsertCtrl]
     })
