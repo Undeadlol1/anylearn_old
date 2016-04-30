@@ -1,10 +1,32 @@
-import angular from 'angular'
+import React from 'react'
+import { FlowRouter } from 'meteor/kadira:flow-router'
+import { mount } from 'react-mounter'
+
+import AppContainer from '../../ui/containers/AppContainer.js'
+import ListContainer from '../../ui/containers/ListContainer.js'
+
+
+FlowRouter.route('/lists/:_id', {
+  name: 'Lists.show',
+  action() {
+    mount(AppContainer, {
+      main: <ListContainer/>
+    })
+  }
+})
+
+
+
+
+
+
+/*import angular from 'angular'
 import router from 'angular-ui-router'
 
 export default angular.module('routes', [
   router
 ]).config(['$urlRouterProvider', '$stateProvider', '$locationProvider', function($urlRouterProvider, $stateProvider, $locationProvider) {
-    'ngInject';
+    'ngInject'
     $locationProvider.html5Mode(true)
     $stateProvider
         .state('index', {
@@ -22,7 +44,7 @@ export default angular.module('routes', [
                     }
                 }
             }*/
-        }).state('skill-edit', {
+      /*  }).state('skill-edit', {
             url: '/skill/:skillId/edit',
             template: '<skill-edit></skill-edit>'
         }).state('skill', {
@@ -53,10 +75,10 @@ export default angular.module('routes', [
 
     $urlRouterProvider.otherwise("/")
 }]).run(['$rootScope', '$state', function($rootScope, $state) {
-    'ngInject';
+    'ngInject'
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
         if (error === 'AUTH_REQUIRED') {
             $state.go('signIn')
         }
     })
-}])
+}])*/

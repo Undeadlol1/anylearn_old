@@ -1,7 +1,14 @@
+import React from 'react'
 import { Meteor } from 'meteor/meteor'
-import angular from 'angular'
-import angularMeteor from 'angular-meteor'
-import angularSanitize from 'angular-sanitize'
+import { render } from 'react-dom'
+
+import App from '../imports/ui/App.jsx'
+
+Meteor.startup(() => {
+  render(<App />, document.getElementById('render-target'))
+})
+
+/*import { Meteor } from 'meteor/meteor'
 // configs
 import routes from '../imports/startup/routes'
 import '../imports/startup/accounts-config.js'
@@ -30,47 +37,6 @@ import revision from '../imports/pages/revision/revision'
 import signIn from '../imports/pages/signIn/signIn'
 import docs from '../imports/pages/docs/docs'
 // utilities/plugins
-import utilsPagination from 'angular-utils-pagination';
+import utilsPagination from 'angular-utils-pagination'
 // tinymce ui relies on tinymce cdn, which is linked in main.html
-import '../node_modules/angular-ui-tinymce/src/tinymce.js'
-
-
-angular.module('teachme', [
-  angularMeteor,
-  routes.name,
-  skillsList.name,
-  skillInsert.name,
-  skillEdit.name,
-  wysiwyg.name,
-  pagination.name,
-  navBar.name,
-  skillStages.name,
-  index.name,
-  skill.name,
-  forum.name,
-  manifest.name,
-  collapsible.name,
-  siteForums.name,
-  siteThreads.name,
-  threadsList.name,
-  threadsInsert.name,
-  thread.name,
-  revision.name,
-  revisionsList.name,
-  signIn.name,
-  docs.name,
-  utilsPagination,
-  'ui.tinymce',
-  'accounts.ui',
-  angularSanitize
-])
-
-function onReady() {
-  angular.bootstrap(document, ['teachme'])
-}
-
-if (Meteor.isCordova) {
-  angular.element(document).on('deviceready', onReady)
-} else {
-  angular.element(document).ready(onReady)
-}
+import '../node_modules/angular-ui-tinymce/src/tinymce.js'*/
