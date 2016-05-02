@@ -7,8 +7,10 @@ class wysiwygCtrl {
         //  menubar: false,
           language_url : '/tinymce.languages/ru.js',
           skin_url: '/tinymce.skins/light',
-          plugins: 'autoresize code image autolink advlist autosave codesample link preview print contextmenu paste',
+          plugins: 'autoresize code image autolink advlist autosave codesample link preview print contextmenu paste autosave visualblocks media',
+          //toolbar: "media",
           autoresize_bottom_margin: 10,
+          contextmenu: "link image inserttable bold",
           paste_as_text: true,
         //  elementpath: false,
           resize: false
