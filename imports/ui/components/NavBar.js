@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
 import { $ } from 'meteor/jquery'
@@ -16,11 +17,15 @@ class NavBar extends Component {
   check(_id){
     Meteor.call('notifications.update', _id)
   }
+  componentDidMount(){
+    $(this.refs.dropdown).dropdown()
+    $(this.refs.collapse).sideNav({closeOnClick: true})
+  }
   render() {
     const showNotifications = function(){
-      if(this.props.notifications.length > 0){
+      if(this.props && this.props.notifications){
         return (
-          <li className="dropdown-button" data-activates="notifsDropdown">
+          <li ref="dropdown" className="dropdown-button" data-activates="notifsDropdown">
             <a href="">Уведомления <span className="new badge">{this.props.notifications.length}</span></a>
           </li>
         )
@@ -34,15 +39,17 @@ class NavBar extends Component {
           </ul>
          <div className="nav-wrapper">
            <a href="/" className="brand-logo center">AnyLearn</a>
-         <a href="" data-activates="mobile-demo" className="button-collapse"><i className="material-icons">menu</i></a>
-       <ul className="right hide-on-med-and-down">
+          <a href="" ref="collapse" data-activates="mobile-demo" className="button-collapse">
+            <i className="material-icons">menu</i>
+           </a>
+           <ul className="right hide-on-med-and-down">
                <li><LoginButtonsWrapper /></li>
                <li><a href="/forums">Форум</a></li>
                <li><a href="/add-skill">Создать навык</a></li>
            </ul>
 
            <ul className="left hide-on-med-and-down">
-                showNotifications
+                {showNotifications()}
            </ul>
            <ul className="side-nav" id="mobile-demo">
                <li><LoginButtonsWrapper /></li>
@@ -53,10 +60,6 @@ class NavBar extends Component {
        </nav>
 
     )
-  }
-  ComponentDidMount(){
-      $(".dropdown-button").dropdown()
-      $(".button-collapse").sideNav({closeOnClick: true})
   }
 }
 

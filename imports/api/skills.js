@@ -5,7 +5,13 @@ import { check } from 'meteor/check'
 export const Skills = new Mongo.Collection('skills')
 
 if (Meteor.isServer) {
-  Meteor.publish('skills', function skillsPublication(selector, options) {
+  Meteor.publish('skills', function skillsPublication(
+    selector = {},
+    options = {
+      sort: {
+          createdAt: -1
+      }
+  }) {
     return Skills.find(selector, options)
   })
 }

@@ -1,21 +1,60 @@
 import React from 'react'
 import { FlowRouter } from 'meteor/kadira:flow-router'
 import { mount } from 'react-mounter'
+//import AccountsTemplates from 'meteor/useraccounts:core'
+//import { Accounts } from 'meteor/accounts-base'
 
-import AppContainer from '../../ui/containers/AppContainer.js'
-import ListContainer from '../../ui/containers/ListContainer.js'
+import MainLayout from '../ui/pages/layouts/MainLayout.js'
+import Index from '../ui/pages/Index'
+//Routes
+/*Accounts.ui.config({
+  passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
+});*/
 
-
-FlowRouter.route('/lists/:_id', {
-  name: 'Lists.show',
+FlowRouter.route('/', {
+  name: 'Index',
   action() {
-    mount(AppContainer, {
-      main: <ListContainer/>
+    mount(MainLayout, {
+      main: <Index />
     })
   }
 })
 
+/*FlowRouter.route('/private', {
+  triggersEnter: [AccountsTemplates.ensureSignedIn],
+  action: function() {
+    BlazeLayout.render(...);
+    // or
+    ReactLayout.render(...);
+  }
+}); */
 
+
+
+// routes.jsx
+
+/*AccountsTemplates.configureRoute('signIn', {
+  layoutType: 'blaze-to-react',
+  name: 'signin',
+  path: '/login',
+  template: 'myLogin',
+//  layoutTemplate: CustomLayout,
+  layoutRegions: {
+  },
+  contentRegion: 'main'
+});*/
+
+
+
+/*FlowRouter.notFound = {
+  action: function() {
+    BlazeLayout.render('masterLayout', {
+      footer: "footer",
+      main: "pageNotFound",
+      nav: "nav",
+    });
+  }
+};*/
 
 
 
