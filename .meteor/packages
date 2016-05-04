@@ -16,21 +16,23 @@ standard-minifier-js    # JS minifier run for production mode
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
-accounts-password
-practicalmeteor:mocha
 poetic:materialize-scss
 fourseven:scss
-mrt:accounts-vk
+accounts-password
+accounts-ui
 accounts-twitter
 accounts-facebook
+mrt:accounts-vk
 long:htmldiff
 tmeasday:publish-counts
 alanning:roles
 kadira:flow-router
 react-meteor-data
 gadicc:blaze-react-component
-accounts-ui
 useraccounts:materialize
 useraccounts:flow-routing
 softwarerero:accounts-t9n
 # ryw:blog
+# kadira:blaze-layout
+# gwendall:useraccounts-react
+# practicalmeteor:mocha

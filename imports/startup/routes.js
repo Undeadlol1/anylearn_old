@@ -4,6 +4,8 @@ import { mount } from 'react-mounter'
 //import AccountsTemplates from 'meteor/useraccounts:core'
 //import { Accounts } from 'meteor/accounts-base'
 
+
+import AccountsUIWrapper from '../ui/containers/AccountsUIWrapper'
 import MainLayout from '../ui/pages/layouts/MainLayout.js'
 import Index from '../ui/pages/Index'
 //Routes
@@ -19,7 +21,32 @@ FlowRouter.route('/', {
     })
   }
 })
+FlowRouter.route('/sign-in', {
+  name: 'signIn',
+  action() {
+    mount(MainLayout, {
+      main: <AccountsUIWrapper />
+    })
+  }
+})
+FlowRouter.notFound = {
+    action: function() {
+      mount(MainLayout, {
+          main: <Index />
+      })
+    }
+}
 
+// this is a must
+AccountsTemplates.configureRoute('signIn', {
+  action() {
+    mount(MainLayout, {
+      main: <AccountsUIWrapper />
+    })
+  }
+})
+
+//state='signUp'
 /*FlowRouter.route('/private', {
   triggersEnter: [AccountsTemplates.ensureSignedIn],
   action: function() {
