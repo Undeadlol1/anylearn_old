@@ -5,7 +5,7 @@ import { $ } from 'meteor/jquery'
 import { Skills } from '../../api/skills.js'
 import List from '../components/List'
 
-class Index extends Component {
+class IndexPage extends Component {
 
   render() {
     return (
@@ -25,7 +25,7 @@ class Index extends Component {
   }
 }
 
-Index.propTypes = {
+IndexPage.propTypes = {
  skills: PropTypes.array.isRequired
 }
 
@@ -34,4 +34,4 @@ export default createContainer(() => {
     return {
         skills: Skills.find({}).fetch()
     }
-}, Index)
+}, IndexPage)

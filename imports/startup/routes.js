@@ -7,22 +7,47 @@ import { mount } from 'react-mounter'
 
 import AccountsUIWrapper from '../ui/containers/AccountsUIWrapper'
 import MainLayout from '../ui/pages/layouts/MainLayout.js'
-import Index from '../ui/pages/Index'
+import IndexPage from '../ui/pages/IndexPage'
+import SkillPage from '../ui/pages/SkillPage'
+import SkillsInsertPage from '../ui/pages/SkillsInsertPage'
+import SkillsUpdatePage from '../ui/pages/SkillsUpdatePage'
+
 //Routes
 /*Accounts.ui.config({
   passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
 });*/
 
 FlowRouter.route('/', {
-  name: 'Index',
+//  name: 'index',
   action() {
     mount(MainLayout, {
-      main: <Index />
+      main: <IndexPage />
+    })
+  }
+})
+FlowRouter.route('/add-skill', {
+  action() {
+    mount(MainLayout, {
+      main: <SkillsInsertPage />
+    })
+  }
+})
+FlowRouter.route('/skill/:skillId', {
+  action() {
+    mount(MainLayout, {
+      main: <SkillPage />
+    })
+  }
+})
+FlowRouter.route('/skill/:skillId/edit', {
+  action() {
+    mount(MainLayout, {
+      main: <SkillsUpdatePage />
     })
   }
 })
 FlowRouter.route('/sign-in', {
-  name: 'signIn',
+//  name: 'signIn',
   action() {
     mount(MainLayout, {
       main: <AccountsUIWrapper />
@@ -32,7 +57,7 @@ FlowRouter.route('/sign-in', {
 FlowRouter.notFound = {
     action: function() {
       mount(MainLayout, {
-          main: <Index />
+          main: <IndexPage />
       })
     }
 }

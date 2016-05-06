@@ -6,7 +6,12 @@ import { Counts } from 'meteor/tmeasday:publish-counts'
 export const Threads = new Mongo.Collection('threads')
 
 if (Meteor.isServer) {
-    Meteor.publish('threads', function threadsPublication(selector, options) {
+    Meteor.publish('threads', function threadsPublication(    selector = {},
+        options = {
+          sort: {
+              createdAt: -1
+          }
+      }) {
         Counts.publish(this, 'numberOfThreads', Threads.find(selector), {
             noReady: true
         })
