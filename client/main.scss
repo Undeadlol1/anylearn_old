@@ -17,6 +17,7 @@ $secondary-color: color("light-blue", "base");
 body {
     word-wrap: break-word;
     text-overflow: ellipsis;
+    background-color: #fcfcfc;
 }
 
 .clear-fix {
@@ -38,17 +39,25 @@ body {
     nav {
         padding: 0 0.6rem
     }
+    //for login buttons of accounts-ui-styled package
+    #login-dropdown-list {
+        top: 20px;
+        left: -200px;
+    }
+}
+// side nav styles for accounts-ui package
+.side-nav li {
+  text-align: center;
+  #login-dropdown-list{
+    position: static;
+    a{
+      height: 46px;
+    }
+  }
 }
 
 
-/*for login buttons of accounts-ui-styled package
 
-#login-dropdown-list {
-    top: 20px;
-    left: -200px;
-}
-
-*/
 
 
 /* fix for md-color-picker plugin unnecessary left padding */

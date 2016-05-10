@@ -2,13 +2,18 @@
 <div class="row section">
     <div class="col s12">
         <div style="overflow: auto; padding-top: 20px;">
-          <a href="skill/{{$ctrl.skill._id}}/edit" class="btn waves-effect waves-light left">Улучшить
+          <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a href="skill/{{$ctrl.skill._id}}/edit" title="редактировать" class="btn-floating btn-large waves-effect waves-light">
+              <i class="large material-icons">mode_edit</i>
+            </a>
+          </div>
+        <!-- <a href="skill/{{$ctrl.skill._id}}/edit" class="btn waves-effect waves-light left">Улучшить
               <i class="material-icons right">mode_edit</i>
+          </a> -->
+          <a href="skill/{{$ctrl.skill._id}}/forum/{{$ctrl.forum._id}}" class="btn waves-effect waves-light right">
+            Обсуждение<i class="material-icons right">list</i>
           </a>
-          <a href="skill/{{$ctrl.skill._id}}/forum/{{$ctrl.forum._id}}" class="btn waves-effect waves-light right">Обсуждение
-              <i class="material-icons right">list</i>
-          </a>
-          <a class="waves-effect waves-blue btn-flat right" title="подписаться" ng-click="$ctrl.subscribe()">
+          <a class="waves-effect waves-blue btn-flat left" title="подписаться" ng-click="$ctrl.subscribe()">
             <i ng-if="$ctrl.isSubscribed" class="material-icons center-align">turned_in</i>
             <i ng-if="!$ctrl.isSubscribed" class="material-icons center-align">turned_in_not</i>
           </a>
