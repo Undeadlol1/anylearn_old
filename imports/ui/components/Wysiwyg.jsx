@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+//import React, { PropTypes } from 'react'
 /*import {Editor, EditorState} from 'draft-js'
 
 export default class Wysiwyg extends React.Component {
@@ -11,7 +11,7 @@ export default class Wysiwyg extends React.Component {
     const {editorState} = this.state;
     return <Editor editorState={editorState} onChange={this.onChange} />;
   }
-}*/
+}
 import Editor from 'draft-js-editor'
 
 export default class Wysiwyg extends React.Component {
@@ -21,14 +21,15 @@ export default class Wysiwyg extends React.Component {
       <Editor />
       </div>)
   }
-}
+}*/
 
 //import 'tinymce/tinymce.js'
 //global.tinymce = mce
-//import TinyMCE from 'react-tinymce'
-// import React from 'react'
+import React, { Component, PropTypes } from 'react'
+import { $ } from 'meteor/jquery'
+import TinyMCE from 'react-tinymce'
 
-/*export default class Wysiwyg extends Component {
+export default class Wysiwyg extends Component {
   handleEditorChange(e) {
     console.log('Content was updated:', e.target.getContent());
   }
@@ -55,7 +56,7 @@ export default class Wysiwyg extends React.Component {
       </div>
     )
   }
-}*/
+}
 Wysiwyg.defaultProps = {
   label: '',
   text: ''

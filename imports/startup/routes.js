@@ -1,24 +1,29 @@
 import React from 'react'
 import { FlowRouter } from 'meteor/kadira:flow-router'
 import { mount } from 'react-mounter'
-//import AccountsTemplates from 'meteor/useraccounts:core'
-//import { Accounts } from 'meteor/accounts-base'
-
+import { Accounts } from 'meteor/accounts-base'
+import { Session } from 'meteor/session'
 
 import AccountsUIWrapper from '../ui/containers/AccountsUIWrapper'
 import MainLayout from '../ui/pages/layouts/MainLayout.js'
 import IndexPage from '../ui/pages/IndexPage'
 import SkillPage from '../ui/pages/SkillPage'
+import DevPage from '../ui/pages/DevPage'
+import ManifestPage from '../ui/pages/ManifestPage'
+import DocsPage from '../ui/pages/DocsPage'
 import SkillsInsertPage from '../ui/pages/SkillsInsertPage'
 import SkillsUpdatePage from '../ui/pages/SkillsUpdatePage'
 
-//Routes
-/*Accounts.ui.config({
-  passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
-});*/
+function checkLoggedIn (ctx, redirect) {
+  if (!Meteor.userId()) {
+    redirect('/sign-in')
+  }
+}
+// filtering
+//FlowRouter.triggers.enter([checkLoggedIn], {only: ["home"]});
+//FlowRouter.triggers.exit([checkLoggedIn], {except: ["home"]});
 
 FlowRouter.route('/', {
-//  name: 'index',
   action() {
     mount(MainLayout, {
       main: <IndexPage />
@@ -26,28 +31,53 @@ FlowRouter.route('/', {
   }
 })
 FlowRouter.route('/add-skill', {
+  triggersEnter: [checkLoggedIn],
   action() {
     mount(MainLayout, {
       main: <SkillsInsertPage />
     })
   }
 })
-FlowRouter.route('/skill/:skillId', {
+const skill = FlowRouter.group({
+    prefix: '/skill'
+});
+skill.route('/:skillId', {
   action() {
     mount(MainLayout, {
       main: <SkillPage />
     })
   }
 })
-FlowRouter.route('/skill/:skillId/edit', {
+skill.route('/:skillId/edit', {
+  triggersEnter: [checkLoggedIn],
   action() {
     mount(MainLayout, {
       main: <SkillsUpdatePage />
     })
   }
 })
+skill.route('/:skillId/dev', {
+  action() {
+    mount(MainLayout, {
+      main: <DevPage />
+    })
+  }
+})
+FlowRouter.route('/manifest/:manifestId', {
+  action() {
+    mount(MainLayout, {
+      main: <ManifestPage />
+    })
+  }
+})
+FlowRouter.route('/docs', {
+  action() {
+    mount(MainLayout, {
+      main: <DocsPage />
+    })
+  }
+})
 FlowRouter.route('/sign-in', {
-//  name: 'signIn',
   action() {
     mount(MainLayout, {
       main: <AccountsUIWrapper />
@@ -62,6 +92,9 @@ FlowRouter.notFound = {
     }
 }
 
+// when user logs out reload page to rerun permission checking
+Tracker.autorun(() =>{ if(Session.get('loggedIn')) FlowRouter.reload() })
+
 // this is a must
 AccountsTemplates.configureRoute('signIn', {
   action() {
@@ -70,6 +103,7 @@ AccountsTemplates.configureRoute('signIn', {
     })
   }
 })
+
 
 //state='signUp'
 /*FlowRouter.route('/private', {

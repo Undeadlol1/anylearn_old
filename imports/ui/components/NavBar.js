@@ -7,14 +7,7 @@ import { Notifications } from '../../api/notifications.js'
 import LoginButtonsWrapper from '../containers/LoginButtonsWrapper'
 
 class NavBar extends Component {
-  renderNotifications() {
-    return this.props.notifications.map((notif) => (
-      <li>
-        <a key={notif._id} onClick="this.check(notif._id).bind(this))" href="/revision/{notif.targetId}">{notif.name}</a>
-      </li>
-    ))
-  }
-  check(_id){
+  handleClick(_id){
     Meteor.call('notifications.update', _id)
   }
   componentDidMount(){
@@ -22,20 +15,27 @@ class NavBar extends Component {
     $(this.refs.collapse).sideNav({closeOnClick: true})
   }
   render() {
-    const showNotifications = function(){
-      if(this.props && this.props.notifications){
-        return (
-          <li ref="dropdown" className="dropdown-button" data-activates="notifsDropdown">
-            <a href="">Уведомления <span className="new badge">{this.props.notifications.length}</span></a>
-          </li>
-        )
+    const NotificationsIndicator = ()=>{
+      try {
+        if(this.props.notifications.length) return (
+            <li ref="dropdown" className="dropdown-button" data-activates="notifsDropdown">
+              <a>Уведомления <span className="new badge">{notifs.length}</span></a>
+            </li>
+          )
       }
-      else { return null }
+      catch (e) { return null }
+    }
+    const NotificationsList= () => {
+      return this.props.notifications.map((notif) => (
+        <li>
+          <a key={notif._id} onClick={this.handleClick(notif._id)} href={`/revision/${notif.targetId}`}>{notif.name}</a>
+        </li>
+      ))
     }
     return (
       <nav>
           <ul id="notifsDropdown" className="dropdown-content">
-            {this.renderNotifications()}
+            {NotificationsList()}
           </ul>
          <div className="nav-wrapper">
            <a href="/" className="brand-logo center">AnyLearn</a>
@@ -43,17 +43,20 @@ class NavBar extends Component {
             <i className="material-icons">menu</i>
            </a>
            <ul className="right hide-on-med-and-down">
-               <li><LoginButtonsWrapper /></li>
-               <li><a href="/forums">Форум</a></li>
+               {/* <li><a href="/forums">Форум</a></li> */}
                <li><a href="/add-skill">Создать навык</a></li>
+               <li><a href="/docs">Справка</a></li>
+               <li><LoginButtonsWrapper /></li>
            </ul>
 
            <ul className="left hide-on-med-and-down">
-                {showNotifications()}
+                {NotificationsIndicator()}
            </ul>
            <ul className="side-nav" id="mobile-demo">
                <li><LoginButtonsWrapper /></li>
-               <li><a href="/forums">Форум</a></li>
+               {NotificationsIndicator()}
+               {/* <li><a href="/forums">Форум</a></li> */}
+               <li><a href="/docs">Справка</a></li>
                <li><a href="/add-skill">Создать навык</a></li>
            </ul>
          </div>

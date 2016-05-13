@@ -30,7 +30,8 @@ kadira:flow-router
 react-meteor-data
 gadicc:blaze-react-component
 useraccounts:materialize
-useraccounts:flow-routing
+# useraccounts:flow-routing
+abiabsurd:flow-routing-react
 softwarerero:accounts-t9n
 # ryw:blog
 # kadira:blaze-layout

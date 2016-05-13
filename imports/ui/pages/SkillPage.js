@@ -17,24 +17,22 @@ class SkillPage extends Component {
   }
   render() {
     const showSubscribedIcon = ()=> {
-      // if user exists, and has skillId in skills array
-      const user = this.props.user
-      if (user &&
-          user.profile.skills &&
-          user.profile.skills.indexOf(this.props.skillId) != -1
-      ) return 'turned_in'
-      return 'turned_in_not'
-
+      try {
+        const skills = Meteor.user().profile.skills
+        return skills.indexOf(this.props.skillId) != -1 ? 'turned_in' : 'turned_in_not'
+      } catch (e) {
+        return 'turned_in_not'
+      }
     }
     return (
       <div>
         <div className="row section">
             <div className="col s12">
                 <div style={{overflow: 'auto', paddingTop: 20 + 'px'}}>
-                  <a href={`skill/${this.props.skill._id}/edit`} className="btn waves-effect waves-light left">Улучшить
+                  <a href={`/skill/${this.props.skill._id}/edit`} className="btn waves-effect waves-light left">Улучшить
                     <i className="material-icons right">mode_edit</i>
                   </a>
-                  <a href={`skill/${this.props.skill._id}/forum`} className="btn waves-effect waves-light right">Обсуждение
+                  <a href={`/skill/${this.props.skill._id}/dev`} className="btn waves-effect waves-light right">Обсуждение
                     <i className="material-icons right">list</i>
                   </a>
                   <a className="waves-effect waves-blue btn-flat right" title="подписаться" onClick={this.subscribe.bind(this)}>
@@ -48,7 +46,6 @@ class SkillPage extends Component {
         <div className="divider"></div>
         <ThreadsInsert parent={this.props.skillId} type="skill" />
         <List name="Обсуждения" items={this.props.threads} href="thread"/>
-        {/*<Threads-list parent={this.props.skill._id} type="skill" /> */}
       </div>
     )
   }
@@ -58,7 +55,7 @@ SkillPage.propTypes = {
  skill: PropTypes.object.isRequired,
  revision: PropTypes.object.isRequired,
  threads: PropTypes.array.isRequired,
- user: PropTypes.object
+// user: PropTypes.object
 }
 
 export default createContainer(() => {
@@ -82,7 +79,7 @@ export default createContainer(() => {
       skill: skill ? skill : {},
       revision: revision ? revision : {},
       threads: Threads.find({}).fetch(),
-      user: Meteor.user(),
+    //  user: Meteor.user(),
       skillId
   }
 }, SkillPage)

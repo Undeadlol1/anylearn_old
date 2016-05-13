@@ -6,11 +6,10 @@ import { Skills } from '../../api/skills.js'
 import List from '../components/List'
 
 class IndexPage extends Component {
-
   render() {
     return (
       <div>
-        <div className="row">
+        <div className="row section">
           <div className="col s12">
             <div className="card-panel light-blue base">
               <span className="white-text">

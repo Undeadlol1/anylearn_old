@@ -1,3 +1,4 @@
+abiabsurd:flow-routing-react@0.0.1
 accounts-base@1.2.7
 accounts-facebook@1.0.9
 accounts-oauth@1.1.12
@@ -98,7 +99,6 @@ ui@1.0.11
 underscore@1.0.8
 url@1.0.9
 useraccounts:core@1.14.2
-useraccounts:flow-routing@1.14.2
 useraccounts:materialize@1.14.2
 webapp@1.2.8
 webapp-hashing@1.0.9
