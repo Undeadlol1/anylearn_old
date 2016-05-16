@@ -13,7 +13,7 @@ export default class SkillStages extends Component {
   }
   render() {
     return (
-      <div className="row">
+      <div className="row card-panel">
           <div className="col s12">
               <ul className="tabs" ref="tabs">
                   <li className="tab col s3">

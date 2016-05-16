@@ -5,6 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router'
 import { Revisions } from '../../api/revisions.js'
 import { Threads } from '../../api/threads.js'
 import ThreadsInsert from '../components/ThreadsInsert'
+import Form from '../components/Form'
 import List from '../components/List'
 
 
@@ -12,7 +13,8 @@ class DevPage extends Component {
   render() {
     return (
       <div>
-        <ThreadsInsert parent={this.props.parent} type="dev" />
+        <Form preset="threads.insert" type="dev" />
+        {/*}<ThreadsInsert parent={this.props.parent} type="dev" />*/}
         <div className="row">
           <div className="col m12">
             <a href={`/manifest/${this.props.parent}`}>Манифест</a>

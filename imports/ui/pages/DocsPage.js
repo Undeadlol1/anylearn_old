@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import { introduction } from '../templates'
 
 export default class SkillsInsertPage extends Component {
+  createMarkup(__html) {
+    return {__html}
+  }
   render() {
-    function createMarkup() { return {__html: introduction} }
     return <div className="row">
-            <div className="col s12" dangerouslySetInnerHTML={createMarkup()}></div>
+            <div className="col s12" dangerouslySetInnerHTML={this.createMarkup(introduction)}></div>
            </div>
   }
 }

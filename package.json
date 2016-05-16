@@ -5,6 +5,7 @@
     "start": "meteor run"
   },
   "dependencies": {
+    "alloyeditor": "^1.2.0",
     "draft-js": "^0.7.0",
     "draft-js-editor": "^0.6.15",
     "meteor-node-stubs": "~0.2.0",
@@ -16,5 +17,7 @@
     "react-tinymce": "^0.5.1",
     "tinymce": "^4.3.11"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint-plugin-react": "^5.1.1"
+  }
 }

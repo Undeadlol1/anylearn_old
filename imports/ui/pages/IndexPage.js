@@ -4,9 +4,15 @@ import { Meteor } from 'meteor/meteor'
 import { $ } from 'meteor/jquery'
 import { Skills } from '../../api/skills.js'
 import List from '../components/List'
+import Form from '../components/Form'
 
 class IndexPage extends Component {
+  _handleSubmit(result, event){
+    event.preventDefault()
+    console.log(result)
+  }
   render() {
+  //  <Form elements={['text', 'textarea', 'email']} title='Добавить' onSubmit={this._handleSubmit} />
     return (
       <div>
         <div className="row section">
@@ -18,7 +24,7 @@ class IndexPage extends Component {
             </div>
           </div>
         </div>
-        <List name="Навыки" items={this.props.skills} href="skill"/>
+        <List name="Навыки" items={this.props.skills} href="skill" />
     </div>
     )
   }

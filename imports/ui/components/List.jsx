@@ -33,7 +33,7 @@ export default class List extends Component {
       <div className={ !this.props.className ? 'row' : ''}>
           <div className={"col " + (this.props.className || 's12 m12 l6 offset-l3')}>
               <div>
-                  <ul className="collection with-header">
+                  <ul className="collection with-header z-depth-1">
                       <li className="collection-item">
                           <h4 className="center-align">{this.props.name}</h4>
                       </li>

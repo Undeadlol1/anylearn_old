@@ -6,7 +6,8 @@ import { Counts } from 'meteor/tmeasday:publish-counts'
 export const Threads = new Mongo.Collection('threads')
 
 if (Meteor.isServer) {
-    Meteor.publish('threads', function threadsPublication(    selector = {},
+    Meteor.publish('threads', function threadsPublication(
+        selector = {},
         options = {
           sort: {
               createdAt: -1
@@ -18,14 +19,13 @@ if (Meteor.isServer) {
         return Threads.find(selector, options)
     })
 }
-
 Meteor.methods({
   'threads.insert' (data) {
     check(data.name, String)
     check(data.text, String)
     check(data.parent, String)
+    check(data._id, Match.Maybe(String)) // do i need it? where do i use it?
     check(data.type, Match.Maybe(String))
-    check(data._id, Match.Maybe(String))
     if (!Meteor.userId()) {
       throw new Meteor.Error('not-authorized')
     }
@@ -38,13 +38,16 @@ Meteor.methods({
       createdAt: new Date()
     }
     // if data specified insert it aswell
-    if(data.type) thread.type = data.type
-    if(data._id) thread._id = data._id
-    const threadId = Threads.insert(thread)
-    Meteor.call('comments.insert', {
-      text: data.text,
-      parent: threadId
-    })
-    return threadId
+    try {
+      thread.type = data.type
+      thread._id = data._id // do i need it? where do i use it?
+    } finally {
+      const threadId = Threads.insert(thread)
+      Meteor.call('comments.insert', {
+        text: data.text,
+        parent: threadId
+      })
+      return threadId
+    }
   }
 })
