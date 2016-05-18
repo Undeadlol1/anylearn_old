@@ -11,7 +11,9 @@ export default class ThreadsInsert extends Component {
     const text = ReactDOM.findDOMNode(this.refs.text).value.trim()
     const type = this.props.type
     const parent = this.props.parent
-    Meteor.call('threads.insert', { name, text, type, parent },
+    const data = { name, text, type, parent }
+    console.log(data)
+    Meteor.call('threads.insert', data,
       (err, result) => {
           if (err) console.log(err)
           else {
@@ -28,7 +30,7 @@ export default class ThreadsInsert extends Component {
   render() {
     return (
       <div className="row section">
-        <div className="col s12">
+        <div className="col s12 card-panel">
           <h4 className="center-align">Добавить обсуждение</h4>
           <form onSubmit={this.handleThreadsInsert.bind(this)}>
               <div className="row">

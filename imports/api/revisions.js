@@ -6,7 +6,7 @@ import { Counts } from 'meteor/tmeasday:publish-counts'
 export const Revisions = new Mongo.Collection('revisions')
 
 if (Meteor.isServer) {
-  Meteor.publish('revisions', function threadsPublication(selector, options) {
+  Meteor.publish('revisions', function (selector, options) {
       Counts.publish(this, 'numberOfRevisions', Revisions.find(selector), {
           noReady: true
       })
@@ -19,7 +19,7 @@ Meteor.methods({
     check(data.name, String)
     check(data.text, [String])
     check(data.parent, String)
-    check(data.description, Match.Maybe(String))
+    check(data.description, Match.Maybe(String)) // or just String?
 
     // Make sure the user is logged in before inserting
     if (!Meteor.userId()) {

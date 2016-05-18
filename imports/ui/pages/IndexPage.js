@@ -35,7 +35,13 @@ IndexPage.propTypes = {
 }
 
 export default createContainer(() => {
-    Meteor.subscribe('skills')
+    Meteor.subscribe('skills',
+    {},
+    {
+      sort: {
+          createdAt: -1
+      }
+    })
     return {
         skills: Skills.find({}).fetch()
     }

@@ -1,15 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import TinyMCE from 'react-tinymce'
 import {$} from 'meteor/jquery'
-//import { createContainer } from 'meteor/react-meteor-data'
-//import { Meteor } from 'meteor/meteor'
 
 export default class SkillStages extends Component {
-  componentDidMount(){
-    $(this.refs.tabs).tabs()
-  }
   createMarkup(__html) {
     return {__html}
+  }
+  componentDidMount(){
+    $(this.refs.tabs).tabs()
   }
   render() {
     return (
@@ -42,6 +40,5 @@ SkillStages.defaultProps = {
   text: ['', '', '', '']
 }
 SkillStages.propTypes = {
-  //label: PropTypes.string.isRequired,
   text: PropTypes.array.isRequired
 }

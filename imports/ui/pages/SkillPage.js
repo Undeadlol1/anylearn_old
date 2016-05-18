@@ -11,39 +11,48 @@ import List from '../components/List'
 
 
 class SkillPage extends Component {
+  constructor(props){
+    super(props)
+    this.state = {subscribed: false}
+  }
   subscribe(e){
     e.preventDefault()
-    Meteor.call('users.subscribe', this.props.skillId)
+    Meteor.call('users.subscribe', this.props.skillId,
+    (err, succes)=>{
+        if (err) console.log(err)
+        else this.setState({subscribed: true})
+    })
   }
   render() {
     const showSubscribedIcon = ()=> {
       try {
         const skills = Meteor.user().profile.skills
-        return skills.indexOf(this.props.skillId) != -1 ? 'turned_in' : 'turned_in_not'
+        return (skills.indexOf(this.props.skillId) != -1)
       } catch (e) {
-        return 'turned_in_not'
+        return false
       }
     }
     return (
       <div>
         <div className="row section">
             <div className="col s12">
-                <div style={{overflow: 'auto', paddingTop: 20 + 'px'}}>
-                  <a href={`/skill/${this.props.skill._id}/edit`} className="btn waves-effect waves-light left">Улучшить
-                    <i className="material-icons right">mode_edit</i>
-                  </a>
+                <div style={{overflow: 'auto', paddingTop:  '20px'}}>
+                  <div className="fixed-action-btn" style={{bottom: '45px', right: '24px'}}>
+                    <a href={`/skill/${this.props.skill._id}/edit`} className="btn-floating btn-large waves-effect waves-light">
+                      <i className="large material-icons">mode_edit</i>
+                    </a>
+                  </div>
                   <a href={`/skill/${this.props.skill._id}/dev`} className="btn waves-effect waves-light right">Обсуждение
                     <i className="material-icons right">list</i>
                   </a>
-                  <a className="waves-effect waves-blue btn-flat right" title="подписаться" onClick={this.subscribe.bind(this)}>
-                    <i className="material-icons center-align">{showSubscribedIcon()}</i>
+                  <a className="waves-effect waves-blue btn-flat left" title="подписаться" onClick={this.subscribe.bind(this)}>
+                    <i className="material-icons center-align">{showSubscribedIcon() ? 'turned_in' : 'turned_in_not'}</i>
                   </a>
                 </div>
                 <h1 className="center-align">{this.props.skill.name}</h1>
             </div>
         </div>
         <SkillStages text={this.props.revision.text} />
-        <div className="divider"></div>
         <ThreadsInsert parent={this.props.skillId} type="skill" />
         <List name="Обсуждения" items={this.props.threads} href="thread"/>
       </div>

@@ -24,8 +24,8 @@ Meteor.methods({
     check(data.name, String)
     check(data.text, String)
     check(data.parent, String)
-    check(data._id, Match.Maybe(String)) // do i need it? where do i use it?
     check(data.type, Match.Maybe(String))
+
     if (!Meteor.userId()) {
       throw new Meteor.Error('not-authorized')
     }
@@ -37,11 +37,9 @@ Meteor.methods({
       author: Meteor.userId(),
       createdAt: new Date()
     }
-    // if data specified insert it aswell
-    try {
-      thread.type = data.type
-      thread._id = data._id // do i need it? where do i use it?
-    } finally {
+    // if type of thread specified insert it aswell
+    try { thread.type = data.type }
+    finally {
       const threadId = Threads.insert(thread)
       Meteor.call('comments.insert', {
         text: data.text,

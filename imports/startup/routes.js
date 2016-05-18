@@ -10,6 +10,7 @@ import IndexPage from '../ui/pages/IndexPage'
 import SkillPage from '../ui/pages/SkillPage'
 import DevPage from '../ui/pages/DevPage'
 import ManifestPage from '../ui/pages/ManifestPage'
+import RevisionPage from '../ui/pages/RevisionPage'
 import DocsPage from '../ui/pages/DocsPage'
 import SkillsInsertPage from '../ui/pages/SkillsInsertPage'
 import SkillsUpdatePage from '../ui/pages/SkillsUpdatePage'
@@ -70,6 +71,13 @@ FlowRouter.route('/manifest/:manifestId', {
     })
   }
 })
+FlowRouter.route('/revision/:revisionId', {
+  action() {
+    mount(MainLayout, {
+      main: <RevisionPage />
+    })
+  }
+})
 FlowRouter.route('/docs', {
   action() {
     mount(MainLayout, {
@@ -86,6 +94,7 @@ FlowRouter.route('/sign-in', {
 })
 FlowRouter.notFound = {
     action: function() {
+      console.error('Route not found!')
       mount(MainLayout, {
           main: <IndexPage />
       })

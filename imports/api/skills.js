@@ -34,7 +34,8 @@ Meteor.methods({
       name: 'First version',
       text: data.text,
       parent: generatedId,
-      description: null
+      description: null,
+      previous: null
     })
     return Skills.insert({
           _id: generatedId,

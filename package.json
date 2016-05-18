@@ -6,16 +6,15 @@
   },
   "dependencies": {
     "alloyeditor": "^1.2.0",
+    "diff": "^2.2.2",
     "draft-js": "^0.7.0",
     "draft-js-editor": "^0.6.15",
     "meteor-node-stubs": "~0.2.0",
     "react": "^15.0.2",
     "react-addons-pure-render-mixin": "^15.0.2",
-    "react-diff": "0.0.6",
     "react-dom": "^15.0.2",
     "react-mounter": "^1.2.0",
-    "react-tinymce": "^0.5.1",
-    "tinymce": "^4.3.11"
+    "react-tinymce": "^0.5.1"
   },
   "devDependencies": {
     "eslint-plugin-react": "^5.1.1"

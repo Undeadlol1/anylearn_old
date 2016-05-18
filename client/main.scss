@@ -6,17 +6,26 @@
 
 /*****************************************************************************/
 // If you want to override materialize sass variables you can uncomment the following:
-//@import "{undeadlol1:materialize-scss-no-js}/bower_components/materialize/sass/components/_color.scss";
 @import "{poetic:materialize-scss}/sass/components/_color.scss";
 $primary-color: color("indigo", "darken-2");
 $secondary-color: color("light-blue", "base");
 // import main scss file
-//@import "{undeadlol1:materialize-scss-no-js}/bower_components/materialize/sass/materialize.scss";
 @import "{poetic:materialize-scss}/sass/materialize.scss";
-//.main
 body {
     word-wrap: break-word;
     text-overflow: ellipsis;
+    background-color: #fcfcfc;
+    // Meteor package installed content.css, which messed up typography
+    // this is a temprorary workaround
+    line-height: 1.5;
+    font-family: "Roboto", sans-serif;
+    font-weight: normal;
+    font-size: inherit;
+    color: rgba(0, 0, 0, 0.87);
+    /* this also works
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit; */
 }
 
 .clear-fix {

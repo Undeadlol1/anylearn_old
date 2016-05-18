@@ -13,8 +13,8 @@ class DevPage extends Component {
   render() {
     return (
       <div>
-        <Form preset="threads.insert" type="dev" />
-        {/*}<ThreadsInsert parent={this.props.parent} type="dev" />*/}
+        {/*<Form preset="threads.insert" type="dev" />*/}
+        <ThreadsInsert parent={this.props.parent} type="dev" />
         <div className="row">
           <div className="col m12">
             <a href={`/manifest/${this.props.parent}`}>Манифест</a>
@@ -22,7 +22,7 @@ class DevPage extends Component {
         </div>
         <div className="row">
           <List name="Обсуждения" items={this.props.threads} type="dev" href="thread" className="col s12 m6" />
-          <List name="История" items={this.props.revisions} href="thread" className="col s12 m6" />
+          <List name="История" items={this.props.revisions} href="revision" className="col s12 m6" />
         </div>
       </div>
     )
