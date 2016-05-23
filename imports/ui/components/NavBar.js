@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
 import { $ } from 'meteor/jquery'
 import { Notifications } from '../../api/notifications.js'
-import LoginButtonsWrapper from '../containers/LoginButtonsWrapper'
+import Blaze from 'meteor/gadicc:blaze-react-component'
 
 class NavBar extends Component {
   handleClick(_id){
@@ -45,18 +45,18 @@ class NavBar extends Component {
            <ul className="right hide-on-med-and-down">
                {/* <li><a href="/forums">Форум</a></li> */}
                <li><a href="/add-skill">Создать навык</a></li>
-               <li><a href="/docs">Справка</a></li>
-               <li><LoginButtonsWrapper /></li>
+               {/*<li><a href="/docs">Справка</a></li>*/}
+               <li><Blaze template="atNavButton" /></li>
            </ul>
 
            <ul className="left hide-on-med-and-down">
                 {NotificationsIndicator()}
            </ul>
            <ul className="side-nav" id="mobile-demo">
-               <li><LoginButtonsWrapper /></li>
+               <li><Blaze template="atNavButton" /></li>
                {NotificationsIndicator()}
                {/* <li><a href="/forums">Форум</a></li> */}
-               <li><a href="/docs">Справка</a></li>
+               {/*<li><a href="/docs">Справка</a></li>*/}
                <li><a href="/add-skill">Создать навык</a></li>
            </ul>
          </div>

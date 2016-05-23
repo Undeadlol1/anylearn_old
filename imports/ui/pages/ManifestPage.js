@@ -1,24 +1,39 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
 import { FlowRouter } from 'meteor/kadira:flow-router'
-import { Skills } from '../../api/skills.js'
-import { Revisions } from '../../api/revisions.js'
-import { Threads } from '../../api/threads.js'
+import { Suggestions } from '../../api/suggestions.js'
 import List from '../components/List'
+import Loading from '../components/Loading'
 
 
 class ManifestPage extends Component {
-  handleSubmit(e){
+  _handleSubmit(e){
     e.preventDefault()
-    Meteor.call('users.subscribe', this.props.skillId)
+    // get values for method call
+    const name = ReactDOM.findDOMNode(this.refs.name).value.trim()
+    const text = ReactDOM.findDOMNode(this.refs.text).value.trim()
+    const parent = this.props.manifestId
+    // call method
+    Meteor.call('suggestions.insert', { name, text, parent }, (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            ReactDOM.findDOMNode(this.refs.name).value = ''
+            // trigger blur to animate empty input (materializecss bug)
+            $(this.refs.name).blur()
+            ReactDOM.findDOMNode(this.refs.text).value = ''
+            $(this.refs.text).blur()
+        }
+    })
   }
   render() {
-    return (
+     return this.props.loaded ? (
       <section>
         <div className="row">
             <div className="col s12">
-              <form name="form" onSubmit={this.handleSubmit}>
+              <form name="form" onSubmit={this._handleSubmit.bind(this)}>
                 <div className="row">
                  <div className="input-field col s12">
                   <input ref="name" type="text" required />
@@ -41,41 +56,25 @@ class ManifestPage extends Component {
               </form>
             </div>
         </div>
-        <suggestions name="Основные положения" parent={this.props.manifestId}></suggestions>
+        <List name="Основные положения" items={this.props.suggestions} href="thread"/>
       </section>
-    )
+    ) : <Loading />
   }
 }
 
 ManifestPage.propTypes = {
- skill: PropTypes.object.isRequired,
- revision: PropTypes.object.isRequired,
- threads: PropTypes.array.isRequired,
- user: PropTypes.object
+ suggestions: PropTypes.array.isRequired,
+ manifestId: PropTypes.string.isRequired
 }
 
 export default createContainer(() => {
-  const skillId = FlowRouter.getParam('skillId')
-  Meteor.subscribe('skills', skillId)
-  Meteor.subscribe('revisions', {
-    parent: skillId,
-    active: true
-  })
-  Meteor.subscribe('threads', {
-      parent: skillId,
-      type: "skill"
-  }/*, {
+  const manifestId = FlowRouter.getParam('manifestId')
+  const loaded = Meteor.subscribe('suggestions', manifestId
+  /*, {
       limit: parseInt(this.perPage),
       skip: parseInt((this.getReactively('page') - 1) * this.perPage),
       sort: this.getReactively('sort')
-  }*/)
-  const skill = Skills.findOne()
-  const revision = Revisions.findOne()
-  return {
-      skill: skill ? skill : {},
-      revision: revision ? revision : {},
-      threads: Threads.find({}).fetch(),
-      user: Meteor.user(),
-      skillId
-  }
+  }*/).ready()
+  const suggestions = Suggestions.find().fetch()
+  return { suggestions, manifestId, loaded }
 }, ManifestPage)

@@ -13,8 +13,5 @@ export default class MainLayout extends Component {
         </main>
       </div>
     )
-    /* <footer>
-      {this.props.footer || <Footer />}
-    </footer> */
   }
 }

@@ -9,7 +9,6 @@ import '../imports/api/manifests.js';
 import '../imports/api/suggestions.js';
 import '../imports/api/votes.js';
 import '../imports/api/users.js';
-import '../imports/api/fixtures.js';
 import './fixtures'
 
 

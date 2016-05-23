@@ -7,25 +7,26 @@ import { Threads } from '../../api/threads.js'
 import ThreadsInsert from '../components/ThreadsInsert'
 import Form from '../components/Form'
 import List from '../components/List'
+import Loading from '../components/Loading'
 
 
 class DevPage extends Component {
   render() {
-    return (
+    return this.props.loaded ? (
       <div>
         {/*<Form preset="threads.insert" type="dev" />*/}
         <ThreadsInsert parent={this.props.parent} type="dev" />
-        <div className="row">
-          <div className="col m12">
-            <a href={`/manifest/${this.props.parent}`}>Манифест</a>
-          </div>
+        <div className="row card-panel">
+          <a href={`/manifest/${this.props.parent}`} className="col m12">
+            Манифест
+          </a>
         </div>
-        <div className="row">
+        <div className="row">{/* totalItems={} */}
           <List name="Обсуждения" items={this.props.threads} type="dev" href="thread" className="col s12 m6" />
           <List name="История" items={this.props.revisions} href="revision" className="col s12 m6" />
         </div>
       </div>
-    )
+    ) : <Loading />
   }
 }
 
@@ -37,18 +38,19 @@ DevPage.propTypes = {
 
 export default createContainer(() => {
   const parent = FlowRouter.getParam('skillId')
-  Meteor.subscribe('revisions', { parent })
-  Meteor.subscribe('threads', {
+  const revisionsReady = Meteor.subscribe('revisions', { parent }, { sort: { createdAt: -1 } }).ready()
+  const threadsReady =  Meteor.subscribe('threads', {
       parent,
       type: "dev"
-  }/*, {
-      limit: parseInt(this.perPage),
-      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
-      sort: this.getReactively('sort')
-  }*/)
+  }, {
+      sort: { createdAt: -1 }//,
+    //  limit: parseInt(this.perPage),
+    //  skip: parseInt((this.getReactively('page') - 1) * this.perPage)
+  }).ready()
+  const revisions = Revisions.find({}).fetch()
+  const threads = Threads.find({}).fetch()
   return {
-      revisions: Revisions.find({}).fetch(),
-      threads: Threads.find({}).fetch(),
-      parent
+    revisions, threads, parent,
+    loaded: revisionsReady && threadsReady
   }
 }, DevPage)

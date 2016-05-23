@@ -5,11 +5,18 @@ import { check } from 'meteor/check'
 export const Comments = new Mongo.Collection('comments')
 
 if (Meteor.isServer) {
-  Meteor.publish('comments', function commentsPublication(parent) {
-    return Comments.find({parent}, {
-      sort: { createdAt: -1 }
+    Meteor.publish('comments', function (
+        selector = {},
+        options = {
+          sort: {
+              createdAt: -1
+          }
+      }) {
+        Counts.publish(this, 'numberOfComments', Comments.find(selector), {
+            noReady: true
+        })
+        return Comments.find(selector, options)
     })
-  })
 }
 
 Meteor.methods({

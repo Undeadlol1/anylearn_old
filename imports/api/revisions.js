@@ -6,7 +6,10 @@ import { Counts } from 'meteor/tmeasday:publish-counts'
 export const Revisions = new Mongo.Collection('revisions')
 
 if (Meteor.isServer) {
-  Meteor.publish('revisions', function (selector, options) {
+  Meteor.publish('revisions', function (
+    selector,
+    options = { sort: { createdAt: -1 } }
+  ) {
       Counts.publish(this, 'numberOfRevisions', Revisions.find(selector), {
           noReady: true
       })

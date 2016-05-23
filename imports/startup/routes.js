@@ -4,16 +4,17 @@ import { mount } from 'react-mounter'
 import { Accounts } from 'meteor/accounts-base'
 import { Session } from 'meteor/session'
 
-import AccountsUIWrapper from '../ui/containers/AccountsUIWrapper'
 import MainLayout from '../ui/pages/layouts/MainLayout.js'
 import IndexPage from '../ui/pages/IndexPage'
 import SkillPage from '../ui/pages/SkillPage'
 import DevPage from '../ui/pages/DevPage'
 import ManifestPage from '../ui/pages/ManifestPage'
 import RevisionPage from '../ui/pages/RevisionPage'
+import ThreadPage from '../ui/pages/ThreadPage'
 import DocsPage from '../ui/pages/DocsPage'
 import SkillsInsertPage from '../ui/pages/SkillsInsertPage'
 import SkillsUpdatePage from '../ui/pages/SkillsUpdatePage'
+import Blaze from 'meteor/gadicc:blaze-react-component'
 
 function checkLoggedIn (ctx, redirect) {
   if (!Meteor.userId()) {
@@ -64,6 +65,13 @@ skill.route('/:skillId/dev', {
     })
   }
 })
+FlowRouter.route('/thread/:threadId', {
+  action() {
+    mount(MainLayout, {
+      main: <ThreadPage />
+    })
+  }
+})
 FlowRouter.route('/manifest/:manifestId', {
   action() {
     mount(MainLayout, {
@@ -88,7 +96,7 @@ FlowRouter.route('/docs', {
 FlowRouter.route('/sign-in', {
   action() {
     mount(MainLayout, {
-      main: <AccountsUIWrapper />
+      main: <Blaze template="atForm" />
     })
   }
 })
@@ -104,11 +112,14 @@ FlowRouter.notFound = {
 // when user logs out reload page to rerun permission checking
 Tracker.autorun(() =>{ if(Session.get('loggedIn')) FlowRouter.reload() })
 
-// this is a must
+// this is a must. Otherwise Blaze login templates do not work properly
 AccountsTemplates.configureRoute('signIn', {
   action() {
+    // TODO: review
+    // this is a code dublication (see /sign-in route)
+    // change it to FlowRouter.go('/sign-in') ?
     mount(MainLayout, {
-      main: <AccountsUIWrapper />
+      main: <Blaze template="atForm" />
     })
   }
 })

@@ -1,8 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 
 export default class Vote extends Component {
-  createMarkup(__html) {
-    return {__html}
+  vote(boolean) {
+      const data = {value, parent: this.getReactively('this.parent')}
+      // if choice exists and choice.value equals to choosen value
+      if(this.choice && this.choice.value === data.value) data.value = null
+      Meteor.call('votes.choose', data, err=>{
+        if (err) console.log(err)
+      })
   }
   render() {
     return (

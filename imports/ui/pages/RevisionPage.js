@@ -7,7 +7,7 @@ import Diff from '../components/Diff'
 
 class RevisionPage extends Component {
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextProps)
+    //console.log(nextProps)
     // if nextProps == defaultProps, do not let component to update
     try {
       return (nextProps.revision.text == ['', '', '', ''] && nextProps.previous.text == ['', '', '', ''])
@@ -17,8 +17,6 @@ class RevisionPage extends Component {
     }
   }
   render() {
-    console.log(this.props.revision)
-    console.log(this.props.previous)
     return (
         <div>
           <div className="row">

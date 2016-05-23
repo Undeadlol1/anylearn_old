@@ -19,11 +19,11 @@ SkillsUpdatePage.propTypes = {
 
 export default createContainer(() => {
   const parent = FlowRouter.getParam('skillId')
-  Meteor.subscribe('skills', parent)
-  Meteor.subscribe('revisions', {
+  const skillsReady = Meteor.subscribe('skills', parent).ready()
+  const revisionsReady = Meteor.subscribe('revisions', {
     parent,
     active: true
-  })
+  }).ready()
   const skill = Skills.findOne()
   const revision = Revisions.findOne()
   return {
@@ -32,6 +32,7 @@ export default createContainer(() => {
         text: ['', '', '', ''],
         previous: '',
         parent
-      }
+      },
+      loaded: skillsReady && revisionsReady
   }
 }, SkillsUpdatePage)

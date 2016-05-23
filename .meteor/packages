@@ -22,16 +22,16 @@ accounts-twitter
 accounts-facebook
 mrt:accounts-vk
 softwarerero:accounts-t9n
-# long:htmldiff
 tmeasday:publish-counts
 alanning:roles
 kadira:flow-router
 react-meteor-data
 gadicc:blaze-react-component
 useraccounts:materialize
-# useraccounts:flow-routing
 abiabsurd:flow-routing-react
-kemnep:tinymce
+# kemnep:tinymce
 # practicalmeteor:mocha
 fourseven:scss
 poetic:materialize-scss
+# for managing <head> attrs and scripts
+static-html

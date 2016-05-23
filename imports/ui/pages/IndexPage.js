@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor'
 import { $ } from 'meteor/jquery'
 import { Skills } from '../../api/skills.js'
 import List from '../components/List'
-import Form from '../components/Form'
+import Loading from '../components/Loading'
 
 class IndexPage extends Component {
   _handleSubmit(result, event){
@@ -12,8 +12,7 @@ class IndexPage extends Component {
     console.log(result)
   }
   render() {
-  //  <Form elements={['text', 'textarea', 'email']} title='Добавить' onSubmit={this._handleSubmit} />
-    return (
+    return this.props.loaded ? (
       <div>
         <div className="row section">
           <div className="col s12">
@@ -26,7 +25,7 @@ class IndexPage extends Component {
         </div>
         <List name="Навыки" items={this.props.skills} href="skill" />
     </div>
-    )
+    ) : <Loading />
   }
 }
 
@@ -35,14 +34,13 @@ IndexPage.propTypes = {
 }
 
 export default createContainer(() => {
-    Meteor.subscribe('skills',
+    const loaded = Meteor.subscribe('skills',
     {},
     {
       sort: {
           createdAt: -1
       }
-    })
-    return {
-        skills: Skills.find({}).fetch()
-    }
+    }).ready()
+    const skills = Skills.find({}).fetch()
+    return { skills, loaded }
 }, IndexPage)

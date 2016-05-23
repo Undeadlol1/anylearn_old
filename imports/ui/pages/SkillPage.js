@@ -8,6 +8,7 @@ import { Threads } from '../../api/threads.js'
 import SkillStages from '../components/SkillStages'
 import ThreadsInsert from '../components/ThreadsInsert'
 import List from '../components/List'
+import Loading from '../components/Loading'
 
 
 class SkillPage extends Component {
@@ -32,7 +33,7 @@ class SkillPage extends Component {
         return false
       }
     }
-    return (
+    return this.props.loaded ? (
       <div>
         <div className="row section">
             <div className="col s12">
@@ -56,7 +57,7 @@ class SkillPage extends Component {
         <ThreadsInsert parent={this.props.skillId} type="skill" />
         <List name="Обсуждения" items={this.props.threads} href="thread"/>
       </div>
-    )
+    ) : <Loading />
   }
 }
 
@@ -69,26 +70,27 @@ SkillPage.propTypes = {
 
 export default createContainer(() => {
   const skillId = FlowRouter.getParam('skillId')
-  Meteor.subscribe('skills', skillId)
-  Meteor.subscribe('revisions', {
+  const skillsReady = Meteor.subscribe('skills', skillId).ready()
+  const revisionsReady = Meteor.subscribe('revisions', {
     parent: skillId,
     active: true
-  })
-  Meteor.subscribe('threads', {
+  }).ready()
+  const threadsReady = Meteor.subscribe('threads', {
       parent: skillId,
       type: "skill"
   }/*, {
       limit: parseInt(this.perPage),
       skip: parseInt((this.getReactively('page') - 1) * this.perPage),
       sort: this.getReactively('sort')
-  }*/)
+  }*/).ready()
   const skill = Skills.findOne()
   const revision = Revisions.findOne()
+  const threads = Threads.find({}).fetch()
   return {
       skill: skill ? skill : {},
       revision: revision ? revision : {},
-      threads: Threads.find({}).fetch(),
-    //  user: Meteor.user(),
+      threads: threads,
+      loaded: skillsReady && revisionsReady && threadsReady,
       skillId
   }
 }, SkillPage)

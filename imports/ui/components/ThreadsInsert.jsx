@@ -12,7 +12,7 @@ export default class ThreadsInsert extends Component {
     const type = this.props.type
     const parent = this.props.parent
     const data = { name, text, type, parent }
-    console.log(data)
+    console.log(data.text)
     Meteor.call('threads.insert', data,
       (err, result) => {
           if (err) console.log(err)

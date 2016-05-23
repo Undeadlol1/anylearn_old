@@ -29,7 +29,7 @@ export default class Wysiwyg extends Component {
                 plugins: 'autoresize code image autolink advlist autosave codesample link preview print contextmenu paste',
                 autoresize_bottom_margin: 10,
                 paste_as_text: true,
-                elementpath: false,
+                elementpath: true,
                 resize: false
             }}
           onChange={this.handleEditorChange.bind(this)}

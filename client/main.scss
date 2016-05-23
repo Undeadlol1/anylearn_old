@@ -31,16 +31,19 @@ body {
 .clear-fix {
     clear: both
 }
-// rich text styles
-[ng-bind-html], wysiwyg {
+// rich text styles (experimenting with .col)
+.col {
   pre, code {
     display: block;
     background-color: #ECECA5;
   }
   li {
-    list-style: circle;
+    list-style: disc;
   }
 }
+// materializecss screws up ul's and li's
+// .tabs element width is calculated using padding value
+ul:not(.tabs) { padding: inherit; }
 
 @media #{$large-and-up} {
     // styles for large screens and up

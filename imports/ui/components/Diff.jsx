@@ -5,13 +5,15 @@ export default class Diff extends Component {
 
   render() {
     const createMarkup = () => {
-      const diff = JsDiff.diffChars(this.props.first, this.props.second)
-      const __html = diff.map(function(part, index){
-            // bg color green, red or grey
-            const color = part.added ? 'green' :
-              part.removed ? 'red' : 'grey'
-            return `<span key=${index} style="color: ${color}">${part.value}</span>`
-      })
+      const __html = JsDiff
+        .diffChars(this.props.first, this.props.second)
+        .map(function(part, index){
+              let color
+              if (part.added) color = 'green'
+              else if (part.removed) color = 'red'
+              return `<span key=${index} style="background-color: ${color};">${part.value}</span>`
+        })
+        .join('')
       return {__html}
     }
     return (
