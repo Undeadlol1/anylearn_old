@@ -1,21 +1,36 @@
 import React, { Component, PropTypes } from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
+import VoteContainer from './VoteContainer'
 import Pagination from './Pagination'
 
-export default class List extends Component {
+class List extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {loading: true}
+  }
+  componentWillUpdate(nextProps, nextState) {
+    this.setState({loading: true})
+  }
+  componentDidUpdate(prevProps, prevState) {
+    console.log('componentDidUpdate');
+    this.setState({loading: false})
+  }
   render() {
+    const p = this.props
     const renderItems = () => {
-      if(this.props.items.length != 0){
-        return this.props.items.map(item => {
+      // if items exist render them, else show empty list
+      if(p.items.length != 0){
+        return p.items.map(item => {
           return (
+            <li key={item._id} className="collection-item">
               <a
-                key={item._id}
-                href={"/" + this.props.href + "/" + item[this.props.target]}
-                className="collection-item"
+                href={"/" + p.href + "/" + item[p.target]}
               >
                 {item.name}
               </a>
+              {p.votes ? <VoteContainer parent={item._id} /> : ''}
+            </li>
             )
           }
         )
@@ -31,16 +46,19 @@ export default class List extends Component {
       }
     }
     return (
-      <div className={ !this.props.className ? 'row' : ''}>
-          <div className={(this.props.className || 'col s12 m12 l6 offset-l3')}>
+      <div className={ !p.className ? 'row' : ''}>
+          <div className={(p.className || 'col s12 m12 l6 offset-l3')}>
               <div>
                   <ul className="z-depth-1 collection with-header">
                       <li className="collection-item">
-                          <h4 className="center-align">{this.props.name}</h4>
+                          <h4 className="center-align">{p.name}</h4>
                       </li>
                       {renderItems()}
                   </ul>
-                  <Pagination />
+                  <Pagination
+                    numberOfItems={p.numberOfItems}
+                    onChangePage={p.onChangePage}
+                  />
               </div>
           </div>
     </div>
@@ -48,10 +66,15 @@ export default class List extends Component {
   }
 }
 List.defaultProps = {
-  target: '_id'
+  target: '_id',
+  votes: false
 }
 List.propTypes = {
   name: PropTypes.string.isRequired,
   href: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired
+  items: PropTypes.array.isRequired,
+  numberOfItems: PropTypes.number.isRequired,
+  votes: PropTypes.bool
 }
+
+export default List

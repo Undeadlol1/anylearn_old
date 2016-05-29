@@ -8,32 +8,33 @@ export default class Pagination extends Component {
     //this.props.changePage(data.selected++)
   }
   render(){
-        // if there are pages display this component
-        return (this.props.pageNum != 0) ? (
-          <div className='center-align'>
-            <ReactPaginate previousLabel={<i className="material-icons">chevron_left</i>}
-                             nextLabel={<i className="material-icons">chevron_right</i>}
-                             breakLabel={<a>...</a>}
-                             //pageNum={this.state.pageNum}
-                             marginPagesDisplayed={2}
-                             pageRangeDisplayed={5}
-                             clickCallback={this._handlePageClick.bind(this)}
-                             containerClassName={'pagination'}
-                             subContainerClassName={'pagination'}
-                             pageLinkClassName={'waves-effect'}
-                             activeClassName={'active'} />
-          </div>
-        ) : null
+    const p = this.props
+    const pages = Math.ceil(p.numberOfItems/p.perPage)
+    // if there are pages display this component
+    if (p.numberOfItems != 0 && p.numberOfItems/p.perPage > 1) {
+      return (
+        <div className='center-align'>
+          <ReactPaginate
+               previousLabel={<i className="material-icons">chevron_left</i>}
+               nextLabel={<i className="material-icons">chevron_right</i>}
+               breakLabel={<a>...</a>}
+               pageNum={pages}
+               marginPagesDisplayed={2}
+               pageRangeDisplayed={5}
+               clickCallback={p.onChangePage.bind(this)}
+               containerClassName={'pagination'}
+               subContainerClassName={'pagination'}
+               pageLinkClassName={'waves-effect'}
+               activeClassName={'active'} />
+        </div>
+      )
+    }
+    else return null
   }
 }
-Pagination.propTypes = {
-  //name: PropTypes.string.isRequired,
-  //href: PropTypes.string.isRequired,
-  //items: PropTypes.array.isRequired
-}
 Pagination.defaultProps = {
-  pageNum: 0
-  // classname do not have default prop because showing row class depend on existence of className
-//  className: 's12 m12 l6 offset-l3',
-//  target: '_id'
+  perPage: 10
+}
+Pagination.propTypes = {
+  perPage: PropTypes.number.isRequired
 }

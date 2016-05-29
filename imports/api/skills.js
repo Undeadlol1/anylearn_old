@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
 import { check } from 'meteor/check'
+import { Counts } from 'meteor/tmeasday:publish-counts'
 
 export const Skills = new Mongo.Collection('skills')
 
@@ -12,7 +13,10 @@ if (Meteor.isServer) {
           createdAt: -1
       }
   }) {
-    return Skills.find(selector, options)
+      Counts.publish(this, 'numberOfSkills', Skills.find(selector), {
+          noReady: true
+      })
+      return Skills.find(selector, options)
   })
 }
 
