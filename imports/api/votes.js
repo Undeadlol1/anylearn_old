@@ -5,11 +5,14 @@ import { check, Match } from 'meteor/check'
 export const Votes = new Mongo.Collection('votes')
 
 if (Meteor.isServer) {
-    Meteor.publish('votes', function votesPublication(parentId) {
-        /*return Votes.find({
-            parent: parentId
-        })*/
-        return Votes.find()
+    Meteor.publish('votes', function votesPublication(
+      selector = {},
+      options = {
+        sort: {
+            createdAt: -1
+        }
+    }) {
+        return Votes.find(selector, options)
     })
 }
 

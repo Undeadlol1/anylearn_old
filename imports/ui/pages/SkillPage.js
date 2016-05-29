@@ -2,14 +2,22 @@ import React, { Component, PropTypes } from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
 import { FlowRouter } from 'meteor/kadira:flow-router'
+import { Counts } from 'meteor/tmeasday:publish-counts'
+import { ReactiveVar } from 'meteor/reactive-var'
 import { Skills } from '../../api/skills.js'
 import { Revisions } from '../../api/revisions.js'
 import { Threads } from '../../api/threads.js'
+import { Responses } from '../../api/responses.js'
+//import { Responses } from '../../api/responses.js'
 import SkillStages from '../components/SkillStages'
 import ThreadsInsert from '../components/ThreadsInsert'
+import Interview from '../components/Interview'
 import List from '../components/List'
 import Loading from '../components/Loading'
 
+const perPage = 10
+let skipThreads = new ReactiveVar(0)
+let skipRevisions = new ReactiveVar(0)
 
 class SkillPage extends Component {
   constructor(props){
@@ -24,10 +32,13 @@ class SkillPage extends Component {
         else this.setState({subscribed: true})
     })
   }
+  changePage(e) {
+    skipThreads.set(e.selected * perPage)
+  }
   render() {
     const showSubscribedIcon = ()=> {
       try {
-        const skills = Meteor.user().profile.skills
+        const {skills} = Meteor.user().profile
         return (skills.indexOf(this.props.skillId) != -1)
       } catch (e) {
         return false
@@ -54,8 +65,14 @@ class SkillPage extends Component {
             </div>
         </div>
         <SkillStages text={this.props.revision.text} />
+        <Interview parent={this.props.skillId} userId={Meteor.userId()} />
         <ThreadsInsert parent={this.props.skillId} type="skill" />
-        <List name="Обсуждения" items={this.props.threads} href="thread"/>
+        <List
+          name="Обсуждения"
+          items={this.props.threads}
+          href="thread"
+          numberOfItems={this.props.numberOfThreads}
+          onChangePage={this.changePage.bind(this)} />
       </div>
     ) : <Loading />
   }
@@ -64,8 +81,7 @@ class SkillPage extends Component {
 SkillPage.propTypes = {
  skill: PropTypes.object.isRequired,
  revision: PropTypes.object.isRequired,
- threads: PropTypes.array.isRequired,
-// user: PropTypes.object
+ threads: PropTypes.array.isRequired
 }
 
 export default createContainer(() => {
@@ -78,19 +94,26 @@ export default createContainer(() => {
   const threadsReady = Meteor.subscribe('threads', {
       parent: skillId,
       type: "skill"
-  }/*, {
-      limit: parseInt(this.perPage),
-      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
-      sort: this.getReactively('sort')
-  }*/).ready()
-  const skill = Skills.findOne()
-  const revision = Revisions.findOne()
-  const threads = Threads.find({}).fetch()
+    }, {
+      sort: { createdAt: -1 },
+      limit: perPage,
+      skip: skipThreads.get()
+  })
+  const responseReady = Meteor.subscribe('responses', {
+    parent: skillId, userId: Meteor.userId()
+  }).ready()
+
+  let skill = Skills.findOne()
+  let revision = Revisions.findOne()
+  let response = Responses.findOne()
+  let threads = Threads.find().fetch()
   return {
       skill: skill ? skill : {},
       revision: revision ? revision : {},
+      response: response ? response : {},
       threads: threads,
-      loaded: skillsReady && revisionsReady && threadsReady,
+      numberOfThreads: Counts.get('numberOfThreads'),
+      loaded: skillsReady && revisionsReady,// && threadsReady,
       skillId
   }
 }, SkillPage)

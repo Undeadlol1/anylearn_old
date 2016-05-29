@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
 import { $ } from 'meteor/jquery'
+import { Counts } from 'meteor/tmeasday:publish-counts'
 import { Skills } from '../../api/skills.js'
 import List from '../components/List'
 import Loading from '../components/Loading'
@@ -23,14 +24,19 @@ class IndexPage extends Component {
             </div>
           </div>
         </div>
-        <List name="Навыки" items={this.props.skills} href="skill" />
+        <List
+          name="Навыки"
+          items={this.props.skills}
+          href="skill"
+          numberOfItems={this.props.numberOfSkills} />
     </div>
     ) : <Loading />
   }
 }
 
 IndexPage.propTypes = {
- skills: PropTypes.array.isRequired
+ skills: PropTypes.array.isRequired,
+ numberOfSkills: PropTypes.number.isRequired
 }
 
 export default createContainer(() => {
@@ -42,5 +48,9 @@ export default createContainer(() => {
       }
     }).ready()
     const skills = Skills.find({}).fetch()
-    return { skills, loaded }
+    return {
+      skills,
+      loaded,
+      numberOfSkills: Counts.get('numberOfSkills')
+    }
 }, IndexPage)

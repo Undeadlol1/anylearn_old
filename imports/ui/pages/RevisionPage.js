@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor'
 import { FlowRouter } from 'meteor/kadira:flow-router'
 import { Revisions } from '../../api/revisions.js'
 import Diff from '../components/Diff'
+import VoteContainer from '../components/VoteContainer'
 
 class RevisionPage extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -22,7 +23,10 @@ class RevisionPage extends Component {
           <div className="row">
               <div className="col s12 card light-blue base">
                 <div className="card-content">{/* <vote parent={this.props.revision._id}></vote> */}
-                  <p className="card-title white-text">{this.props.revision.name}</p>
+                  <p className="card-title white-text">
+                    {this.props.revision.name}
+                    <VoteContainer parent={this.props.revisionId} color='#039be5' />
+                  </p>
                   <p className="white-text">{this.props.revision.description}</p>
                 </div>
             </div>
@@ -37,7 +41,8 @@ class RevisionPage extends Component {
 
 RevisionPage.propTypes = {
  revision: PropTypes.object.isRequired,
- previous: PropTypes.object.isRequired
+ previous: PropTypes.object.isRequired,
+ revisionId: PropTypes.string.isRequired
 }
 /*RevisionPage.defaultProps = {
   revision: {text: ['', '', '', ''], name: '', desription: ''},
@@ -55,7 +60,8 @@ export default createContainer(() => {
   } catch (e) {}
   return {
     revision: revision ? revision : {text: ['', '', '', ''], name: '', desription: ''},
-    previous: previous ? previous :  {text: ['', '', '', '']}
+    previous: previous ? previous :  {text: ['', '', '', '']},
+    revisionId
   }
 
 }, RevisionPage)
