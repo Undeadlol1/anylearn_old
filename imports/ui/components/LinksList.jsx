@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
-import VoteContainer from '../containers/VoteContainer'
 import Pagination from './Pagination'
 
-class List extends Component {
+class LinksList extends Component {
   constructor(props) {
     super(props)
     this.state = {loading: true}
@@ -29,8 +28,7 @@ class List extends Component {
                 href={"/" + p.href + "/" + item[p.target]}
               >
                 {item.name}
-              </a> {/* className="light-blue-text text-darken-1" */}
-              {p.votes ? <VoteContainer parent={item._id} color="#303f9f" /> : ''}
+              </a>
             </li>
             )
           }
@@ -66,16 +64,14 @@ class List extends Component {
     )
   }
 }
-List.defaultProps = {
-  target: '_id',
-  votes: false
+LinksList.defaultProps = {
+  target: '_id'
 }
-List.propTypes = {
+LinksList.propTypes = {
   name: PropTypes.string.isRequired,
   href: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  numberOfItems: PropTypes.number.isRequired,
-  votes: PropTypes.bool
+  numberOfItems: PropTypes.number.isRequired
 }
 
-export default List
+export default LinksList

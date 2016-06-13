@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor'
 import { FlowRouter } from 'meteor/kadira:flow-router'
 import classNames from 'classnames'
 
-class Vote extends Component {
+class Revert extends Component {
   vote(value, event) {
       event.preventDefault()
       // gather data for method call
@@ -36,16 +36,16 @@ class Vote extends Component {
             className={redIcon}>
             thumb_down
           </i>
-          {this.props.dislikes}
+          <span className="material-icons">{this.props.dislikes}</span>
         </span>
       </span>
     )
   }
 }
-Vote.defaultProps = {
+Revert.defaultProps = {
   color: 'white'
 }
-Vote.propTypes = {
+Revert.propTypes = {
   likes: PropTypes.number.isRequired,
   dislikes: PropTypes.number.isRequired,
   choice: PropTypes.bool, // choice may be null so it s not required
@@ -53,4 +53,4 @@ Vote.propTypes = {
   parent: PropTypes.string.isRequired // needed for Meteor.call
 }
 
-export default Vote
+export default Revert

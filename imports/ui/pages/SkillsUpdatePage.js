@@ -18,13 +18,13 @@ SkillsUpdatePage.propTypes = {
 }
 
 export default createContainer(() => {
-  const parent = FlowRouter.getParam('skillId')
-  const skillsReady = Meteor.subscribe('skills', parent).ready()
+  const skillsReady = Meteor.subscribe('skills', {slug: FlowRouter.getParam('slugId')}).ready()
+  const skill = Skills.findOne()
+  const parent = skill ? skill._id : ''  // FlowRouter.getParam('slugId
   const revisionsReady = Meteor.subscribe('revisions', {
     parent,
     active: true
   }).ready()
-  const skill = Skills.findOne()
   const revision = Revisions.findOne()
   return {
       skillName: skill ? skill.name : '',

@@ -8,7 +8,6 @@ import { Skills } from '../../api/skills.js'
 import { Revisions } from '../../api/revisions.js'
 import { Threads } from '../../api/threads.js'
 import { Responses } from '../../api/responses.js'
-//import { Responses } from '../../api/responses.js'
 import SkillStages from '../components/SkillStages'
 import ThreadsInsert from '../components/ThreadsInsert'
 import Interview from '../components/Interview'
@@ -36,42 +35,44 @@ class SkillPage extends Component {
     skipThreads.set(e.selected * perPage)
   }
   render() {
+    const p = this.props
     const showSubscribedIcon = ()=> {
       try {
         const {skills} = Meteor.user().profile
-        return (skills.indexOf(this.props.skillId) != -1)
+        return (skills.indexOf(p.skillId) != -1)
       } catch (e) {
         return false
       }
     }
-    return this.props.loaded ? (
+
+    return p.loaded ? (
       <div>
         <div className="row section">
             <div className="col s12">
                 <div style={{overflow: 'auto', paddingTop:  '20px'}}>
                   <div className="fixed-action-btn" style={{bottom: '45px', right: '24px'}}>
-                    <a href={`/skill/${this.props.skill._id}/edit`} className="btn-floating btn-large waves-effect waves-light">
+                    <a href={`/s/${p.skill.slug}/edit`} className="btn-floating btn-large waves-effect waves-light">
                       <i className="large material-icons">mode_edit</i>
                     </a>
                   </div>
-                  <a href={`/skill/${this.props.skill._id}/dev`} className="btn waves-effect waves-light right">Обсуждение
+                  <a href={`/s/${p.skill.slug}/dev`} className="btn waves-effect waves-light right">Обсуждение
                     <i className="material-icons right">list</i>
                   </a>
                   <a className="waves-effect waves-blue btn-flat left" title="подписаться" onClick={this.subscribe.bind(this)}>
                     <i className="material-icons center-align">{showSubscribedIcon() ? 'turned_in' : 'turned_in_not'}</i>
                   </a>
                 </div>
-                <h1 className="center-align">{this.props.skill.name}</h1>
+                <h1 className="center-align">{p.skill.name}</h1>
             </div>
         </div>
-        <SkillStages text={this.props.revision.text} />
-        <Interview parent={this.props.skillId} userId={Meteor.userId()} />
-        <ThreadsInsert parent={this.props.skillId} type="skill" />
+        <SkillStages text={p.revision.text} />
+        <Interview parent={p.skillId} response={p.response} />
+        <ThreadsInsert parent={p.skillId} type="skill" />
         <List
           name="Обсуждения"
-          items={this.props.threads}
+          items={p.threads}
           href="thread"
-          numberOfItems={this.props.numberOfThreads}
+          numberOfItems={p.numberOfThreads}
           onChangePage={this.changePage.bind(this)} />
       </div>
     ) : <Loading />
@@ -85,21 +86,28 @@ SkillPage.propTypes = {
 }
 
 export default createContainer(() => {
-  const skillId = FlowRouter.getParam('skillId')
-  const skillsReady = Meteor.subscribe('skills', skillId).ready()
-  const revisionsReady = Meteor.subscribe('revisions', {
+  const skillsReady = Meteor.subscribe('skills', {
+    slug: FlowRouter.getParam('skillSlug')
+  }).ready(),
+  skillId = Skills.findOne() ? Skills.findOne()._id : '',
+  /*try {
+    let skillId = Skills.findOne()._id
+  } catch (e) {
+    let skillId = ''
+  }*/
+  revisionsReady = Meteor.subscribe('revisions', {
     parent: skillId,
     active: true
-  }).ready()
-  const threadsReady = Meteor.subscribe('threads', {
+  }).ready(),
+  threadsReady = Meteor.subscribe('threads', {
       parent: skillId,
       type: "skill"
     }, {
       sort: { createdAt: -1 },
       limit: perPage,
       skip: skipThreads.get()
-  })
-  const responseReady = Meteor.subscribe('responses', {
+  }),
+  responseReady = Meteor.subscribe('responses', {
     parent: skillId, userId: Meteor.userId()
   }).ready()
 

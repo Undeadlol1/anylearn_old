@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "alloyeditor": "^1.2.0",
+    "classnames": "latest",
     "diff": "^2.2.2",
     "draft-js": "^0.7.0",
     "draft-js-editor": "^0.6.15",
@@ -14,10 +15,14 @@
     "react-addons-create-fragment": "^15.0.2",
     "react-addons-pure-render-mixin": "^15.0.2",
     "react-dom": "^15.0.2",
+    "react-materialize": "^0.14.4",
     "react-mounter": "^1.2.0",
     "react-paginate": "latest",
     "react-spinkit": "latest",
-    "react-tinymce": "^0.5.1"
+    "react-tinymce": "^0.5.1",
+    "selectn": "latest",
+    "unless": "latest",
+    "react-materialize": "latest"
   },
   "devDependencies": {
     "eslint-plugin-react": "^5.1.1"

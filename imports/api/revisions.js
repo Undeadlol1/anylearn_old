@@ -76,5 +76,56 @@ Meteor.methods({
       author: Meteor.userId()
     })
     return newRevisionId
+  },
+  'revisions.revert' (_id, reason) {
+    check(_id, String)
+    check(reason, String)
+
+    // Make sure the user is logged in
+    if (!Meteor.userId()) throw new Meteor.Error('not-authorized')
+
+    // deactivate current revision
+    Revisions.update(_id, {
+      $set: {
+        active: false,
+        reverted: true
+      }
+    })
+
+    // insert new active revision
+    const current = Revisions.findOne(_id)
+    const previous = Revisions.findOne({previous: current.previous})
+    const newRevisionId = Revisions.insert({
+      name: `Отменяет "${current.name}"`,
+      description: reason,
+      text: previous.text,
+      parent: previous.parent,
+      previous: previous.previous,
+      active: true,
+      author: '',
+      createdAt: new Date()
+    })
+    
+    // create notification
+    Meteor.call('notifications.insert', {
+      name: `Отменяет "${current.name}"`,
+      targetId: newRevisionId,
+      parent: previous.parent,
+      type: 'revision',
+      author: Meteor.userId()
+    })
+    return newRevisionId
+}, // i don't know why i created revisions.remove
+  'revisions.remove' (_id) {
+    check(_id, String)
+
+    // Make sure the user is logged in before inserting a task
+    if (!Meteor.userId()) {
+      throw new Meteor.Error('not-authorized')
+    }
+
+    const previousId = Revisions.findOne(_id).previous
+    Revisions.update(previousId, { $set: {active: true} })
+    Revisions.remove(_id)
   }
 })

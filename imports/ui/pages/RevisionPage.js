@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor'
 import { FlowRouter } from 'meteor/kadira:flow-router'
 import { Revisions } from '../../api/revisions.js'
 import Diff from '../components/Diff'
-import VoteContainer from '../components/VoteContainer'
+import VoteContainer from '../containers/VoteContainer'
 
 class RevisionPage extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -25,7 +25,7 @@ class RevisionPage extends Component {
                 <div className="card-content">{/* <vote parent={this.props.revision._id}></vote> */}
                   <p className="card-title white-text">
                     {this.props.revision.name}
-                    <VoteContainer parent={this.props.revisionId} color='#039be5' />
+                    <VoteContainer parent={this.props.revisionId} color='white' />
                   </p>
                   <p className="white-text">{this.props.revision.description}</p>
                 </div>

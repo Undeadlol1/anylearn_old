@@ -8,8 +8,6 @@ import { Revisions } from '../../api/revisions.js'
 import { Threads } from '../../api/threads.js'
 import { Skills } from '../../api/skills.js'
 import ThreadsInsert from '../components/ThreadsInsert'
-//import Form from '../components/Form'
-import RevisionsList from '../components/RevisionsList'
 import List from '../components/List'
 import Loading from '../components/Loading'
 
@@ -17,7 +15,7 @@ const perPage = 10
 let skipThreads = new ReactiveVar(0)
 let skipRevisions = new ReactiveVar(0)
 
-class DevPage extends Component {
+class AdminPage extends Component {
   changePage(type, e) {
     if (type == 'threads') skipThreads.set(e.selected * perPage)
     else skipRevisions.set(e.selected * perPage)
@@ -26,7 +24,6 @@ class DevPage extends Component {
     const p = this.props
     return p.loaded ? (
       <div>
-        {/*<Form preset="threads.insert" type="dev" />*/}
         <ThreadsInsert parent={p.parent} type="dev" />
         <div className="row">
           <div className="col s12 m6">
@@ -54,7 +51,7 @@ class DevPage extends Component {
             className="col s12 m6"
             onChangePage={this.changePage.bind(this, 'threads')}
             />
-          <RevisionsList
+          <List
             name="История"
             items={p.revisions}
             numberOfItems={p.numberOfRevisions}
@@ -69,7 +66,7 @@ class DevPage extends Component {
   }
 }
 
-DevPage.propTypes = {
+AdminPage.propTypes = {
  parent: PropTypes.string.isRequired,
  loaded: PropTypes.bool.isRequired,
  revisions: PropTypes.array.isRequired,
@@ -105,4 +102,4 @@ export default createContainer(() => {
     loaded: true, //revisionsReady && threadsReady,
     parent
   }
-}, DevPage)
+}, AdminPage)

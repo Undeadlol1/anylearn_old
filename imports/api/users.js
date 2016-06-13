@@ -21,7 +21,7 @@ Meteor.methods({
                 'profile.skills': skillId
             }
         })
-      }
+    }
   }
 })
 

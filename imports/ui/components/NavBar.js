@@ -15,6 +15,12 @@ class NavBar extends Component {
     $(this.refs.collapse).sideNav({closeOnClick: true})
   }
   render() {
+      const adminButton = () =>{
+          if (Roles.userIsInRole(Meteor.userId(), 'admin')) {
+              return <li><a href="/admin">Admin</a></li>
+          }
+          else return ''
+      }
     const NotificationsIndicator = ()=>{
       try {
         if(this.props.notifications.length) return (
@@ -43,9 +49,9 @@ class NavBar extends Component {
             <i className="material-icons">menu</i>
            </a>
            <ul className="right hide-on-med-and-down">
-               {/* <li><a href="/forums">Форум</a></li> */}
                <li><a href="/add-skill">Создать навык</a></li>
-               {/*<li><a href="/docs">Справка</a></li>*/}
+               {adminButton()}
+               <li><a href="/profile">Профайл</a></li>
                <li><Blaze template="atNavButton" /></li>
            </ul>
 
@@ -55,8 +61,8 @@ class NavBar extends Component {
            <ul className="side-nav" id="mobile-demo">
                <li><Blaze template="atNavButton" /></li>
                {NotificationsIndicator()}
-               {/* <li><a href="/forums">Форум</a></li> */}
-               {/*<li><a href="/docs">Справка</a></li>*/}
+               <li><a href="/profile">Профайл</a></li>
+               {adminButton()}
                <li><a href="/add-skill">Создать навык</a></li>
            </ul>
          </div>

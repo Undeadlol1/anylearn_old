@@ -36,5 +36,7 @@ Pagination.defaultProps = {
   perPage: 10
 }
 Pagination.propTypes = {
-  perPage: PropTypes.number.isRequired
+  numberOfItems: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func.isRequired
 }

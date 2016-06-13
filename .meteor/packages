@@ -29,9 +29,12 @@ react-meteor-data
 gadicc:blaze-react-component
 useraccounts:materialize
 abiabsurd:flow-routing-react
+# helps not to wait for the Meteor.user() onject
+gwendall:ground-user
 # kemnep:tinymce
 # practicalmeteor:mocha
 fourseven:scss
 poetic:materialize-scss
 # for managing <head> attrs and scripts
 static-html
+todda00:friendly-slugs

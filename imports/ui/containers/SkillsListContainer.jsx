@@ -2,15 +2,15 @@ import React, { Component, PropTypes } from 'react'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
 import { Votes } from '../../api/votes'
-import Vote from './Vote'
+import Vote from '../components/Vote'
 
-class VoteContainer extends Component {
+class SkillsListContainer extends Component {
   render() {
-    return <Vote
+    return <Vote {...this.props}
             likes={this.props.likes}
             dislikes={this.props.dislikes}
             choice={this.props.choice}
-            parent={this.props.parent} />
+            parent={this.props.parent}/>
   }
 }
 
@@ -27,9 +27,9 @@ export default createContainer( params => {
     parent,
     choice: choice ? choice.value : null
   }
-}, VoteContainer)
+}, SkillsListContainer)
 
-VoteContainer.propTypes = {
+SkillsListContainer.propTypes = {
   likes: PropTypes.number.isRequired,
   dislikes: PropTypes.number.isRequired,
   choice: PropTypes.bool, // choice may be null so it s not required

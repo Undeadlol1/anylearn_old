@@ -26,11 +26,13 @@ export default class Wysiwyg extends Component {
           config={{
                 language_url : '/tinymce.languages/ru.js',
                 skin_url: '/tinymce.skins/light',
+                content_css : '/tinymce.css',
                 plugins: 'autoresize code image autolink advlist autosave codesample link preview print contextmenu paste',
                 autoresize_bottom_margin: 10,
                 paste_as_text: true,
                 elementpath: true,
-                resize: false
+                resize: false,
+                inline: true
             }}
           onChange={this.handleEditorChange.bind(this)}
         />

@@ -41,9 +41,7 @@ export default class SkillsUpdate extends Component {
       Meteor.call('revisions.update', data,
         (err) => {
             if (err) console.error(err)
-            else {
-              FlowRouter.go(`/skill/${parent}`)
-            }
+            else FlowRouter.go(`/s/${FlowRouter.getParam('skillSlug')}`)
         }
       )
     } catch (e) {

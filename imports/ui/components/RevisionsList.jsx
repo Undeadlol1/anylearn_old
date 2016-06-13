@@ -4,19 +4,14 @@ import { Meteor } from 'meteor/meteor'
 import VoteContainer from '../containers/VoteContainer'
 import Pagination from './Pagination'
 
-class List extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {loading: true}
-  }
-  componentWillUpdate(nextProps, nextState) {
-    //console.log('componentWillUpdate');
-    //this.setState({loading: true}) // infinite loop
-  }
-  componentDidUpdate(prevProps, prevState) {
-    //console.log('componentDidUpdate');
-    //this.setState({loading: false}) // infinite loop
-  }
+class RevisionsList extends Component {
+    revert(_id) {
+        console.log(_id);
+        const reason = prompt("Почему вы хотите отменить это изменение?")
+        console.log(reason);
+
+        if (reason) Meteor.call('revisions.revert', _id, reason)
+    }
   render() {
     const p = this.props
     const renderItems = () => {
@@ -29,8 +24,13 @@ class List extends Component {
                 href={"/" + p.href + "/" + item[p.target]}
               >
                 {item.name}
-              </a> {/* className="light-blue-text text-darken-1" */}
-              {p.votes ? <VoteContainer parent={item._id} color="#303f9f" /> : ''}
+              </a>
+              <VoteContainer parent={item._id} color="#303f9f" />
+              <i onClick={this.revert.bind(this, item._id)}
+                className="right text-red material-icons"
+                style={{cursor: 'pointer'}}>
+                restore
+              </i>
             </li>
             )
           }
@@ -66,16 +66,14 @@ class List extends Component {
     )
   }
 }
-List.defaultProps = {
-  target: '_id',
-  votes: false
+RevisionsList.defaultProps = {
+  target: '_id'
 }
-List.propTypes = {
+RevisionsList.propTypes = {
   name: PropTypes.string.isRequired,
   href: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  numberOfItems: PropTypes.number.isRequired,
-  votes: PropTypes.bool
+  numberOfItems: PropTypes.number.isRequired
 }
 
-export default List
+export default RevisionsList

@@ -3,10 +3,15 @@ import { FlowRouter } from 'meteor/kadira:flow-router'
 import { mount } from 'react-mounter'
 import { Accounts } from 'meteor/accounts-base'
 import { Session } from 'meteor/session'
+import Blaze from 'meteor/gadicc:blaze-react-component'
+import selectn from 'selectn'
 
-import MainLayout from '../ui/pages/layouts/MainLayout.js'
+// pages
+import MainLayout from '../ui/pages/MainLayout.js'
 import IndexPage from '../ui/pages/IndexPage'
 import SkillPage from '../ui/pages/SkillPage'
+import AdminPage from '../ui/pages/AdminPage'
+import ProfilePage from '../ui/pages/ProfilePage'
 import DevPage from '../ui/pages/DevPage'
 import ManifestPage from '../ui/pages/ManifestPage'
 import RevisionPage from '../ui/pages/RevisionPage'
@@ -14,16 +19,36 @@ import ThreadPage from '../ui/pages/ThreadPage'
 import DocsPage from '../ui/pages/DocsPage'
 import SkillsInsertPage from '../ui/pages/SkillsInsertPage'
 import SkillsUpdatePage from '../ui/pages/SkillsUpdatePage'
-import Blaze from 'meteor/gadicc:blaze-react-component'
 
 function checkLoggedIn (ctx, redirect) {
-  if (!Meteor.userId()) {
-    redirect('/sign-in')
-  }
+    if (!Meteor.userId()) redirect('/sign-in')
+}
+function checkAdmin (ctx, redirect){
+    console.log(Meteor.userId())
+    if (!Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        console.warn('You cannot acces that route! Redirecting to main page')
+        redirect('/')
+    }
 }
 // filtering
-//FlowRouter.triggers.enter([checkLoggedIn], {only: ["home"]});
-//FlowRouter.triggers.exit([checkLoggedIn], {except: ["home"]});
+//FlowRouter.triggers.enter([checkAdmin], {only: ['/admin']});
+
+/*const routes = [
+  ['/', <IndexPage />],
+  ['/welcome', <WelcomePage />],
+  ['/radar', <RadarPage />],
+  ['/rating', <RatingPage />],
+  ['/funds', <FundsPage />]
+].forEach( item =>{
+    FlowRouter.route(item[0], {
+      action() {
+        mount(MainLayout, {
+          main: item[1]
+        })
+      }
+    })
+  })*/
+
 
 FlowRouter.route('/', {
   action() {
@@ -41,30 +66,30 @@ FlowRouter.route('/add-skill', {
   }
 })
 const skill = FlowRouter.group({
-    prefix: '/skill'
-});
-skill.route('/:skillId', {
-  action() {
-    mount(MainLayout, {
-      main: <SkillPage />
-    })
-  }
-})
-skill.route('/:skillId/edit', {
-  triggersEnter: [checkLoggedIn],
-  action() {
-    mount(MainLayout, {
-      main: <SkillsUpdatePage />
-    })
-  }
-})
-skill.route('/:skillId/dev', {
-  action() {
-    mount(MainLayout, {
-      main: <DevPage />
-    })
-  }
-})
+      prefix: '/s/:skillSlug'
+  })
+  skill.route('/', {
+    action() {
+      mount(MainLayout, {
+        main: <SkillPage />
+      })
+    }
+  })
+  skill.route('/edit', {
+    triggersEnter: [checkLoggedIn],
+    action() {
+      mount(MainLayout, {
+        main: <SkillsUpdatePage />
+      })
+    }
+  })
+  skill.route('/dev', {
+    action() {
+      mount(MainLayout, {
+        main: <DevPage />
+      })
+    }
+  })
 FlowRouter.route('/thread/:threadId', {
   action() {
     mount(MainLayout, {
@@ -93,16 +118,33 @@ FlowRouter.route('/docs', {
     })
   }
 })
-FlowRouter.route('/sign-in', {
+FlowRouter.route('/admin', {
+  name: 'admin',
+  triggersEnter: [checkAdmin],
   action() {
     mount(MainLayout, {
-      main: <Blaze template="atForm" />
+      main: <AdminPage />
     })
   }
 })
+FlowRouter.route('/profile', {
+  action() {
+    mount(MainLayout, {
+      main: <ProfilePage />
+    })
+  }
+})
+FlowRouter.route('/sign-in', {
+  action() {
+      FlowRouter.go('/sign-in')
+      mount(MainLayout, {
+        main: <Blaze template="atForm" />
+      })
+  }
+})
 FlowRouter.notFound = {
-    action: function() {
-      console.error('Route not found!')
+    action() {
+      console.error('Route not found! Redirecting to index page')
       mount(MainLayout, {
           main: <IndexPage />
       })
@@ -118,9 +160,7 @@ AccountsTemplates.configureRoute('signIn', {
     // TODO: review
     // this is a code dublication (see /sign-in route)
     // change it to FlowRouter.go('/sign-in') ?
-    mount(MainLayout, {
-      main: <Blaze template="atForm" />
-    })
+    FlowRouter.go('/sign-in')
   }
 })
 

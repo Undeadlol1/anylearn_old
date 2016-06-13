@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
 import { FlowRouter } from 'meteor/kadira:flow-router'
 import { Threads } from '../../api/threads.js';
-import { Comments as Comms } from '../../api/comments.js'
+//import { Comments as Comms } from '../../api/comments.js'
 import List from '../components/List'
 import Loading from '../components/Loading'
 import Comments from '../components/Comments'
@@ -93,14 +93,14 @@ class ThreadPage extends Component {
 ThreadPage.propTypes = {
  name: PropTypes.string.isRequired,
  text: PropTypes.string,
- comments: PropTypes.array.isRequired,
+ //comments: PropTypes.array.isRequired,
  parent: PropTypes.string.isRequired
 }
 
 export default createContainer(() => {
   const parent = FlowRouter.getParam('threadId')
   const threadsReady = Meteor.subscribe('threads', parent).ready()
-  const commentsReady = Meteor.subscribe('comments', {parent}).ready()
+  //const commentsReady = Meteor.subscribe('comments', {parent}).ready()
    /*, {
         limit: parseInt(this.perPage),
         skip: parseInt((this.getReactively('page') - 1) * this.perPage),
@@ -111,7 +111,7 @@ export default createContainer(() => {
       name: thread ? thread.name : '',
       text: thread ? thread.text : '',
       comments: Comms.find().fetch(),
-      loaded: threadsReady && commentsReady,
+      loaded: threadsReady, //&& commentsReady,
       parent
   }
 }, ThreadPage)
