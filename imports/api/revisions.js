@@ -28,16 +28,19 @@ Meteor.methods({
     if (!Meteor.userId()) {
       throw new Meteor.Error('not-authorized')
     }
-
-    return Revisions.insert({
-      name: data.name,
-      text: data.text,
-      description: data.description,
-      parent: data.parent,
-      active: true,
-      createdAt: new Date(),
-      author: Meteor.userId()
-    })
+    // insert revision
+    const revisionId = Revisions.insert({
+                          name: data.name,
+                          text: data.text,
+                          description: data.description,
+                          parent: data.parent,
+                          active: true,
+                          createdAt: new Date(),
+                          author: Meteor.userId()
+                        })
+    // insert positive vote for your revision
+    Meteor.call('votes.insert', {value: true, parent: revisionId})
+    return revisionId
   },
   'revisions.update' (data) {
     check(data.name, String)
@@ -67,6 +70,8 @@ Meteor.methods({
       author: Meteor.userId(),
       createdAt: new Date()
     })
+    // insert positive vote for your revision
+    Meteor.call('votes.insert', {value: true, parent: newRevisionId})
     // create notification
     Meteor.call('notifications.insert', {
       name: data.name,
@@ -105,7 +110,7 @@ Meteor.methods({
       author: '',
       createdAt: new Date()
     })
-    
+
     // create notification
     Meteor.call('notifications.insert', {
       name: `Отменяет "${current.name}"`,
