@@ -4,46 +4,49 @@ import { mount } from 'react-mounter'
 import { Accounts } from 'meteor/accounts-base'
 import { Session } from 'meteor/session'
 import Blaze from 'meteor/gadicc:blaze-react-component'
-import selectn from 'selectn'
+import oget from 'oget'
 
 // pages
 import MainLayout from '../ui/pages/MainLayout.js'
-import IndexPage from '../ui/pages/IndexPage'
-import SkillPage from '../ui/pages/SkillPage'
+import IndexPageContainer from '../ui/containers/IndexPageContainer'
+import SkillPageContainer from '../ui/containers/SkillPageContainer'
 import AdminPage from '../ui/pages/AdminPage'
+import DashboardPageContainer from '../ui/containers/DashboardPageContainer'
 import ProfilePage from '../ui/pages/ProfilePage'
-import DevPage from '../ui/pages/DevPage'
+import DevPageContainer from '../ui/containers/DevPageContainer'
 import ManifestPage from '../ui/pages/ManifestPage'
+import ScholarPage from '../ui/pages/ScholarPage'
 import RevisionPage from '../ui/pages/RevisionPage'
 import ThreadPage from '../ui/pages/ThreadPage'
 import DocsPage from '../ui/pages/DocsPage'
 import SkillsInsertPage from '../ui/pages/SkillsInsertPage'
-import SkillsUpdatePage from '../ui/pages/SkillsUpdatePage'
+import SkillsUpdatePageContainer from '../ui/containers/SkillsUpdatePageContainer'
 
 function checkLoggedIn (ctx, redirect) {
     if (!Meteor.userId()) redirect('/sign-in')
 }
 function checkAdmin (ctx, redirect){
-    console.log(Meteor.userId())
-    if (!Roles.userIsInRole(Meteor.userId(), 'admin')) {
+    if (!_.contains(oget(Meteor.user(), 'roles'), 'admin')) {
         console.warn('You cannot acces that route! Redirecting to main page')
         redirect('/')
     }
 }
 // filtering
-//FlowRouter.triggers.enter([checkAdmin], {only: ['/admin']});
+//FlowRouter.triggers.enter([checkLoggedIn], {only: ['AddSkill', 'EditSkill']});
+//FlowRouter.triggers.enter([checkAdmin], {only: ['Admin']});
 
 /*const routes = [
-  ['/', <IndexPage />],
-  ['/welcome', <WelcomePage />],
-  ['/radar', <RadarPage />],
-  ['/rating', <RatingPage />],
-  ['/funds', <FundsPage />]
+  ['/', 'IndexPage', <IndexPageContainer />],
+  ['/add-skill', 'SkillsInsert', <SkillsInsertPage />],
+  ['/s/:skillSlug', 'Skill', <SkillPageContainer />],
+  ['/s/:skillSlug/dev', 'Dev', <DevPageContainer />],
+  ['/s/:skillSlug/edit', 'SkillsUpdate', <SkillsUpdatePageContainer />]
 ].forEach( item =>{
     FlowRouter.route(item[0], {
+      name: item[1],
       action() {
         mount(MainLayout, {
-          main: item[1]
+          main: item[2]
         })
       }
     })
@@ -53,7 +56,7 @@ function checkAdmin (ctx, redirect){
 FlowRouter.route('/', {
   action() {
     mount(MainLayout, {
-      main: <IndexPage />
+      main: <IndexPageContainer />
     })
   }
 })
@@ -71,7 +74,7 @@ const skill = FlowRouter.group({
   skill.route('/', {
     action() {
       mount(MainLayout, {
-        main: <SkillPage />
+        main: <SkillPageContainer />
       })
     }
   })
@@ -79,14 +82,14 @@ const skill = FlowRouter.group({
     triggersEnter: [checkLoggedIn],
     action() {
       mount(MainLayout, {
-        main: <SkillsUpdatePage />
+        main: <SkillsUpdatePageContainer />
       })
     }
   })
   skill.route('/dev', {
     action() {
       mount(MainLayout, {
-        main: <DevPage />
+        main: <DevPageContainer />
       })
     }
   })
@@ -101,6 +104,13 @@ FlowRouter.route('/manifest/:manifestId', {
   action() {
     mount(MainLayout, {
       main: <ManifestPage />
+    })
+  }
+})
+FlowRouter.route('/scholar/:scholarId', {
+  action() {
+    mount(MainLayout, {
+      main: <ScholarPage />
     })
   }
 })
@@ -127,7 +137,21 @@ FlowRouter.route('/admin', {
     })
   }
 })
+FlowRouter.route('/dashboard', {
+  action() {
+    mount(MainLayout, {
+      main: <DashboardPageContainer />
+    })
+  }
+})
 FlowRouter.route('/profile', {
+  action() {
+    mount(MainLayout, {
+      main: <ProfilePage />
+    })
+  }
+})
+FlowRouter.route('/profile/:userId', {
   action() {
     mount(MainLayout, {
       main: <ProfilePage />
@@ -146,7 +170,7 @@ FlowRouter.notFound = {
     action() {
       console.error('Route not found! Redirecting to index page')
       mount(MainLayout, {
-          main: <IndexPage />
+          main: <IndexPageContainer />
       })
     }
 }
@@ -165,99 +189,8 @@ AccountsTemplates.configureRoute('signIn', {
 })
 
 
-//state='signUp'
-/*FlowRouter.route('/private', {
-  triggersEnter: [AccountsTemplates.ensureSignedIn],
-  action: function() {
-    BlazeLayout.render(...);
-    // or
-    ReactLayout.render(...);
-  }
-}); */
 
-
-
-// routes.jsx
-
-/*AccountsTemplates.configureRoute('signIn', {
-  layoutType: 'blaze-to-react',
-  name: 'signin',
-  path: '/login',
-  template: 'myLogin',
-//  layoutTemplate: CustomLayout,
-  layoutRegions: {
-  },
-  contentRegion: 'main'
-});*/
-
-
-
-/*FlowRouter.notFound = {
-  action: function() {
-    BlazeLayout.render('masterLayout', {
-      footer: "footer",
-      main: "pageNotFound",
-      nav: "nav",
-    });
-  }
-};*/
-
-
-
-
-/*import angular from 'angular'
-import router from 'angular-ui-router'
-
-export default angular.module('routes', [
-  router
-]).config(['$urlRouterProvider', '$stateProvider', '$locationProvider', function($urlRouterProvider, $stateProvider, $locationProvider) {
-    'ngInject'
-    $locationProvider.html5Mode(true)
-    $stateProvider
-        .state('index', {
-            url: '/',
-            template: '<index></index>'
-        }).state('add-skill', {
-            url: '/add-skill',
-            template: '<skill-insert></skill-insert>'/*,
-            resolve: {
-                currentUser: ($q) => {
-                    if (Meteor.userId() === null) {
-                        return $q.reject('AUTH_REQUIRED')
-                    } else {
-                        return $q.resolve()
-                    }
-                }
-            }*/
-      /*  }).state('skill-edit', {
-            url: '/skill/:skillId/edit',
-            template: '<skill-edit></skill-edit>'
-        }).state('skill', {
-            url:'/skill/:skillId',
-            template: '<skill></skill>'
-        }).state('revision', {
-            url: '/revision/:revisionId',
-            template: '<revision></revision>'
-        }).state('forum', {
-            url: '/skill/:skillId/forum/:forumId',
-            template: '<forum></forum>'
-        }).state('thread', {
-            url: '/thread/:threadId',
-            template: '<thread></thread>'
-        }).state('manifest', {
-            url: '/manifest/:manifestId',
-            template: '<manifest></manifest>'
-        }).state('docs', {
-            url: '/docs',
-            template: '<docs></docs>'
-        }).state('site-forums', {
-            url:'/forums',
-            template: '<site-forums></site-forums>'
-        }).state('site-threads', {
-            url:'/forums/:skillId',
-            template: '<site-threads></site-threads>'
-        })
-
+/*
     $urlRouterProvider.otherwise("/")
 }]).run(['$rootScope', '$state', function($rootScope, $state) {
     'ngInject'

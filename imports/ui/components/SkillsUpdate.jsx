@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { Meteor } from 'meteor/meteor'
+import {$} from 'meteor/jquery'
 import { FlowRouter } from 'meteor/kadira:flow-router'
 import Wysiwyg from './Wysiwyg'
 
@@ -11,6 +12,12 @@ export default class SkillsUpdate extends Component {
       name: '',
       desription: ''
     }
+  }
+  componentDidMount(){
+    $(this.refs.tabs).tabs()
+  }
+  componentWillUnmount() {
+      $(this.refs.tabs).remove()
   }
   _handleTextChange(position, text){
     let array = this.state.text
@@ -40,8 +47,12 @@ export default class SkillsUpdate extends Component {
       if (text == this.props.text) throw new Error("You didn't changed anything!")
       Meteor.call('revisions.update', data,
         (err) => {
-            if (err) console.error(err)
-            else FlowRouter.go(`/s/${FlowRouter.getParam('skillSlug')}`)
+            if (err) Materialize.toast(`Произошла ошибка! ${err.name}`, 4000)
+            else {
+                Materialize.toast('Сохранено!', 4000)
+                if (this.props.callback) this.props.callback()
+                else FlowRouter.go(`/s/${FlowRouter.getParam('skillSlug')}`)
+            }
         }
       )
     } catch (e) {
@@ -50,30 +61,49 @@ export default class SkillsUpdate extends Component {
   }
   render() {
     const {text} = this.props.revision
+    const {_handleChange, _handleTextChange, _handleSkillsUpdate} = this
     return (
-      <div className="row">
+      <div className="row card-panel" {...this.props}>
           <div className="col s12">
-              <h1 className="center-align">{this.props.skillName}</h1>
-              <form onSubmit={this._handleSkillsUpdate.bind(this)}>
-                  <Wysiwyg label="Новичок" text={text[0]} onChange={this._handleTextChange.bind(this, 0)} />
-                  <Wysiwyg label="Ученик" text={text[1]} onChange={this._handleTextChange.bind(this, 1)} />
-                  <Wysiwyg label="Практикант" text={text[2]} onChange={this._handleTextChange.bind(this, 2)} />
-                  <Wysiwyg label="Мастер" text={text[3]} onChange={this._handleTextChange.bind(this, 3)} />
+              <ul className="tabs" ref="tabs">
+                  <li className="tab col s3">
+                      <a href="#stage1">Новичок</a>
+                  </li>
+                  <li className="tab col s3">
+                      <a href="#stage2">Ученик</a>
+                  </li>
+                  <li className="tab col s3">
+                      <a href="#stage3">Практикант</a>
+                  </li>
+                  <li className="tab col s3">
+                      <a href="#stage4">Мастер</a>
+                  </li>
+              </ul>
+          </div>
+          <div className="col s12">
+              <form onSubmit={_handleSkillsUpdate.bind(this)}>
+                  <Wysiwyg id="stage1" text={text[0]} onChange={_handleTextChange.bind(this, 0)} />
+                  <Wysiwyg id="stage2" text={text[1]} onChange={_handleTextChange.bind(this, 1)} />
+                  <Wysiwyg id="stage3" text={text[2]} onChange={_handleTextChange.bind(this, 2)} />
+                  <Wysiwyg id="stage4" text={text[3]} onChange={_handleTextChange.bind(this, 3)} />
                   <div className="row">
                     <div className="input-field col s12">
-                        <input onChange={this._handleChange.bind(this, 'name')} type="text" required />
+                        <input onChange={_handleChange.bind(this, 'name')} type="text" required />
                         <label>Название изменения</label>
                     </div>
                   </div>
-                  <div className="row">
+                  <div className="row center">
                     <div className="input-field col s12">
-                        <textarea onChange={this._handleChange.bind(this, 'description')} className="materialize-textarea"></textarea>
+                        <textarea onChange={_handleChange.bind(this, 'description')} className="materialize-textarea"></textarea>
                         <label>Описание изменения (желательно)</label>
                     </div>
                   </div>
-                  <button className="btn waves-effect waves-light" type="submit" name="action">Сохранить
-                      <i className="material-icons right">send</i>
-                  </button>
+                  <div className="row center">
+                      <button className="btn waves-effect waves-light" type="submit" name="action">
+                          Сохранить
+                          <i className="material-icons right">send</i>
+                      </button>
+                  </div>
               </form>
           </div>
       </div>
@@ -82,6 +112,6 @@ export default class SkillsUpdate extends Component {
 }
 
 SkillsUpdate.propTypes = {
- skillName: PropTypes.string.isRequired,
- revision: PropTypes.object.isRequired
+ revision: PropTypes.object.isRequired,
+ callback: PropTypes.func
 }

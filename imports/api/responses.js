@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
 import { check } from 'meteor/check'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 
 export const Responses = new Mongo.Collection('responses')
 
@@ -15,6 +16,24 @@ if (Meteor.isServer) {
     return Responses.find(selector, options)
   })
 }
+
+Responses.schema = new SimpleSchema({
+	why: {type: String},
+	exp: {type: String},
+	parent: {type: String, regEx: SimpleSchema.RegEx.Id},
+	userId: {type: String, regEx: SimpleSchema.RegEx.Id},
+	createdAt: {type: Date}
+})
+Responses.attachSchema(Responses.schema)
+
+/*Responses.helpers({
+	revision() {
+		return Revisions.findOne({ parent: this._id, active: true })
+	},
+	threads() {
+		return Threads.find({ parent: this._id, type: "skill" })
+	}
+})*/
 
 Meteor.methods({
   'responses.insert' (data) {

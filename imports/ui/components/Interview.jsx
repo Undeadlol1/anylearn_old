@@ -13,7 +13,7 @@ class Interview extends Component {
     // call insert method
     Meteor.call('responses.insert', { why, exp, parent },
       (err, result) => {
-          if (err) console.log(err)
+          if (err) console.error(err)
           else {
             // Clear form
             ReactDOM.findDOMNode(this.refs.why).value = null
@@ -26,35 +26,36 @@ class Interview extends Component {
     )
   }
   render() {
+      const {_handleSubmit, props: response} = this
     // if interview already been passed do not display component
-    return this.props.response ? null : (
-      <div className="row section">
-        <div className="col s12">
-          <h4 className="center-align">Опрос</h4>
-          <form onSubmit={this._handleSubmit.bind(this)} className="card-panel">
-              <div className="row">
-                <div className="input-field col s12">
-                  <input ref="why" type="text" id="textInput" required />
-                  <label htmlFor="textInput">Зачем вам этот навык?</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="input-field col s12">
-                  <textarea ref="exp" className="materialize-textarea" required></textarea>
-                  <label>Есть ли у вас опыт? Если да, то какой?</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="input-field center-align">
-                  <button className="btn waves-effect waves-light" type="submit">Сохранить
-                    <i className="material-icons right">send</i>
-                  </button>
-                </div>
-              </div>
-          </form>
-        </div>
-      </div>
-    )
+    return _.isEmpty(response) ? (
+        <div className="row">
+            <div className="col s12">
+              <h4 className="center-align">Опрос</h4>
+              <form onSubmit={_handleSubmit.bind(this)} className="card-panel">
+                  <div className="row">
+                    <div className="input-field col s12">
+                      <input ref="why" type="text" id="textInput" required />
+                      <label htmlFor="textInput">Зачем вам этот навык?</label>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="input-field col s12">
+                      <textarea ref="exp" className="materialize-textarea" required></textarea>
+                      <label>Есть ли у вас опыт? Если да, то какой?</label>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="input-field center-align">
+                      <button className="btn waves-effect waves-light" type="submit">Сохранить
+                        <i className="material-icons right">send</i>
+                      </button>
+                    </div>
+                  </div>
+              </form>
+            </div>
+          </div>
+      ) : null
   }
 }
 Interview.propTypes = {

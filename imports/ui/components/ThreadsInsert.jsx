@@ -48,7 +48,9 @@ export default class ThreadsInsert extends Component {
       <div className="row section">
         <div className="col s12">
           <h4 className="center-align">Добавить обсуждение</h4>
-          <form onSubmit={this.handleThreadsInsert.bind(this)} className="card-panel">
+		</div>
+		<div className="col s12 card-panel">
+          <form onSubmit={this.handleThreadsInsert.bind(this)}>
               <div className="row">
                 <div className="input-field col s12">
                   <input ref="name" id="thread-name" type="text" required />

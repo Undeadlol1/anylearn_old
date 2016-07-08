@@ -22,6 +22,7 @@ accounts-twitter
 accounts-facebook
 mrt:accounts-vk
 softwarerero:accounts-t9n
+splendido:accounts-meld
 tmeasday:publish-counts
 alanning:roles
 kadira:flow-router
@@ -38,3 +39,7 @@ poetic:materialize-scss
 # for managing <head> attrs and scripts
 static-html
 todda00:friendly-slugs
+meteorhacks:subs-manager
+aldeed:simple-schema
+aldeed:collection2
+dburles:collection-helpers

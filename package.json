@@ -11,18 +11,16 @@
     "draft-js": "^0.7.0",
     "draft-js-editor": "^0.6.15",
     "meteor-node-stubs": "~0.2.0",
+    "oget": "^1.0.6",
     "react": "^15.0.2",
     "react-addons-create-fragment": "^15.0.2",
     "react-addons-pure-render-mixin": "^15.0.2",
     "react-dom": "^15.0.2",
-    "react-materialize": "^0.14.4",
+    "react-materialize": "latest",
     "react-mounter": "^1.2.0",
     "react-paginate": "latest",
     "react-spinkit": "latest",
-    "react-tinymce": "^0.5.1",
-    "selectn": "latest",
-    "unless": "latest",
-    "react-materialize": "latest"
+    "react-tinymce": "^0.5.1"
   },
   "devDependencies": {
     "eslint-plugin-react": "^5.1.1"

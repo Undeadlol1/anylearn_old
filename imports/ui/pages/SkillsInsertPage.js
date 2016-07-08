@@ -1,11 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 import SkillsInsert from '../components/SkillsInsert'
 
-export default class SkillsInsertPage extends Component {
-  render() {
+const SkillsInsertPage = ()=>{
     return <SkillsInsert />
-  }
 }
-/*export default function SkillsInsertPage() {
-  return <SkillsInsert />
-}*/
+export default SkillsInsertPage

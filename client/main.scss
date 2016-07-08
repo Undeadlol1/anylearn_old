@@ -14,7 +14,7 @@ $secondary-color: color("light-blue", "base");
 body {
     word-wrap: break-word;
     text-overflow: ellipsis;
-    background-color: #fcfcfc;
+    background-color: #e8e8e8; //#fcfcfc
     // Meteor package installed content.css, which messed up typography
     // this is a temprorary workaround
     line-height: 1.5;
@@ -44,6 +44,7 @@ body {
 // materializecss screws up ul's and li's
 // .tabs element width is calculated using padding value
 ul:not(.tabs) { padding: inherit; }
+ul.collection { padding: initial; }
 
 @media #{$large-and-up} {
     // styles for large screens and up

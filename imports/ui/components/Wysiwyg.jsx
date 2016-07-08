@@ -19,8 +19,8 @@ export default class Wysiwyg extends Component {
   }
   render() {
     return (
-      <div>
-        <b>{this.props.label || ''}</b>
+      <div {...this.props}>
+        {this.props.label ? <b>{this.props.label}</b> : ''}
         <TinyMCE
           content={this.props.text}
           config={{
@@ -32,7 +32,7 @@ export default class Wysiwyg extends Component {
                 paste_as_text: true,
                 elementpath: true,
                 resize: false,
-                inline: true
+                //inline: true
             }}
           onChange={this.handleEditorChange.bind(this)}
         />
@@ -41,10 +41,10 @@ export default class Wysiwyg extends Component {
   }
 }
 Wysiwyg.defaultProps = {
-  //label: '',
+  label: '',
   text: ''
 }
 Wysiwyg.propTypes = {
-  //label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   text: PropTypes.string.isRequired
 }

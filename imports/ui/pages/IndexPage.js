@@ -1,18 +1,27 @@
 import React, { Component, PropTypes } from 'react'
-import { createContainer } from 'meteor/react-meteor-data'
-import { Meteor } from 'meteor/meteor'
-import { Counts } from 'meteor/tmeasday:publish-counts'
-import { Skills } from '../../api/skills.js'
-import { Revisions } from '../../api/revisions.js'
-import SkillsList from '../components/SkillsList'
 import Loading from '../components/Loading'
-import { Row, Col, CardPanel } from 'react-materialize'
-
+import SkillsList from '../components/SkillsList'
+import { Row, Col, CardPanel, Collection, CollectionItem } from 'react-materialize'
 
 class IndexPage extends Component {
   //_changePage(e) {skip.set(e.selected * perPage)}
   render() {
-    return this.props.loaded ? (
+     const {props} = this
+     const renderUsers = props.users.sort((first, second) =>{
+                return second.revisionsCount - first.revisionsCount
+        }).map(user => {
+                let name
+                try {
+                    name = user.username || user.profile.name
+                } catch (e) {
+                    name = user._id
+                }
+                if (user.revisionsCount == 0) return
+                return <a href={`profile/${user._id}`} className="collection-item" key={user._id} style={{overflow: 'auto'}}>
+                            <span className="left">{name}</span><span className="right">внесено изменений: <b>{user.revisionsCount}</b></span>
+                        </a>
+        })
+    return props.loaded ? (
       <div>
         <Row className="section">
           <Col s={12}>
@@ -21,33 +30,27 @@ class IndexPage extends Component {
             </CardPanel>
           </Col>
         </Row>
-        <SkillsList skills={this.props.skills} revisions={this.props.revisions} />
+        <SkillsList skills={props.skills} revisions={props.revisions} />
+        <Row>
+           <Col s={12}>
+             <ul className="collection with-header">
+                <li style={{listStyle: 'none'}} className="collection-header">
+					<h5>Самые активные пользователи</h5>
+				</li>
+                {renderUsers}
+            </ul>
+          </Col>
+        </Row>
     </div>
     ) : <Loading />
   }
 }
 
 IndexPage.propTypes = {
+ users: PropTypes.array.isRequired,
  skills: PropTypes.array.isRequired,
  revisions: PropTypes.array.isRequired,
  numberOfSkills: PropTypes.number.isRequired
 }
 
-export default createContainer(() => {
-    const perPage = 10
-    //let skip = new ReactiveVar(0)
-    const skillsReady = Meteor.subscribe('skills',
-      {},
-      {
-        sort: { createdAt: -1 },
-        //limit: perPage,
-        //skip: skip.get()
-    }).ready()
-    const revisionsReady = Meteor.subscribe('revisions', {active: true}).ready()
-    return {
-      skills: Skills.find().fetch(),
-      revisions: Revisions.find().fetch(),
-      numberOfSkills: Counts.get('numberOfSkills'),
-      loaded: skillsReady && revisionsReady
-    }
-}, IndexPage)
+export default IndexPage

@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
 import { check, Match } from 'meteor/check'
 import { Counts } from 'meteor/tmeasday:publish-counts'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 
 export const Revisions = new Mongo.Collection('revisions')
 
@@ -16,6 +17,23 @@ if (Meteor.isServer) {
       return Revisions.find(selector, options)
   })
 }
+
+/*Revisions.schema = new SimpleSchema({
+	name: {type: String},
+	_id: {type: String, regEx: SimpleSchema.RegEx.Id},
+	revision: {type: String, regEx: SimpleSchema.RegEx.Id},
+	author: {type: String, regEx: SimpleSchema.RegEx.Id},
+	createdAt: {type: Date}
+})
+Revisions.attachSchema(Revisions.schema)*/
+/*Revisions.helpers({
+	revision() {
+		return Revisions.findOne({ parent: this._id, active: true })
+	},
+	threads() {
+		return Threads.find({ parent: this._id, type: "skill" })
+	}
+})*/
 
 Meteor.methods({
   'revisions.insert' (data) {
@@ -86,8 +104,13 @@ Meteor.methods({
     check(_id, String)
     check(reason, String)
 
-    // Make sure the user is logged in
-    if (!Meteor.userId()) throw new Meteor.Error('not-authorized')
+    // make sure user is admin
+    try {
+        if (!Meteor.user().roles.includes('admin')) throw new Meteor.Error('not-authorized')
+    } catch (e) {
+        throw new Meteor.Error('not-authorized')
+    }
+
 
     // deactivate current revision
     Revisions.update(_id, {

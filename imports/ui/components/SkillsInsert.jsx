@@ -38,7 +38,7 @@ export default class SkillsInsert extends Component {
 
   render() {
     return (
-        <form onSubmit={this._handleSkillsInsert.bind(this)}>
+        <form className="card-panel section" onSubmit={this._handleSkillsInsert.bind(this)} {...this.props}>
             <div className="row">
               <div className="input-field col s12">
                 <input onChange={this._handleNameChange.bind(this)} type="text" required id="threadName" /> {/*ref="name"*/}

@@ -2,8 +2,31 @@ import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
 import { check, Match } from 'meteor/check'
 import { Counts } from 'meteor/tmeasday:publish-counts'
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 
 export const Threads = new Mongo.Collection('threads')
+
+Threads.schema = new SimpleSchema({
+	name: {type: String},
+	text: {type: String},
+	type: {type: String, optional: true},
+	parent: {type: String, regEx: SimpleSchema.RegEx.Id},
+	userId: {
+		type: String,
+		regEx: SimpleSchema.RegEx.Id,
+		defaultValue: this.userId
+	},
+	createdAt: {type: Date}
+})
+Threads.attachSchema(Threads.schema)
+/*Threads.helpers({
+	revision() {
+		return Revisions.findOne({ parent: this._id, active: true })
+	},
+	threads() {
+		return Threads.find({ parent: this._id, type: "skill" })
+	}
+})*/
 
 if (Meteor.isServer) {
     Meteor.publish('threads', function threadsPublication(
@@ -19,6 +42,7 @@ if (Meteor.isServer) {
         return Threads.find(selector, options)
     })
 }
+
 Meteor.methods({
   'threads.insert' (data) {
     check(data.name, String)
