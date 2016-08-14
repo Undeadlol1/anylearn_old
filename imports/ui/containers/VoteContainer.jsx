@@ -3,7 +3,7 @@ import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
 import { Votes } from '../../api/votes'
 import Vote from '../components/Vote'
-import { SubsManager } from 'meteor/meteorhacks:subs-manager'
+import get from 'oget'
 
 const VoteContainer = props => {
     return <Vote {...props}
@@ -13,21 +13,18 @@ const VoteContainer = props => {
             parent={props.parent} />
 }
 
-const subsManager = new SubsManager({ cacheLimit: 5, expireIn: 5 })
-
 export default createContainer( params => {
-  const parent = params.parent
 
-  subsManager.subscribe('votes', { parent } )
+	const 	parent = params.parent
 
-  let likes = Votes.find({ value: true, parent }).count()
-  let dislikes = Votes.find({ value: false, parent }).count()
-  let choice = Votes.findOne({ author: Meteor.userId(), parent })
+	Meteor.subscribe('votes', { parent } )
 
-  return {
-      likes, dislikes, parent,
-      choice: choice ? choice.value : null
-  }
+	const 	likes = Votes.find({ choice: true, parent }).count(),
+			dislikes = Votes.find({ choice: false, parent }).count(),
+			choice = get(Votes.findOne({ userId: Meteor.userId(), parent }), 'choice')
+
+	return { likes, dislikes, parent, choice }
+
 }, VoteContainer)
 
 VoteContainer.propTypes = {

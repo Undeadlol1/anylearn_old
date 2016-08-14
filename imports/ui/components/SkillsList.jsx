@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { Meteor } from 'meteor/meteor'
 //import Pagination from './Pagination'
 
 class SkillsList extends Component {
@@ -16,9 +17,10 @@ class SkillsList extends Component {
         // if items exist render them, else show empty list
         if(props.skills.length) {
             return props.skills.map( skill => {
-            let text = ''
+			let revision,
+				text
             try {// find revision and return first chunk of text
-                const revision = props.revisions.find(r => { return r.parent == skill._id })
+                revision = props.revisions.find(r => { return r.parent == skill._id })
                 const firstChunk = revision.text[0].indexOf('</p>')
                 const maxChars = 200
                 // if there is too much text to show limit it by maxChars
@@ -27,9 +29,17 @@ class SkillsList extends Component {
                 else text = revision.text[0].slice(0, firstChunk) + '...'
             } catch (e) {}
             return  <li key={skill._id} className="collection-item avatar">
-                        <i className="material-icons circle">folder</i>
+						{
+							revision.image
+							? <img src={revision.image} className="circle" />
+							: <i className="material-icons circle">folder</i>
+						}
                         <a href={`/s/${skill.slug}`} className="title">{skill.name}</a>
-                        <a href={`/s/${skill.slug}`} dangerouslySetInnerHTML={this._createMarkup(text)}></a>
+                        <a
+							href={`/s/${skill.slug}`}
+							dangerouslySetInnerHTML={this._createMarkup(text)}
+						>
+						</a>
                         <a
 							onClick={_learnIt.bind(this, skill._id)}
 							title="Учиться навыку"

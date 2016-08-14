@@ -4,10 +4,9 @@ import { Meteor } from 'meteor/meteor'
 import { $ } from 'meteor/jquery'
 
 export default class ThreadsInsert extends Component {
-  constructor(props){
-    super(props)
-    this.state = {show: false}
-  }
+
+  state = {show: false}
+
   show(){
     this.setState({show: !this.state.show})
   }

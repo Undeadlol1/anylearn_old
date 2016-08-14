@@ -3,12 +3,12 @@ import TinyMCE from 'react-tinymce'
 import {$} from 'meteor/jquery'
 
 export default class SkillStages extends Component {
-  createMarkup(__html) {
-    return {__html}
-  }
-  componentDidMount(){
-    $(this.refs.tabs).tabs()
-  }
+
+  // createMarkup(__html) { return { __html } }
+  createMarkup = (__html) => { __html }
+
+  componentDidMount() { $(this.refs.tabs).tabs() }
+
   render() {
     return (
       <div className="row card-panel">
@@ -36,9 +36,11 @@ export default class SkillStages extends Component {
     )
   }
 }
+
 SkillStages.defaultProps = {
   text: ['', '', '', '']
 }
+
 SkillStages.propTypes = {
   text: PropTypes.array.isRequired
 }

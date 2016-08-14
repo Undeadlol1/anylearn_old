@@ -1,116 +1,132 @@
 import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
+import { _ } from 'meteor/underscore'
 import { check, Match } from 'meteor/check'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 
 export const Revisions = new Mongo.Collection('revisions')
 
-if (Meteor.isServer) {
-  Meteor.publish('revisions', function (
-    selector,
-    options = { sort: { createdAt: -1 } }
-  ) {
-      Counts.publish(this, 'numberOfRevisions', Revisions.find(selector), {
-          noReady: true
-      })
-      return Revisions.find(selector, options)
-  })
-}
-
-/*Revisions.schema = new SimpleSchema({
-	name: {type: String},
-	_id: {type: String, regEx: SimpleSchema.RegEx.Id},
-	revision: {type: String, regEx: SimpleSchema.RegEx.Id},
-	author: {type: String, regEx: SimpleSchema.RegEx.Id},
-	createdAt: {type: Date}
-})
-Revisions.attachSchema(Revisions.schema)*/
-/*Revisions.helpers({
-	revision() {
-		return Revisions.findOne({ parent: this._id, active: true })
+Revisions.schema = new SimpleSchema({
+	name: {
+		type: String,
+		label: 'revision name',
+		defaultValue: 'Initial version' // move this to skills insert or revision insert?
 	},
-	threads() {
-		return Threads.find({ parent: this._id, type: "skill" })
+	text: {
+		type: [String],
+		label: 'revision text',
+		custom() {
+			this.value = this.value.filter(item => {
+				return !!item && typeof(item) == 'string'
+			})
+			return this.value ? true : 'expectedString'
+		}
+	},
+	description: {
+		type: String,
+		label: 'revision description',
+		optional: true
+	},
+	image: {
+		type: String,
+		label: 'revision image url',
+		regEx: SimpleSchema.RegEx.Url,
+		optional: true
+	},
+	active: {
+		type: Boolean,
+		label: 'revision active state',
+		autoValue() { if (this.isInsert) return true }
+	},
+	parent: {
+		type: String,
+		label: 'revision parent id' //,
+		// TODO write migration for this
+		//regEx: SimpleSchema.RegEx.Id
+	},
+	previous: {
+		type: String,
+		label: 'revision previous id',
+		regEx: SimpleSchema.RegEx.Id,
+		optional: true // ?????
+	},
+	userId: {
+		type: String,
+		label: 'revision userId',
+		regEx: SimpleSchema.RegEx.Id,
+		autoValue() { if ( this.isInsert ) return this.userId }
+	},
+	createdAt: {
+		label: 'revision createdAt',
+		type: Date,
+		autoValue() {
+			if ( this.isInsert ) return new Date()
+		}
 	}
-})*/
+})
+
+Revisions.attachSchema(Revisions.schema)
+
+Revisions.after.insert((userId, doc) => {
+	if (doc) {
+		Revisions.update(// deactivate current active revision
+			{
+				_id: { $ne: doc._id }, // $eq
+				parent: doc.parent,
+				active: true
+			},
+			{ $set: { active: false } }
+		)
+		// insert positive vote for your revision
+		Meteor.call('votes.insert', {choice: true, parent: doc._id})
+		// create notification
+		Meteor.call('notifications.insert', {
+		  name: doc.name,
+		  targetId: doc._id,
+		  parent: doc.parent,
+		  type: 'revision',
+		  author: Meteor.userId()
+		})
+	}
+})
 
 Meteor.methods({
-  'revisions.insert' (data) {
-    check(data.name, String)
-    check(data.text, [String])
-    check(data.parent, String)
-    check(data.description, Match.Maybe(String)) // or just String?
-
-    // Make sure the user is logged in before inserting
-    if (!Meteor.userId()) {
-      throw new Meteor.Error('not-authorized')
-    }
-    // insert revision
-    const revisionId = Revisions.insert({
-                          name: data.name,
-                          text: data.text,
-                          description: data.description,
-                          parent: data.parent,
-                          active: true,
-                          createdAt: new Date(),
-                          author: Meteor.userId()
-                        })
-    // insert positive vote for your revision
-    Meteor.call('votes.insert', {value: true, parent: revisionId})
-    return revisionId
-  },
+	// TODO change isert & update to upsert?
+	'revisions.insert' (data) {
+		if (!Meteor.userId()) throw new Meteor.Error('not-authorized')
+		return Revisions.insert(data)
+	},
   'revisions.update' (data) {
-    check(data.name, String)
-    check(data.text, [String])
-    check(data.parent, String)
-    check(data.previous, String)
-    check(data.description, Match.Maybe(String))
-
     // Make sure the user is logged in before inserting a task
     if (!Meteor.userId()) {
       throw new Meteor.Error('not-authorized')
     }
     // deactivate current revision
-    Revisions.update(data.previous, {
+    /*Revisions.update(data.previous, {
       $set: {
         active: false
       }
-    })
+    })*/
+	// name: data.name,//
+	// text: data.text,
+	// description: data.description,
+	// image: data.image,
+	// parent: data.parent,
+	// previous: data.previous
     // insert new active revision
-    const newRevisionId = Revisions.insert({
-      name: data.name,
-      text: data.text,
-      description: data.description,
-      parent: data.parent,
-      previous: data.previous,
-      active: true,
-      author: Meteor.userId(),
-      createdAt: new Date()
-    })
-    // insert positive vote for your revision
-    Meteor.call('votes.insert', {value: true, parent: newRevisionId})
-    // create notification
-    Meteor.call('notifications.insert', {
-      name: data.name,
-      targetId: newRevisionId,
-      parent: data.parent,
-      type: 'revision',
-      author: Meteor.userId()
-    })
-    return newRevisionId
+	console.log(data)
+
+    return Revisions.insert(data)
   },
   'revisions.revert' (_id, reason) {
     check(_id, String)
     check(reason, String)
 
+	// check if user is logged in
+	//isLoggedIn // remove this?
     // make sure user is admin
-    try {
-        if (!Meteor.user().roles.includes('admin')) throw new Meteor.Error('not-authorized')
-    } catch (e) {
-        throw new Meteor.Error('not-authorized')
-    }
-
+	//isAdmin
 
     // deactivate current revision
     Revisions.update(_id, {
@@ -119,7 +135,7 @@ Meteor.methods({
         reverted: true
       }
     })
-
+	// THIS MUST BE REWORKED. ON REVERT IMAGE DOES NOT COME BACK
     // insert new active revision
     const current = Revisions.findOne(_id)
     const previous = Revisions.findOne({previous: current.previous})
@@ -129,9 +145,7 @@ Meteor.methods({
       text: previous.text,
       parent: previous.parent,
       previous: previous.previous,
-      active: true,
-      author: '',
-      createdAt: new Date()
+      author: ''
     })
 
     // create notification
@@ -143,17 +157,16 @@ Meteor.methods({
       author: Meteor.userId()
     })
     return newRevisionId
-}, // i don't know why i created revisions.remove
-  'revisions.remove' (_id) {
-    check(_id, String)
-
-    // Make sure the user is logged in before inserting a task
-    if (!Meteor.userId()) {
-      throw new Meteor.Error('not-authorized')
-    }
-
-    const previousId = Revisions.findOne(_id).previous
-    Revisions.update(previousId, { $set: {active: true} })
-    Revisions.remove(_id)
-  }
+	}
 })
+
+if (Meteor.isServer) {
+  Meteor.publish('revisions', function revisionsPublication (
+	  selector = {}, options = { sort: { createdAt: -1 } }
+  ) {
+      Counts.publish(this, 'numberOfRevisions', Revisions.find(selector), {
+          noReady: true
+      })
+      return Revisions.find(selector, options)
+  })
+}

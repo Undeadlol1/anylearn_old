@@ -7,7 +7,7 @@ import Blaze from 'meteor/gadicc:blaze-react-component'
 import oget from 'oget'
 
 // pages
-import MainLayout from '../ui/pages/MainLayout.js'
+import MainLayout from '../ui/pages/layouts/MainLayout.js'
 import IndexPageContainer from '../ui/containers/IndexPageContainer'
 import SkillPageContainer from '../ui/containers/SkillPageContainer'
 import AdminPage from '../ui/pages/AdminPage'
@@ -21,6 +21,10 @@ import ThreadPage from '../ui/pages/ThreadPage'
 import DocsPage from '../ui/pages/DocsPage'
 import SkillsInsertPage from '../ui/pages/SkillsInsertPage'
 import SkillsUpdatePageContainer from '../ui/containers/SkillsUpdatePageContainer'
+// mood
+import MoodLayout from '../ui/pages/layouts/MoodLayout'
+import MoodIndexPageContainer from '../ui/containers/MoodIndexPageContainer'
+import MoodPageContainer from '../ui/containers/MoodPageContainer'
 
 function checkLoggedIn (ctx, redirect) {
     if (!Meteor.userId()) redirect('/sign-in')
@@ -65,6 +69,22 @@ FlowRouter.route('/add-skill', {
   action() {
     mount(MainLayout, {
       main: <SkillsInsertPage />
+    })
+  }
+})
+/* MOOD */
+FlowRouter.route('/mood', {
+  action() {
+    mount(MoodLayout, {
+      main: <MoodIndexPageContainer />
+    })
+  }
+})
+FlowRouter.route('/mood/:moodSlug', {
+  //triggersEnter: [checkLoggedIn],
+  action() {
+    mount(MoodLayout, {
+      main: <MoodPageContainer />
     })
   }
 })

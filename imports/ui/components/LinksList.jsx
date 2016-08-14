@@ -4,18 +4,9 @@ import { Meteor } from 'meteor/meteor'
 import Pagination from './Pagination'
 
 class LinksList extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {loading: true}
-  }
-  componentWillUpdate(nextProps, nextState) {
-    //console.log('componentWillUpdate');
-    //this.setState({loading: true}) // infinite loop
-  }
-  componentDidUpdate(prevProps, prevState) {
-    //console.log('componentDidUpdate');
-    //this.setState({loading: false}) // infinite loop
-  }
+
+	state = { loading: true }
+
   render() {
     const p = this.props
     const renderItems = () => {

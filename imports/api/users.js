@@ -13,26 +13,6 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'users.subscribe'(skillId){
-    check(skillId, String)
-    if (!Meteor.userId()) {
-      throw new Meteor.Error('not-logged-in');
-    }
-    const user = Meteor.user()
-    if ( _.contains(get(user, 'profile.skills', []), skillId) ) {
-        Meteor.users.update(user._id, {
-            $pull: {
-                'profile.skills': skillId
-            }
-        })
-    } else {
-        Meteor.users.update(user._id, {
-            $push: {
-                'profile.skills': skillId
-            }
-        })
-    }
-  },
   'users.toggleLearning'(skillId){
       check(skillId, String)
 
@@ -77,19 +57,24 @@ Meteor.methods({
         return true
     }
     }
+	  /*'users.subscribe'(skillId){
+	    check(skillId, String)
+	    if (!Meteor.userId()) {
+	      throw new Meteor.Error('not-logged-in');
+	    }
+	    const user = Meteor.user()
+	    if ( _.contains(get(user, 'profile.skills', []), skillId) ) {
+	        Meteor.users.update(user._id, {
+	            $pull: {
+	                'profile.skills': skillId
+	            }
+	        })
+	    } else {
+	        Meteor.users.update(user._id, {
+	            $push: {
+	                'profile.skills': skillId
+	            }
+	        })
+	    }
+	  },*/
 })
-
-
-/*Meteor.users.deny({
-  update: function (userId, doc, fields, modifier) {
-    // can't change admin rights
-  //  console.log(modifier);
-  //  console.log(doc);
-  //  return _.has(doc.profile, isAdmin)
-  //  return _.contains(fields, 'isAdmin');
-    //  return _.contains(fields, {profile:isAdmin});
-  },
-  fetch: ['profile']
-});
-//Meteor.users.update("b3ZxtJW66NCjgh3Nk", {$set:{'profile.isAdmin': false}})
-*/

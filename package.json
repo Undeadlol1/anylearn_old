@@ -7,9 +7,11 @@
   "dependencies": {
     "alloyeditor": "^1.2.0",
     "classnames": "latest",
+    "core-decorators": "^0.12.3",
     "diff": "^2.2.2",
     "draft-js": "^0.7.0",
     "draft-js-editor": "^0.6.15",
+    "material-ui": "^0.15.2",
     "meteor-node-stubs": "~0.2.0",
     "oget": "^1.0.6",
     "react": "^15.0.2",
@@ -20,9 +22,13 @@
     "react-mounter": "^1.2.0",
     "react-paginate": "latest",
     "react-spinkit": "latest",
-    "react-tinymce": "^0.5.1"
+    "react-tap-event-plugin": "^1.0.0",
+    "react-tinymce": "^0.5.1",
+    "react-youtube": "^7.0.1",
+    "slug": "^0.9.1"
   },
   "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.10.2",
     "eslint-plugin-react": "^5.1.1"
   }
 }

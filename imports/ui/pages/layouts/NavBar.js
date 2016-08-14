@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Meteor } from 'meteor/meteor'
 import { $ } from 'meteor/jquery'
-import { Notifications } from '../../api/notifications.js'
+import { Notifications } from '../../../api/notifications'
 import Blaze from 'meteor/gadicc:blaze-react-component'
 import get from 'oget'
 
@@ -16,7 +16,7 @@ class NavBar extends Component {
     $(this.refs.collapse).sideNav({closeOnClick: true})
   }
   render() {
-      const adminButton = () =>{//_.contains([1, 2, 3], 3);
+      const adminButton = () =>{
           const user = Meteor.user() || {}
           let isAdmin = _.contains(get(user, "roles"), 'admin')
           return isAdmin ? <li><a href="/admin">Admin</a></li> : ''
@@ -57,6 +57,7 @@ class NavBar extends Component {
 
            <ul className="left hide-on-med-and-down">
                <li><a href="/dashboard">Dashboard</a></li>
+               <li><a href="/mood">Mood</a></li>
                 {NotificationsIndicator()}
            </ul>
            <ul className="side-nav" id="mobile-demo">
@@ -64,6 +65,7 @@ class NavBar extends Component {
                {NotificationsIndicator()}
                <li><a href="/profile">Профайл</a></li>
                {adminButton()}
+               <li><a href="/mood">Mood</a></li>
                <li><a href="/dashboard">Dashboard</a></li>
                <li><a href="/add-skill">Создать навык</a></li>
            </ul>

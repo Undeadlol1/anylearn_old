@@ -28,6 +28,10 @@ body {
     font-size: inherit; */
 }
 
+header {
+	padding-bottom: 15px;
+}
+
 .clear-fix {
     clear: both
 }
@@ -52,9 +56,14 @@ ul.collection { padding: initial; }
         padding: 0 0.6rem
     }
 }
-body.mceContentBody {
-   background: black;
+
+body {
+	background-color: rgb(48, 48, 48);
+	.mceContentBody {
+		background: black;
+	}
 }
+
 // tinymce wysiwyg editor font-size were too small
 #tinymce {
   font-size: inherit;

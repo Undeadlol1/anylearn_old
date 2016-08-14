@@ -5,54 +5,55 @@ import List from '../components/List'
 import Loading from '../components/Loading'
 import { Row, Col, CardPanel } from 'react-materialize'
 
+{/*<Col s={12} m={6}>
+	<CardPanel className="center-align">
+		<a href={`/scholar/${props.parent}`}>
+			Потенциальная картина ученика
+		</a>
+	</CardPanel>
+</Col>*/}
+
 class DevPage extends Component {
   render() {
     const {props} = this
-    return props.loaded ? (
+    return props.loaded ? ( // m={6}
       <section>
         <ThreadsInsert parent={props.parent} type="dev" />
         <Row>
-			<Col s={12}>
-				<CardPanel className="center-align">
-				   <a href={`/reminders/${props.parent}`}>
-						Карточки
-				   </a>
-			   </CardPanel>
-		   </Col>
-            <Col s={12} m={6}>
-                <CardPanel className="center-align">
+            <Col s={6} className="center-align">
+                <CardPanel>
                    <a href={`/manifest/${props.parent}`}>
                     	Манифест
                    </a>
                 </CardPanel>
             </Col>
-            <Col s={12} m={6}>
-                <CardPanel className="center-align">
-                    <a href={`/scholar/${props.parent}`}>
-                    	Потенциальная картина ученика
-                    </a>
-                </CardPanel>
-            </Col>
+			<Col s={6} className="center-align">
+				<CardPanel>
+				   <a href={`/reminders/${props.parent}`}>
+						Карточки
+				   </a>
+			   </CardPanel>
+		   </Col>
        </Row>
        <Row>
 			<List
-            name="Обсуждения"
-            items={props.threads}
-            numberOfItems={props.numberOfThreads}
-            type="dev"
-            href="thread"
-            className="col s12 m6"
-            onChangePage={props.changePage.bind(this, 'threads')}
-            />
+	            name="Обсуждения"
+	            items={props.threads}
+	            numberOfItems={props.numberOfThreads}
+	            type="dev"
+	            href="thread"
+	            className="col s12 m6"
+	            onChangePage={props.changePage.bind(this, 'threads')}
+			/>
 			<RevisionsList
-            name="История"
-            items={props.revisions}
-            numberOfItems={props.numberOfRevisions}
-            votes={true}
-            href="revision"
-            className="col s12 m6"
-            onChangePage={props.changePage.bind(this, 'revisions')}
-            />
+	            name="История"
+	            items={props.revisions}
+	            numberOfItems={props.numberOfRevisions}
+	            votes={true}
+	            href="revision"
+	            className="col s12 m6"
+	            onChangePage={props.changePage.bind(this, 'revisions')}
+			/>
        </Row>
    </section>
     ) : <Loading />

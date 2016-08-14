@@ -1,105 +1,133 @@
 import { Meteor } from 'meteor/meteor'
 import { Mongo } from 'meteor/mongo'
+import { Random } from 'meteor/random'
 import { check } from 'meteor/check'
 import { Counts } from 'meteor/tmeasday:publish-counts'
 import { Revisions } from './revisions'
+import { Responses } from './responses'
 import { Threads } from './threads'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+import slugify from 'slug'
+import { schemaMixin } from './mixins'
 
 export const Skills = new Mongo.Collection('skills')
 
-if (Meteor.isServer) {
-  Meteor.publish('skills', function skillsPublication(
-    selector = {},
-    options = {
-      sort: {
-          createdAt: -1
-      }
-  }) {
-      Counts.publish(this, 'numberOfSkills', Skills.find(selector), {
-          noReady: true
-      })
-      return Skills.find(selector, options)
-  })
-}
-const regExId = SimpleSchema.RegEx.Id
-
 Skills.schema = new SimpleSchema({
-	name: {type: String},
-	slug: {type: String},
-	_id: {type: String, regEx: regExId},
-	revision: {
+	name: {
 		type: String,
-		regEx: regExId/*,
-		autoValue() {
-			Meteor.call('manifests.insert', this.docId)
-		}*/
+		label: 'skill name',
+		index: true,
+		unique: true
 	},
-	userId: { // author
+	slug: {
 		type: String,
-		regEx: regExId,
-		autoValue() {
-			console.log(this.isInsert, this.userId)
-			if ( this.isInsert ) return this.userId
-		}
+		label: 'skill slug',
+		index: true,
+		unique: true
+	},
+	revisionId: {
+		type: String,
+		regEx: SimpleSchema.RegEx.Id,
+		label: 'skill revisionId'
+	},
+	userId: {
+		type: String,
+		label: 'skill userId',
+		regEx: SimpleSchema.RegEx.Id,
+		autoValue() { if ( this.isInsert ) return this.userId }
 	},
 	createdAt: {
+		label: 'skill createdAt',
 		type: Date,
-		autoValue() {
-			if ( this.isInsert ) return Date.now()
-		}
+		autoValue() { if ( this.isInsert ) return new Date() }
 	}
 })
 Skills.attachSchema(Skills.schema)
-Skills.friendlySlugs()
 
+
+/*SimpleSchema.extendOptions({
+  denyInsert: Match.Optional(Boolean),
+  denyUpdate: Match.Optional(Boolean)
+});*/
+// TODO test if helpers work properly with collection-hooks disabled
 Skills.helpers({
 	revision() {
-		return Revisions.findOne({ parent: this._id, active: true })
+		return Revisions.findOne({
+			parent: this._id,
+			active: true
+		}) || {}
 	},
 	threads() {
-		return Threads.find({ parent: this._id, type: "skill" })
-	}
-})
-
-
-Meteor.methods({
-	'skills.insert' (data) {
-    check(data.name, String)
-    check(data.text, [String])
-
-    // Make sure the user is logged in before inserting a task
-    if (!Meteor.userId()) {
-      throw new Meteor.Error('not-authorized')
-    }
-    // somehow sometimes you bypass name check
-    if (data.name.trim() === "") {
-      throw new Meteor.Error('name-is-empty')
-    }
-
-    const generatedId = new Mongo.ObjectID()._str
-    Meteor.call('forums.insert', generatedId)
-    Meteor.call('manifests.insert', generatedId)
-    Meteor.call('users.subscribe', generatedId)
-
-    const revisionId = Meteor.call('revisions.insert', {
-		name: 'First version',
-		description: null,
-		text: data.text,
-		parent: generatedId,
-		previous: null
-    })
-
-    Skills.insert({
-          _id: generatedId,
-          name: data.name,
-          revision: revisionId,
-          createdAt: new Date(),
-          author: Meteor.userId()
-    })
-    return Skills.findOne(generatedId).slug
+		return Threads.find({
+			parent: this._id,
+			type: "skill"
+		}).fetch()
 	},
-	'skills.getId' (selector) {
-		return Skills.findOne(selector)._id
+	response() {
+		console.warn('userId is', Meteor.userId())
+		return Responses.findOne({
+			parent: this._id,
+			userId: Meteor.userId()
+		}) || {}
 	}
 })
+
+Skills.after.insert((userId, doc) => {
+	console.warn('after insert happaned!')
+	if (doc) { // if insert done properly
+		console.warn('Doc exists! Making Meteor calls...')
+		// TODO add notifications
+		Meteor.call('forums.insert', doc._id)
+		Meteor.call('manifests.insert', doc._id)
+		Meteor.call('users.toggleLearning', doc._id)
+		Meteor.call('users.toggleCurating', doc._id)
+	}
+})
+
+export const skillsInsert = new ValidatedMethod({
+	name: 'skills.insert', //skills.insert
+//	validate: Skills.schema, //.validator()
+	mixins: [LoggedInMixin], // , schemaMixin //, simpleSchemaMixin
+	checkLoggedInError: {
+		error: 'notLogged',
+		message: 'You need to login'
+	},
+	validate: new 	SimpleSchema({
+						name: { type: String },
+						text: { type: [String] },
+						image: { type: String }
+					}).validator(), //.validator()
+	// validate: Skills.schema.validator(), //.validator()
+	// schema: Skills.schema.pick(['name', 'text', 'image']),
+	run({name, text, image}) {
+		const 	skillId = Random.id(),
+				slug = slugify(name),
+				revisionId =  Meteor.call(
+								'revisions.insert', {
+									text,
+									image,
+									parent: skillId
+							})
+		// insert skill
+		Skills.insert({
+						name,
+						slug,
+						revisionId,
+						_id: skillId
+					})
+		console.log(slug)
+	    return slug
+	}
+})
+
+if (Meteor.isServer) {
+	Meteor.publish('skills', function skillsPublication(
+		selector = {},
+		options = { sort: { createdAt: -1 } })
+		{
+			Counts.publish(this, 'numberOfSkills', Skills.find(selector), {
+				noReady: true
+			})
+			return Skills.find(selector, options)
+	})
+}

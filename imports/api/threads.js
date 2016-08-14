@@ -7,9 +7,9 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 export const Threads = new Mongo.Collection('threads')
 
 Threads.schema = new SimpleSchema({
-	name: {type: String},
-	text: {type: String},
-	type: {type: String, optional: true},
+	name: {type: String, label: 'thread name'},
+	text: {type: String, label: 'thread text'},
+	type: {type: String, label: 'thread type', optional: true},
 	parent: {type: String, regEx: SimpleSchema.RegEx.Id},
 	userId: {
 		type: String,

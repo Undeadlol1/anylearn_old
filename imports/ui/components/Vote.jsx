@@ -4,28 +4,29 @@ import { FlowRouter } from 'meteor/kadira:flow-router'
 import classNames from 'classnames'
 
 class Vote extends Component {
-  vote(value, event) {
-      event.preventDefault()
+  vote(value) { // , event
+      //event.preventDefault()
       // gather data for method call
       const data = { value, parent: this.props.parent }
       // if user chooses same thing, means he wants to undo his choice
-      if (this.props.choice === value) data.value = null
+      if (this.props.choice === value) data.choice = null
       if (!Meteor.userId()) FlowRouter.go('/sign-in')
-      else Meteor.call('votes.choose', data, (err)=>{
-              if (err) console.log(err)
-      })
+      else Meteor.call('votes.choose', data,
+			(err)=> { if (err) console.log(err) }
+		)
   }
   render() {
+	const { props } = this
     const greenIcon = classNames('material-icons', {
-      'green-text accent-3': this.props.choice === true
+      'green-text accent-3': props.choice === true
     })
     const redIcon = classNames('material-icons', {
-      'deep-orange-text': this.props.choice === false
+      'deep-orange-text': props.choice === false
     })
     return (
-      <span {...this.props} className="right" style={{color: this.props.color, cursor: 'pointer'}}>
+      <span {...props} className="right" style={{color: props.color, cursor: 'pointer'}}>
         <span>
-          {this.props.likes}
+          {props.likes}
           <i onClick={this.vote.bind(this, true)}
             className={greenIcon}>
             thumb_up
@@ -36,7 +37,7 @@ class Vote extends Component {
             className={redIcon}>
             thumb_down
           </i>
-          {this.props.dislikes}
+          {props.dislikes}
         </span>
       </span>
     )
