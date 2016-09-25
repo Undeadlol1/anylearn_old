@@ -10,26 +10,36 @@ import Interview from '../components/Interview'
 import List from '../components/List'
 import Loading from '../components/Loading'
 import { Row, Col } from 'react-materialize'
+import { toggleState } from '../components/Utils'
+
+// необходимо мигрировать этот компонент с SkillsUpdate.
 
 class SkillPage extends Component {
-  constructor(props){
-    super(props)
     // none of this are necessery
     // state variables are false by default
-    this.state = {curating: false, edit: false, stage: 0}
-	this.toggleCurating = this.toggleCurating.bind(this)
-	this._toggleEdit = this._toggleEdit.bind(this)
-	this.changePage = this.changePage.bind(this)
-	this._skillUpdated = this._skillUpdated.bind(this)
-  }
-	_toggleEdit(){
-		const {edit} = this.state
-		if (edit && !confirm('Вы уверены? Не сохраненные изменения будут потеряны!')) return
+    state = {
+        stage: 0,
+        edit: false,
+        curating: false
+    }
+	_toggleEdit = () => {
+		const   {edit} = this.state
+        if (!Meteor.userId()) {
+            return Materialize.toast(`Пожалуйста, залогинтесь`, 4000)
+        }
+		if (edit) {
+            // _.isMatch(array1, array2)
+            const isSure = confirm('Вы уверены? Не сохраненные изменения будут потеряны!')
+            if(!isSure) return
+        }
 		this.setState({edit: !edit})
 	}
-	toggleCurating(e){
+	toggleCurating = (e) => {
 	    e.preventDefault()
-		if (!Meteor.userId()) Materialize.toast('Пожалуйста, залогинтесь', 4000)
+        // откомментировал потому что выходило две ошибки если юзер не залогинен
+        // нужно все-таки сделать обработчик данных
+        // NOTE как сделать обработчик данных?
+		// if (!Meteor.userId()) Materialize.toast('Пожалуйста, залогинтесь', 4000)
 	    Meteor.call('users.toggleCurating', this.props.skillId,
 	            (err, result)=> {
 	                if (err) Materialize.toast(`Ошибка! Что-то пошло не так. ${err.error}`, 4000)
@@ -39,15 +49,18 @@ class SkillPage extends Component {
 					}
 		})
 	}
-	changePage(e) {
+	changePage = (e) => {
 		skipThreads.set(e.selected * perPage)
 	}
-	_skillUpdated() {
+	_skillUpdated = () => {
 		this.setState({edit: false})
 	}
+    onChangePage = (stage) => {
+        this.setState({ stage })
+    }
   render() {
 
-	const { props, state, _toggleEdit, changePage, toggleCurating, _skillUpdated } = this
+	const { props, state, _toggleEdit, changePage, toggleCurating } = this
 	const showIcon = _.contains(get(Meteor.user(), 'profile.curating'), props.skillId)
 	const iconClass = showIcon ? 'turned_in' : 'turned_in_not'
 
@@ -73,7 +86,7 @@ class SkillPage extends Component {
 	                <h1 style={{marginTop: 10}} className="center-align">{props.skill.name}</h1>
 	            </Col>
 	        </Row>
-	        {state.edit ? <SkillsUpdate revision={props.revision} callback={_skillUpdated} /> : <SkillStages text={props.revision.text} />}
+	        {state.edit ? <SkillsUpdate revision={props.revision} stage={state.stage} callback={this._skillUpdated} /> : <SkillStages text={props.revision.text} onChangePage={this.onChangePage} />}
 	        <Interview parent={props.skillId} response={props.response} />
 	        <ThreadsInsert parent={props.skillId} type="skill" />
 	        <List

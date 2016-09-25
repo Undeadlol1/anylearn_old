@@ -18,7 +18,7 @@ class ManifestPage extends Component {
     // call method
     Meteor.call('suggestions.insert', { name, text, parent }, (err, result) => {
         if (err) {
-            console.log(err)
+            Materialize.toast(`Произошла ошибка! ${err.reason || err.error}`, 4000)
         } else {
             ReactDOM.findDOMNode(this.refs.name).value = ''
             // trigger blur to animate empty input (materializecss bug)
@@ -32,7 +32,7 @@ class ManifestPage extends Component {
      return this.props.loaded ? (
       <section>
         <div className="row">
-            <div className="col s12">
+            <div className="col s12 card-panel">
               <form name="form" onSubmit={this._handleSubmit.bind(this)}>
                 <div className="row">
                  <div className="input-field col s12">
@@ -47,7 +47,7 @@ class ManifestPage extends Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="input-field col s12">
+                  <div className="input-field col s12 center">
                     <button className="btn waves-effect waves-light" type="submit">Сохранить
                       <i className="material-icons right">send</i>
                     </button>
@@ -56,7 +56,7 @@ class ManifestPage extends Component {
               </form>
             </div>
         </div>
-        <List name="Основные положения" items={this.props.suggestions} href="thread"/>
+        <List name="Основные положения" items={this.props.suggestions} href="thread" />
       </section>
     ) : <Loading />
   }

@@ -5,20 +5,24 @@ import {$} from 'meteor/jquery'
 import { FlowRouter } from 'meteor/kadira:flow-router'
 import { Row, Col } from 'react-materialize'
 import Wysiwyg from './Wysiwyg'
+import classNames from 'classnames'
 
 export default class SkillsUpdate extends Component {
 	state = {
-      text: this.props.revision.text,//['', '', '', ''],
+      text: this.props.revision.text,
       name: '',
-	  image: this.props.revision.image,// '',
-      description: ''
+	  image: this.props.revision.image,
+      description: '',
+	  stage: this.props.stage || 0
     }
 
-  componentDidMount(){ $(this.refs.tabs).tabs()  }
+  componentDidMount(){ $(this.refs.tabs).tabs() }
 
-  componentWillUnmount() {  $(this.refs.tabs).remove() }
+  componentWillUnmount() { $(this.refs.tabs).remove() }
+// FIXME seems like this is not needed!
+  changeStage = stage => { this.setState({ stage }) }
 
-  _handleTextChange(position, text){
+  _handleTextChange(position, text) {
     let array = this.state.text
     // set changed text to right position in array
     array[position] = text
@@ -31,6 +35,7 @@ export default class SkillsUpdate extends Component {
     })
     this.setState({ text: newArray })
   }
+
   _handleChange(item, event){
     this.setState({[item]: event.target.value})
   }
@@ -58,24 +63,22 @@ export default class SkillsUpdate extends Component {
   }
 
   render() {
-    const {text, image} = this.props.revision
-    const {_handleChange, _handleTextChange, _handleSkillsUpdate} = this
+    const 	{text, image} = this.props.revision,
+    		{_handleChange, changeStage, _handleTextChange, _handleSkillsUpdate} = this,
+			array = ['Новичок', 'Ученик', 'Практикант', 'Мастер']
+
     return (
     <div className="row card-panel" {...this.props}>
         <Col s={12}>
               <ul className="tabs" ref="tabs">
-                  <li className="tab col s3">
-                      <a href="#stage1">Новичок</a>
-                  </li>
-                  <li className="tab col s3">
-                      <a href="#stage2">Ученик</a>
-                  </li>
-                  <li className="tab col s3">
-                      <a href="#stage3">Практикант</a>
-                  </li>
-                  <li className="tab col s3">
-                      <a href="#stage4">Мастер</a>
-                  </li>
+				  {
+					  array.map((item, index) => {
+						const tabIsActive = classNames({active: this.props.stage == index})
+						return  <li className="tab col s3" key={index}>
+				                    <a className={tabIsActive} onClick={changeStage.bind(this, index)} href={"#stage" + (index+1)}>{array[index]}</a>
+				                </li>
+					  })
+				  }
               </ul>
         </Col>
         <Col s={12}>

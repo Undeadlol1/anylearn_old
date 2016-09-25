@@ -1,4 +1,6 @@
 import React from 'react'
+import { Meteor } from 'meteor/meteor'
+import { _ } from 'meteor/underscore'
 import { FlowRouter } from 'meteor/kadira:flow-router'
 import { mount } from 'react-mounter'
 import { Accounts } from 'meteor/accounts-base'
@@ -25,6 +27,7 @@ import SkillsUpdatePageContainer from '../ui/containers/SkillsUpdatePageContaine
 import MoodLayout from '../ui/pages/layouts/MoodLayout'
 import MoodIndexPageContainer from '../ui/containers/MoodIndexPageContainer'
 import MoodPageContainer from '../ui/containers/MoodPageContainer'
+import MoodNavBar from '../ui/pages/layouts/MoodNavBar'
 
 function checkLoggedIn (ctx, redirect) {
     if (!Meteor.userId()) redirect('/sign-in')
@@ -76,7 +79,8 @@ FlowRouter.route('/add-skill', {
 FlowRouter.route('/mood', {
   action() {
     mount(MoodLayout, {
-      main: <MoodIndexPageContainer />
+        // nav: <MoodNavBar mood />,
+        main: <MoodIndexPageContainer />
     })
   }
 })
@@ -84,7 +88,8 @@ FlowRouter.route('/mood/:moodSlug', {
   //triggersEnter: [checkLoggedIn],
   action() {
     mount(MoodLayout, {
-      main: <MoodPageContainer />
+        nav: <MoodNavBar node />,
+        main: <MoodPageContainer />
     })
   }
 })

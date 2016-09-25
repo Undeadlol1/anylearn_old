@@ -44,7 +44,6 @@ export const moodsInsert = new ValidatedMethod({
 						name: { type: String }
 					}).validator(),
 	run({name}) {
-		console.log(name)
 		const slug = slugify(name)
 	    Moods.insert({ name, slug })
 		return slug

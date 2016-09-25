@@ -3,3 +3,4 @@ node_modules/
 server/PROTECTED_VARIABLES.js
 mup.json
 settings.json
+rethinkdb_data/

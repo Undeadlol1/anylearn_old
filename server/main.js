@@ -14,6 +14,7 @@ import '../imports/api/progress'
 import '../imports/api/moods'
 import '../imports/api/nodes'
 import '../imports/api/decisions'
+import '../imports/api/rest/routes'
 // migrations
 import './migrations'
 

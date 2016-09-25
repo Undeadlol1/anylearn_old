@@ -7,6 +7,7 @@ import { Meteor } from 'meteor/meteor'
 import { render } from 'react-dom'
 import '../imports/startup/accounts-config'
 import '../imports/startup/routes'
+import '../imports/startup/errorsHandler'
 // Meteor.startup(() => {
 //   Migrations.migrateTo('latest');
 // });

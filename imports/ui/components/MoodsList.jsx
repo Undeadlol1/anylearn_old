@@ -15,15 +15,15 @@ class MoodsList extends Component {
 		const renderItems = () => {
 		    if(props.moods.length) {
 		        return props.moods.map( mood => {
-						const node = props.nodes.find(node => node.parent == mood.slug )
-						return	<Col s={12} m={4} l={4} key={mood._id}>
+						const node = props.nodes.find(node => node.parent == mood.slug)
+                        const src = node && node.content
+                                    ? `http://img.youtube.com/vi/${node.content}/0.jpg`
+                                    : 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2000px-No_image_available.svg.png'
+						return	<Col s={12} m={4} l={4} key={mood.id}>
 									<a href={`/mood/${mood.slug}`}>
 										<Card>
-											<CardMedia
-												overlay={<CardTitle title={mood.name} />}
-											>
-
-													<img src={node && node.content ? `http://img.youtube.com/vi/${node.content}/0.jpg` : ''} />
+											<CardMedia overlay={<CardTitle title={mood.name} />}>
+                                                <img src={src} />
 											</CardMedia>
 										</Card>
 									</a>

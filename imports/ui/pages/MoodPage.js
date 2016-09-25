@@ -7,11 +7,20 @@ import { Row, Col, Button } from 'react-materialize'
 import AppBar from '../pages/layouts/MoodNavBar.js'
 import Video from '../components/Video'
 
-class MoodPage extends React.Component {
+export default class MoodPage extends React.Component {
+
+	static propTypes = {
+		decision: PropTypes.object.isRequired,
+		slug: PropTypes.string.isRequired,
+		videoCallback: PropTypes.func.isRequired,
+		decisionOnChange: PropTypes.func.isRequired
+	}
+
 	render() {
 
 	    const {node, decision, slug, decisionOnChange, videoCallback} = this.props
 
+		// TODO move css somewhere
 		const 	parentStyles = 	{
 									position: 'relative',
 									height: '100vh',
@@ -30,9 +39,6 @@ class MoodPage extends React.Component {
 								}
 
 		return 	<section>
-					{/* <AppBar title={node.name}>
-						<NodesInsert parent={slug} callback={this.handleClose} />
-					</AppBar> */}
 					<Video style={parentStyles} node={node} callback={videoCallback}>
 						<Decision
 							node={node}
@@ -44,13 +50,3 @@ class MoodPage extends React.Component {
 				</section>
 	}
 }
-
-MoodPage.propTypes = {
-	node: PropTypes.object.isRequired,
-	decision: PropTypes.object.isRequired,
-	slug: PropTypes.string.isRequired,
-	videoCallback: PropTypes.func.isRequired,
-	decisionOnChange: PropTypes.func.isRequired
-}
-
-export default MoodPage

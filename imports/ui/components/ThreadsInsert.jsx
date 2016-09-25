@@ -19,7 +19,9 @@ export default class ThreadsInsert extends Component {
     //call method
     Meteor.call('threads.insert', { name, text, type, parent },
       (err, result) => {
-          if (err) console.log(err)
+          console.warn(err);
+          console.warn(result);
+          if (err) Materialize.toast(`Произошла ошибка! ${err.reason || err.error}`, 4000)
           else {
             // Clear form
             ReactDOM.findDOMNode(this.refs.name).value = '';

@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "alloyeditor": "^1.2.0",
+    "body-parser": "^1.15.2",
     "classnames": "latest",
     "core-decorators": "^0.12.3",
     "diff": "^2.2.2",
@@ -14,21 +15,32 @@
     "material-ui": "^0.15.2",
     "meteor-node-stubs": "~0.2.0",
     "oget": "^1.0.6",
-    "react": "^15.0.2",
+    "react": "^15.3.1",
     "react-addons-create-fragment": "^15.0.2",
     "react-addons-pure-render-mixin": "^15.0.2",
     "react-dom": "^15.0.2",
+    "react-image-gallery": "^0.6.10",
     "react-materialize": "latest",
     "react-mounter": "^1.2.0",
     "react-paginate": "latest",
+    "react-redux": "^4.4.5",
     "react-spinkit": "latest",
     "react-tap-event-plugin": "^1.0.0",
     "react-tinymce": "^0.5.1",
     "react-youtube": "^7.0.1",
+    "redux": "^3.6.0",
+    "relpers": "^1.3.3",
     "slug": "^0.9.1"
   },
   "devDependencies": {
+    "babel-eslint": "^6.1.2",
     "babel-plugin-transform-class-properties": "^6.10.2",
-    "eslint-plugin-react": "^5.1.1"
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "eslint": "^3.3.1",
+    "eslint-plugin-react": "^6.1.2",
+    "express": "^4.14.0",
+    "rethinkdb": "^2.3.3",
+    "rethinkdbdash": "^2.3.23",
+    "thinky": "^2.3.6"
   }
 }

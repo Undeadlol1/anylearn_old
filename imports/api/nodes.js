@@ -8,19 +8,25 @@ import helpers from '../helpers.js'
 export const Nodes = new Mongo.Collection('nodes')
 
 Nodes.schema = new SimpleSchema({
-	content: {
+	// url: { // is not important, never used ATM
+	// 	label: 'node url',
+	// 	type: String,
+	// 	optional: true
+	// },
+	content: { // FIXME rename to contentId?
 		label: 'node content',
 		type: String,
 		index: true,
-		unique: true
+		unique: true // ?????
 	},
 	parent: {
 		type: String,
 		label: 'node parent id'
 	},
-	provider: {
+	provider: { // not important ATM (or not? u sure?)
 		label: 'node provider',
-		type: String
+		type: String,
+		optional: true // optional because hard to parse image urls
 	},
 	type: {
 		label: 'node type',
@@ -57,11 +63,22 @@ export const nodesInsert = new ValidatedMethod({
 						url: { type: String },
 						parent: { type: String }
 					}).validator(),
-	run({url, parent}) {
-		console.warn(helpers.parseUrl(url))
-		console.warn(_.extend(helpers.parseUrl(url), {parent}))
+	run({url, parent }) { // type
+		console.warn(url, parent);
+		console.warn(helpers.parseUrl(url));
+		console.warn(
+			_.extend(
+				helpers.parseUrl(url),
+				{parent} // , type
+			)
+		);
+		// FIXME should i recheck node type?
+		// parseUrl() returns contentId, contyent type(video, images) and provider name
 		return 	Nodes.insert(
-					_.extend(helpers.parseUrl(url), {parent})
+					_.extend(
+						helpers.parseUrl(url),
+						{parent} //, type
+					)
 				)
 	}
 })
@@ -74,11 +91,11 @@ export const updateRating = new ValidatedMethod({
 		message: 'You need to login'
 	},
 	validate: new 	SimpleSchema({
-						_id: 	{ type: String },
-						rating: { type: Number }
-					}).validator(),
+									_id: 	{ type: String },
+									rating: { type: Number }
+								}).validator(),
 	run({_id, rating}) {
-		console.warn('updateRating is being called!')
+		console.warn('updateRating is being called!');
 		console.warn(_id, rating);
 		return 	Nodes.update(_id, {
 					$inc: { rating }

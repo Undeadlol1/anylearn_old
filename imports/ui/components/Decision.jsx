@@ -7,12 +7,14 @@ import classNames from 'classnames'
 import { Decisions } from '../../api/decisions'
 import { Button, Icon, Row, Col } from 'react-materialize'
 import get from 'oget'
+import Slider from 'material-ui/Slider';
 
 class Decision extends Component {
 
 	state = { rating: '' }
 
-	handleChange(event) {
+	handleChange = event => {
+		console.info(event.target.value)
 		const rating = event.target.value
 		this.props.onChange(rating)
 		this.setState({ rating })
@@ -48,12 +50,13 @@ class Decision extends Component {
 		return 	<p style={styles} id="decision" className="range-field" {...this.props}>
 				  <input
 					//  onMouseUp={this.handleSubmit.bind(this)}
-					  onChange={this.handleChange.bind(this)}
+					  onChange={this.handleChange}
 					  type="range"
 					  min="-5"
 					  max="5"
 					  value={this.state.rating}
 					  />
+					  {/* <Slider value={0} step={1} min={-5} max={5} /> */}
 				</p>
 	}
 }

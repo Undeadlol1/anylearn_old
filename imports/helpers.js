@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+
 function parseYoutube(url) {
 	let video_id = url.split('v=')[1],
 		ampersandPosition = video_id.indexOf('&')
@@ -8,6 +10,17 @@ function parseYoutube(url) {
 }
 
 function parseUrl(url) {
+
+	function checkForImageUrl(url) {
+		return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+	}
+
+	if(checkForImageUrl(url)) return {
+								// provider: null,
+								type: 'image',
+								content: url
+							}
+
 	if (url.includes('youtube' || 'youtu.be')) {
 		return {
 			provider: 'youtube',

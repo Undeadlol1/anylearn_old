@@ -4,7 +4,6 @@ import SkillsList from '../components/SkillsList'
 import { Row, Col, CardPanel, Collection, CollectionItem } from 'react-materialize'
 
 class IndexPage extends Component {
-  //_changePage(e) {skip.set(e.selected * perPage)}
   render() {
      const {users, revisions, skills, loaded} = this.props
      const renderUsers = users.sort((first, second) =>{

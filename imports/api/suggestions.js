@@ -17,31 +17,38 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'suggestions.insert' (data) {
-    check(data.name, String)
-    check(data.text, Match.Maybe(String))
-    check(data.parent, String)
+  'suggestions.insert' ({name, text, parent}) {
+    check(name, String)
+    check(text, Match.Maybe(String))
+    check(parent, String)
     // Make sure the user is logged in
     if (!Meteor.userId()) {
       throw new Meteor.Error('not-authorized')
     }
     const suggestionId = Suggestions.insert({
-      name: data.name,
-      text: data.text,
-      parent: data.parent,
+      name,
+      text,
+      parent,
       author: Meteor.userId(),
       createdAt: new Date()
     })
     const textOrName = function(){
-      if(data.text) return data.text
-      return data.name
+      if(text) return text
+      return name
     }
     Meteor.call('threads.insert', {
-      name : data.name,
+      name,
       text: textOrName(),
       parent: suggestionId,
       _id: suggestionId
     })
     return suggestionId
+  },
+  'getUserId' () {
+      const userId = Meteor.userId()
+      console.log(userId)
+      console.log('getUserId is called!')
+      console.log('userId', userId)
+      return userId
   }
 })

@@ -8,13 +8,21 @@ export const Decisions = new Mongo.Collection('decisions')
 Decisions.schema = new SimpleSchema({
 	rating: {
 		type: Number,
-		label: 'decision rating',
+		label: 'decision.rating',
 		defaultValue: 0
+	},
+	nextViewAt: {
+		type: String,
+		label: 'decision.nextViewAt'
 	},
 	parent: {
 		type: String,
 		label: 'decision parent id',
 		regEx: SimpleSchema.RegEx.Id
+	},
+	viewed: {
+		type: [Date],
+		optional: true
 	},
 	userId: {
 		type: String,
@@ -30,65 +38,79 @@ Decisions.schema = new SimpleSchema({
 })
 Decisions.attachSchema(Decisions.schema)
 
+
+
+
+
+/*
+	Set Decision's new nextViewAt based on rating, number of views (documents in collection?),
+	using this formula: Y=2X+1
+	where:
+	y - time to next view
+	x - days since lastview
+*/
+// зарисовки
+
+let previousView = Date.now()
+previousView = 1472667881732
+let currentView = Date.now()
+// const difference = previousView - currentView
+// const nextView = 2 * difference + 1 // or difference*2 - 1 ?
+function showNextview() {
+	let difference = currentView - previousView
+	let nextView = 2 * difference + 1 // or difference*2 - 1 ?
+	nextView += currentView
+	// console.warn('previousView', previousView);
+	// console.warn('nextView', nextView);
+	// console.warn(new Date(nextView));
+}
+showNextview()
+previousView = 1422667841732
+showNextview()
+/*
+
+*/
+
+// TODO add comments
+function calculateNextViewAt(previousView = Date.now(), rating) {
+	const difference = Date.now() - previousView
+	return 2 * difference - previousView
+}
+
 Meteor.methods({
 	'decisions.upsert' ({rating, parent}) {
 		if(!rating) rating = 0
-		console.warn(rating, parent);
 		const 	userId = Meteor.userId(),
-				previousDecision = Decisions.findOne({ parent, userId })
+				previousDecision = Decisions.findOne({ parent, userId }),
+				nextViewAt = calculateNextViewAt(previousDecision.nextViewAt) // nextViewAt ???
 
 		Decisions.upsert(
 							{ parent, userId },
-							{ $set: { rating, parent } }
+							{
+								$set:
+								{
+									parent,
+									nextViewAt,
+									rating: Number(rating)
+								}
+							}
 						)
+
 		if (previousDecision && previousDecision.rating) {
-			const previousRating = previousDecision.rating
-			let difference = 0
-			console.warn('previousRating is ', previousRating);
-			console.warn('newRating is ', rating);
+			const 	previousRating = previousDecision.rating
+			let 	difference = 0
 			if(previousRating < rating) difference = rating - previousRating
 			else difference = previousRating - rating
-
-			// difference = previousRating < 0 ? Math.abs(previousRating) - rating : rating - previousRating
-			console.warn('calling updateRating with ', difference);
 			rating = difference
 		}
+		// update parent node with new rating
 		return	updateRating.call( { _id: parent, rating })
-	}/*,
-	'decisions.insert' (url, parent) {
-	    check(url, String)
-		check(parent, String)
-
-		const userId = Meteor.userId()
-	    // Make sure the user is logged in before inserting a task
-	    if (!userId) {
-	      throw new Meteor.Error('not-authorized')
-	    }
-	    // somehow sometimes you bypass name check
-	    if (url.trim() === "") {
-	      throw new Meteor.Error('url-is-empty')
-	    }
-		if( Decisions.findOne({url, parent, userId}) ) {
-			throw new Meteor.Error('already exist')
-		}
-
-	    return Decisions.insert({
-			url,
-			parent,
-			userId,
-			createdAt: new Date()
-		})
-	}*/
+	}
 })
 
 if (Meteor.isServer) {
   Meteor.publish('decisions', function decisionsPublication(
     selector = {},
-    options = {
-      sort: {
-          createdAt: -1
-      }
-  }) {
-      return Decisions.find(selector, options)
-  })
+    options = { sort: { createdAt: -1 } }
+  ) { return Decisions.find(selector, options) })
 }

@@ -46,20 +46,9 @@ export default createContainer(() => {
 									userId: Meteor.userId()
 								}).ready()
 
-	try {
-		// console.log(skill && skill.revision())
-		// console.log(skill && skill.threads())
-		// console.log(skill && skill.response())
-	} catch (err) {
-		console.warn(err)
-	}
-
 	return {
 		skillId,
-		skill,
-		//revision: skill && skill.revision(), //Revisions.findOne({parent: skillId}) || {}
-		//response: skill && skill.response(),
-		//threads: skill && skill.threads(),
+		skill: skill || {},
 		revision: 	Revisions.findOne({
 						parent: skillId,
 						active: true

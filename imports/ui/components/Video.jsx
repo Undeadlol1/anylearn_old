@@ -8,7 +8,11 @@ class Video extends React.Component {
 
 	state = { hidden: true }
 
-	toggleState = toggleState.bind(this, 'hidden')
+	// toggleState = toggleState.bind(this, 'hidden')
+
+	showDecisionControls = () => this.setState({ hidden: false })
+
+	hideDecisionControlls = () => this.setState({ hidden: true })
 
 	render() {
 		const 	{ node, callback } = this.props,
@@ -18,14 +22,15 @@ class Video extends React.Component {
 					height: '100%',
 					width: '100%',
 					playerVars: { // https://developers.google.com/youtube/player_parameters
-						autoplay: 1
+						autoplay: 1,
+						controls: 1
 					}
 				}
-
+		
 		return 	<section
 					{...props}
-					onMouseOver={this.toggleState}
-					onMouseLeave={this.toggleState}
+					onMouseOver={this.showDecisionControls}
+					onMouseLeave={this.hideDecisionControlls}
 					style={style}
 				>
 					<YouTube
